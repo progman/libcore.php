@@ -272,12 +272,13 @@ function libcore__flag2str($x)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__filter_enum($value, $value_list)
 {
-	if (sizeof($value_list) == 0)
+	$value_list_size = sizeof($value_list);
+	if ($value_list_size == 0)
 	{
 		return $value;
 	}
 
-	for($i=0; $i < sizeof($value_list); $i++)
+	for($i=0; $i < $value_list_size; $i++)
 	{
 		if($value_list[$i] == $value)
 		{
@@ -474,9 +475,9 @@ function libcore__drop_sql_injection($str)
 	return $tmp;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__shell_get_enum($key_name, $value_list)
+function libcore__shell_get_enum($key_name, $value_list, $flag_drop_sql_injection = true)
 {
-	$value = libcore__get_var($key_name, $value_list[0]);
+	$value = libcore__shell_get_str($key_name, $value_list[0], $flag_drop_sql_injection);
 
 
 	return libcore__filter_enum($value, $value_list);
