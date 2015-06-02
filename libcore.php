@@ -973,10 +973,10 @@ function libcore__hex2bin($value)
 	}
 
 
-//	if (function_exists ("hex2bin") === true)
-//	{
-//		return hex2bin($value);
-//	}
+	if (function_exists ("hex2bin") === true)
+	{
+		return hex2bin($value);
+	}
 
 
 	$bin = '';
