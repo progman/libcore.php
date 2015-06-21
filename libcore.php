@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.0.5
+// 0.0.6
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -54,7 +54,7 @@ class result_t
 
 	function get_msg()
 	{
-		if ($this->error_string != "unknown error")
+		if (strcmp($this->error_string, "unknown error") != 0)
 		{
 			return $this->error_string;
 		}
@@ -240,12 +240,12 @@ function libcore__is_flag($x)
 
 	if
 	(
-		($x_low == "false") ||
-		($x_low == "off")   ||
-		($x_low == "0")     ||
-		($x_low == "true")  ||
-		($x_low == "on")    ||
-		($x_low == "1")
+		(strcmp($x_low, "false") == 0) ||
+		(strcmp($x_low, "off")   == 0) ||
+		(strcmp($x_low, "0")     == 0) ||
+		(strcmp($x_low, "true")  == 0) ||
+		(strcmp($x_low, "on")    == 0) ||
+		(strcmp($x_low, "1")     == 0)
 	)
 	{
 		return true;
@@ -262,9 +262,9 @@ function libcore__is_flag_set($x)
 
 	if
 	(
-		($x_low == "true") ||
-		($x_low == "on") ||
-		($x_low == "1")
+		(strcmp($x_low, "true") == 0) ||
+		(strcmp($x_low, "on")   == 0) ||
+		(strcmp($x_low, "1")    == 0)
 	)
 	{
 		return true;
@@ -306,9 +306,15 @@ function libcore__filter_enum($value, $value_list)
 		return $value;
 	}
 
+	settype($value, "string");
+
 	for($i=0; $i < $value_list_size; $i++)
 	{
-		if($value_list[$i] == $value)
+		$value_other = $value_list[$i];
+
+		settype($value_other, "string");
+
+		if(strcmp($value_other, $value) == 0)
 		{
 			return $value;
 		}
@@ -490,13 +496,13 @@ function libcore__drop_sql_injection($str)
 			continue;
 		}
 
-		if ($ch == '"') // double quotes
+		if (ord($ch) == 34) // double quotes '"'
 		{
 			$tmp .= '&#034;'; // may be "\""
 			continue;
 		}
 
-		if ($ch == '\'') // single quote
+		if (ord($ch) == 39) // single quote '\''
 		{
 			$tmp .= '&#039;'; // may be "\'"
 			continue;
@@ -508,7 +514,7 @@ function libcore__drop_sql_injection($str)
 			continue;
 		}
 
-		if (ord($ch) == 0x1a) // EOF
+		if (ord($ch) == 26) // EOF
 		{
 			$tmp .= '\x1a';
 			continue;
@@ -664,7 +670,7 @@ function libcore__convert_date($gmt_offset, $datatime)
 		$str = $str.$year;
 	}
 
-	if ($str == '30 ноября 1999, 00:00')
+	if (strcmp($str, '30 ноября 1999, 00:00') == 0)
 	{
 		return 'unknown';
 	}
