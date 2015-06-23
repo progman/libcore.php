@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.0.6
+// 0.0.7
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -15,6 +15,7 @@ class result_t
 	private $err_code;
 	private $msg;
 	private $msg_private;
+	private $msg_debug;
 
 
 	function set_result($result)
@@ -25,6 +26,17 @@ class result_t
 	function get_result()
 	{
 		return $this->result;
+	}
+
+
+	function set_msg_debug($msg_debug)
+	{
+		$this->msg_debug = $msg_debug;
+	}
+
+	function get_msg_debug()
+	{
+		return $this->msg_debug;
 	}
 
 	function set_err($err_code = 1, $msg = "unknown error", $msg_private = "")
@@ -66,7 +78,6 @@ class result_t
 	{
 		return $this->msg_private;
 	}
-
 
 	function result_t($function_name = "unknown", $file_name = "unknown")
 	{
