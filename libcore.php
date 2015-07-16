@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.0.9
+// 0.1.0
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -982,7 +982,7 @@ function libcore__file_add($filename, $str)
 	return true;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__do_post($url, $data)
+function libcore__do_post($url, $data, $flag_security = true)
 {
 	$result = new result_t(__FUNCTION__, __FILE__);
 
@@ -1028,13 +1028,6 @@ function libcore__do_post($url, $data)
 		return $result;
 	}
 
-	$rc = curl_setopt($ch, CURLOPT_SSLVERSION, 3);
-	if ($rc == false)
-	{
-		$result->error_string = curl_error($ch);
-		return $result;
-	}
-
 	$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'SSLv3');
 	if ($rc == false)
 	{
@@ -1042,11 +1035,21 @@ function libcore__do_post($url, $data)
 		return $result;
 	}
 
-	$rc = curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
-	if ($rc == false)
+	if ($flag_security === true)
 	{
-		$result->error_string = curl_error($ch);
-		return $result;
+		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, 3);
+		if ($rc == false)
+		{
+			$result->error_string = curl_error($ch);
+			return $result;
+		}
+
+		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+		if ($rc == false)
+		{
+			$result->error_string = curl_error($ch);
+			return $result;
+		}
 	}
 
 	$rc = curl_exec($ch);
