@@ -569,7 +569,7 @@ function libcore__drop_sql_injection(&$obj)
 		$size = count($obj);
 		for ($i=0; $i < $size; $i++)
 		{
-			xlibcore__drop_sql_injection($obj[$i]);
+			libcore__drop_sql_injection($obj[$i]);
 		}
 		return;
 	}
@@ -578,7 +578,7 @@ function libcore__drop_sql_injection(&$obj)
 	{
 		foreach ($obj as $name => $value)
 		{
-			xlibcore__drop_sql_injection($obj->{$name});
+			libcore__drop_sql_injection($obj->{$name});
 		}
 		return;
 	}
