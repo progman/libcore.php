@@ -1036,7 +1036,7 @@ function libcore__file_add($filename, $str)
 	return true;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__do_post($url, $data, $flag_security = true)
+function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 {
 	$result = new result_t(__FUNCTION__, __FILE__);
 
@@ -1075,7 +1075,7 @@ function libcore__do_post($url, $data, $flag_security = true)
 		return $result;
 	}
 
-	$rc = curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+	$rc = curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 	if ($rc == false)
 	{
 		$result->error_string = curl_error($ch);
