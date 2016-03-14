@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.1.4
+// 0.1.5
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -1076,6 +1076,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	if ($ch == false)
 	{
 		$result->error_string = curl_error($ch);
+		curl_close($ch);
 		return $result;
 	}
 
@@ -1083,6 +1084,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	if ($rc == false)
 	{
 		$result->error_string = curl_error($ch);
+		curl_close($ch);
 		return $result;
 	}
 
@@ -1090,6 +1092,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	if ($rc == false)
 	{
 		$result->error_string = curl_error($ch);
+		curl_close($ch);
 		return $result;
 	}
 
@@ -1097,6 +1100,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	if ($rc == false)
 	{
 		$result->error_string = curl_error($ch);
+		curl_close($ch);
 		return $result;
 	}
 
@@ -1104,6 +1108,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	if ($rc == false)
 	{
 		$result->error_string = curl_error($ch);
+		curl_close($ch);
 		return $result;
 	}
 
@@ -1111,6 +1116,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	if ($rc == false)
 	{
 		$result->error_string = curl_error($ch);
+		curl_close($ch);
 		return $result;
 	}
 
@@ -1118,6 +1124,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	if ($rc == false)
 	{
 		$result->error_string = curl_error($ch);
+		curl_close($ch);
 		return $result;
 	}
 
@@ -1127,6 +1134,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 		if ($rc == false)
 		{
 			$result->error_string = curl_error($ch);
+			curl_close($ch);
 			return $result;
 		}
 
@@ -1134,6 +1142,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 		if ($rc == false)
 		{
 			$result->error_string = curl_error($ch);
+			curl_close($ch);
 			return $result;
 		}
 	}
@@ -1142,9 +1151,11 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	if ($rc == false)
 	{
 		$result->error_string = curl_error($ch);
+		curl_close($ch);
 		return $result;
 	}
 
+	curl_close($ch);
 	$result->result = true;
 	$result->value  = $rc;
 	return $result;
