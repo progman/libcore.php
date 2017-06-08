@@ -53,15 +53,27 @@ function test__libcore__is_hex()
 		exit(1);
 	}
 
-	if (libcore__is_hex("0123456789abcdefABCDEF") == false)
+	if (libcore__is_hex("z") == true)
 	{
 		echo "ERROR[test_libcore__is_hex()]: step002\n";
 		exit(1);
 	}
 
-	if (libcore__is_hex("0123456789abcdefABCDEF0", true) == true)
+	if (libcore__is_hex("0") == false)
 	{
 		echo "ERROR[test_libcore__is_hex()]: step003\n";
+		exit(1);
+	}
+
+	if (libcore__is_hex("0123456789abcdefABCDEF") == false)
+	{
+		echo "ERROR[test_libcore__is_hex()]: step004\n";
+		exit(1);
+	}
+
+	if (libcore__is_hex("0123456789abcdefABCDEF0", true) == true)
+	{
+		echo "ERROR[test_libcore__is_hex()]: step005\n";
 		exit(1);
 	}
 }
@@ -169,6 +181,101 @@ function test__libcore__rnd()
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function test__libcore__hex_string_parity()
+{
+	$x = libcore__hex_string_parity("0");
+	if (strcmp($x, "00") != 0)
+	{
+		echo "ERROR[test__libcore__hex_string_parity()]: step001\n";
+		exit(1);
+	}
+
+	$x = libcore__hex_string_parity("00");
+	if (strcmp($x, "00") != 0)
+	{
+		echo "ERROR[test__libcore__hex_string_parity()]: step002\n";
+		exit(1);
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function test__libcore__hex_string_expand()
+{
+	$x = libcore__hex_string_expand("0", 2);
+	if (strcmp($x, "00") != 0)
+	{
+		echo "ERROR[test__libcore__hex_string_expand()]: step001\n";
+		exit(1);
+	}
+
+	$x = libcore__hex_string_expand("00", 2);
+	if (strcmp($x, "00") != 0)
+	{
+		echo "ERROR[test__libcore__hex_string_expand()]: step002\n";
+		exit(1);
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function test__libcore__hex_string_add()
+{
+	$x = "1";
+	$y = "2";
+	$z = libcore__hex_string_add($x, $y);
+	if (strcmp($z, "03") != 0)
+	{
+		echo "ERROR[test__libcore__hex_string_add()]: step001\n";
+		exit(1);
+	}
+
+
+	$x = "fe";
+	$y = "1";
+	$z = libcore__hex_string_add($x, $y);
+	if (strcmp($z, "ff") != 0)
+	{
+		echo "ERROR[test__libcore__hex_string_add()]: step002\n";
+		exit(1);
+	}
+
+
+	$x = "ff";
+	$y = "1";
+	$z = libcore__hex_string_add($x, $y);
+	if (strcmp($z, "0100") != 0)
+	{
+		echo "ERROR[test__libcore__hex_string_add()]: step003\n";
+		exit(1);
+	}
+
+	$x = "ff";
+	$y = "ff";
+	$z = libcore__hex_string_add($x, $y);
+	if (strcmp($z, "01fe") != 0)
+	{
+		echo "ERROR[test__libcore__hex_string_add()]: step004\n";
+		exit(1);
+	}
+
+
+	for ($i=0; $i < 1000; $i++)
+	{
+		$a = libcore__hex_string_expand(dechex(rand(0, 9223372036854775807)), 32);
+		$b = libcore__hex_string_expand(dechex(rand(0, 9223372036854775807)), 32);
+
+
+		$c1 = libcore__hex_string_add($a, $b);
+		$c2 = libcore__hex_string_expand((dechex(hexdec($a) + hexdec($b))), 32);
+
+
+		if (strcmp($c1, $c2) != 0)
+		{
+			echo "ERROR[test__libcore__hex_string_expand()]: step005\n";
+			echo "c1     : ".$c1."\n";
+			echo "c2     : ".$c2."\n";
+			exit(1);
+		}
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
 test__libcore__is_uint();
 test__libcore__is_sint();
@@ -177,6 +284,9 @@ test__libcore__is_float();
 test__libcore__hex2bin();
 test__libcore__is_parity();
 test__libcore__rnd();
+test__libcore__hex_string_parity();
+test__libcore__hex_string_expand();
+test__libcore__hex_string_add();
 
 echo "ok, test passed\n";
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
