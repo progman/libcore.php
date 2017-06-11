@@ -1,42 +1,30 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.1.6
+// 0.1.7
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
 {
-	var $result; // TODO: set private this after change old code
-	var $error_string;
-	var $file_name;
-	var $function_name;
-	var $value;
-
-
 	private $err_code;
 	private $msg;
 	private $msg_private;
-	private $msg_debug;
+	private $file_name;
+	private $function_name;
+	private $value;
 
-
-	function set_result($result)
+	function result_t($function_name = "unknown", $file_name = "unknown")
 	{
-		$this->result = $result;
+		$this->err_code      = 1;
+		$this->msg           = "unknown";
+		$this->msg_private   = "unknown";
+		$this->file_name     = $file_name;
+		$this->function_name = $function_name;
+		$this->value         = 0;
 	}
 
-	function get_result()
+	function is_ok()
 	{
-		return $this->result;
-	}
-
-
-	function set_msg_debug($msg_debug)
-	{
-		$this->msg_debug = $msg_debug;
-	}
-
-	function get_msg_debug()
-	{
-		return $this->msg_debug;
+		return ($this->err_code == 0) ? true : false;
 	}
 
 	function set_err($err_code = 1, $msg = "unknown error", $msg_private = "")
@@ -49,14 +37,11 @@ class result_t
 		{
 			$this->msg_private = $this->msg;
 		}
+	}
 
-		$this->error_string = $msg;
-
-		$this->result = false;
-		if ($this->err_code == 0)
-		{
-			$this->result = true;
-		}
+	function set_ok()
+	{
+		$this->set_err(0, "ok", "");
 	}
 
 	function get_err_code()
@@ -66,11 +51,6 @@ class result_t
 
 	function get_msg()
 	{
-		if (strcmp($this->error_string, "unknown error") != 0)
-		{
-			return $this->error_string;
-		}
-
 		return $this->msg;
 	}
 
@@ -79,18 +59,24 @@ class result_t
 		return $this->msg_private;
 	}
 
-	function result_t($function_name = "unknown", $file_name = "unknown")
+	function get_file_name()
 	{
-		$this->result        = false;
-		$this->error_string  = "unknown error";
-		$this->file_name     = $file_name;
-		$this->function_name = $function_name;
-		$this->value         = 0;
+		return $this->file_name;
+	}
 
+	function get_function_name()
+	{
+		return $this->function_name;
+	}
 
-		$this->err_code      = 1;
-		$this->msg_public    = "unknown";
-		$this->msg_private   = "unknown";
+	function set_value($value)
+	{
+		$this->value = $value;
+	}
+
+	function get_value()
+	{
+		return $this->value;
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
