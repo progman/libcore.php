@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.1.7
+// 0.1.8
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -14,12 +14,22 @@ class result_t
 
 	function result_t($function_name = "unknown", $file_name = "unknown")
 	{
-		$this->err_code      = 1;
-		$this->msg           = "unknown";
-		$this->msg_private   = "unknown";
+		$this->set_err(1, "unknown", "unknown");
+
 		$this->file_name     = $file_name;
 		$this->function_name = $function_name;
-		$this->value         = 0;
+
+		$this->set_value(0);
+	}
+
+	function copy($err_code, $msg, $msg_private, $file_name, $function_name, $value)
+	{
+		$this->set_err($err_code, $msg, $msg_private);
+
+		$this->file_name     = $file_name;
+		$this->function_name = $function_name;
+
+		$this->set_value($value);
 	}
 
 	function is_ok()
