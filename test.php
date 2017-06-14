@@ -65,11 +65,14 @@ function test__libcore__is_hex()
 		exit(1);
 	}
 
+for ($i=0; $i < 1000000; $i++)
+{
 	if (libcore__is_hex("0123456789abcdefABCDEF") == false)
 	{
 		echo "ERROR[test_libcore__is_hex()]: step004\n";
 		exit(1);
 	}
+}
 
 	if (libcore__is_hex("0123456789abcdefABCDEF0", true) == true)
 	{
