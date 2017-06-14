@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.1.9
+// 0.2.0
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -110,6 +110,52 @@ static $libcore__hex2bin_table = array
 	null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, // 0xE0
 	null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null  // 0xF0
 );
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/*
+function libcore__rnd($min, $max)
+function libcore__get_rnd()
+function libcore__is_parity($val)
+function libcore__is_uint($x)
+function libcore__is_sint($x)
+function libcore__is_hex($x, $flag_parity = false)
+function libcore__is_float($x, $flag_need_point = false)
+function libcore__is_flag($x)
+function libcore__is_flag_set($x)
+function libcore__flag2int($x)
+function libcore__flag2str($x)
+function libcore__filter_enum($value, $value_list)
+function libcore__drop_sql_injection(&$obj)
+
+function libcore__get_var($key_name, $value_default = null)
+function libcore__get_var_hex($key_name, $value_default = null)
+function libcore__get_var_float($key_name, $value_default = null)
+function libcore__get_var_uint($key_name, $value_default = null)
+function libcore__get_var_sint($key_name, $value_default = null)
+function libcore__get_var_flag($key_name, $value_default = null)
+function libcore__get_var_str($key_name, $value_default = null)
+function libcore__get_var_enum($key_name, $value_list)
+
+function libcore__gzip_check()
+function libcore__gzip_open($flag_gzip)
+function libcore__gzip_close($flag_gzip)
+function libcore__getmonthname($month_num, $flag_simple = false)
+function libcore__convert_date($gmt_offset, $datatime)
+function libcore__set_cookie($cookie_name, $cookie_value, $expired)
+function libcore__unixtime2datatime($unixtime)
+function libcore__make_dir($path)
+function libcore__get_cache_file($filename)
+function libcore__get_time_file($filename, $gmt_offset)
+function libcore__blk_read($handle, $str_size)
+function libcore__blk_write($handle, $str)
+function libcore__file_get($filename)
+function libcore__file_set($filename, $str)
+function libcore__file_add($filename, $str)
+function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
+function libcore__hex2bin($value, $flag_force = false)
+function libcore__hex_string_parity($str)
+function libcore__hex_string_expand($str, $size)
+function libcore__hex_string_add($source, $add, $flag_check_hex = true)
+*/
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__rnd($min, $max)
 {
@@ -394,179 +440,6 @@ function libcore__filter_enum($value, $value_list)
 	return $value_list[0];
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__get_var($key_name, $value_default)
-{
-	global $_ENV;
-	global $_SERVER;
-	global $_GET;
-	global $_POST;
-	global $_COOKIE;
-
-
-	if (isset($_ENV[$key_name]) == true)
-	{
-		return $_ENV[$key_name];
-	}
-
-	if (isset($_SERVER[$key_name]) == true)
-	{
-		return $_SERVER[$key_name];
-	}
-
-	if (isset($_GET[$key_name]) == true)
-	{
-		return $_GET[$key_name];
-	}
-
-	if (isset($_POST[$key_name]) == true)
-	{
-		return $_POST[$key_name];
-	}
-
-
-	for (;;)
-	{
-		$postdata = file_get_contents("php://input");
-		$request = json_decode($postdata);
-		if (json_last_error() != JSON_ERROR_NONE)
-		{
-			break;
-		}
-
-		if (isset($request->{$key_name}) == true)
-		{
-			return $request->{$key_name};
-		}
-
-		break;
-	}
-
-
-	if (isset($_COOKIE[$key_name]) == true)
-	{
-		return $_COOKIE[$key_name];
-	}
-
-
-	return $value_default;
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__shell_get_hex($key_name, $value_default = '00')
-{
-	$value = libcore__get_var($key_name, $value_default);
-
-
-	if (libcore__is_hex($value) == false)
-	{
-		if (libcore__is_hex($value_default) == false)
-		{
-			return 0;
-		}
-		return $value_default;
-	}
-
-
-	return $value;
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__shell_get_float($key_name, $value_default = 0)
-{
-	$value = libcore__get_var($key_name, $value_default);
-
-
-	if (libcore__is_float($value) == false)
-	{
-		if (libcore__is_float($value_default) == false)
-		{
-			return 0;
-		}
-		return $value_default;
-	}
-
-
-	return $value;
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__shell_get_uint($key_name, $value_default = 0)
-{
-	$value = libcore__get_var($key_name, $value_default);
-
-
-	if (libcore__is_uint($value) == false)
-	{
-		if (libcore__is_uint($value_default) == false)
-		{
-			return 0;
-		}
-		return $value_default;
-	}
-
-
-	return $value;
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__shell_get_sint($key_name, $value_default = 0)
-{
-	$value = libcore__get_var($key_name, $value_default);
-
-
-	if (libcore__is_sint($value) == false)
-	{
-		if (libcore__is_sint($value_default) == false)
-		{
-			return 0;
-		}
-		return $value_default;
-	}
-
-
-	return $value;
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__shell_get_flag($key_name, $value_default = "0")
-{
-	$value = libcore__get_var($key_name, $value_default);
-
-
-	if (libcore__is_flag($value) == false)
-	{
-		if (libcore__is_flag($value_default) == false)
-		{
-			return "0";
-		}
-		return $value_default;
-	}
-
-
-	if (libcore__is_flag_set($value) == true)
-	{
-		return "1";
-	}
-
-
-	return "0";
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__shell_get_str($key_name, $value_default = "", $flag_drop_sql_injection = true)
-{
-	$value = libcore__get_var($key_name, $value_default);
-
-
-	if ($value == '')
-	{
-		return $value_default;
-	}
-
-
-	if ($flag_drop_sql_injection == true)
-	{
-		libcore__drop_sql_injection($value);
-	}
-
-
-	return $value;
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__drop_sql_injection(&$obj)
 {
 	$type = gettype($obj);
@@ -670,6 +543,310 @@ function libcore__drop_sql_injection(&$obj)
 	$obj = $tmp;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__get_var($key_name, $value_default = null)
+{
+	global $_ENV;
+	global $_SERVER;
+	global $_GET;
+	global $_POST;
+	global $_COOKIE;
+
+
+	if (isset($_ENV[$key_name]) === true)
+	{
+		return $_ENV[$key_name];
+	}
+
+	if (isset($_SERVER[$key_name]) === true)
+	{
+		return $_SERVER[$key_name];
+	}
+
+	if (isset($_GET[$key_name]) === true)
+	{
+		return $_GET[$key_name];
+	}
+
+	if (isset($_POST[$key_name]) === true)
+	{
+		return $_POST[$key_name];
+	}
+
+
+	for (;;)
+	{
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		if (json_last_error() !== JSON_ERROR_NONE)
+		{
+			break;
+		}
+
+		if (isset($request->{$key_name}) === true)
+		{
+			return $request->{$key_name};
+		}
+
+		break;
+	}
+
+
+	if (isset($_COOKIE[$key_name]) === true)
+	{
+		return $_COOKIE[$key_name];
+	}
+
+
+	return $value_default;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__get_var_hex($key_name, $value_default = null)
+{
+	$value = libcore__get_var($key_name, $value_default);
+
+
+	if (libcore__is_hex($value) === false)
+	{
+		if (libcore__is_hex($value_default) === false)
+		{
+			return null;
+		}
+		return $value_default;
+	}
+
+
+	return $value;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/*
+function libcore__shell_get_hex($key_name, $value_default = '00')
+{
+	$value = libcore__get_var($key_name, $value_default);
+
+
+	if (libcore__is_hex($value) == false)
+	{
+		if (libcore__is_hex($value_default) == false)
+		{
+			return 0;
+		}
+		return $value_default;
+	}
+
+
+	return $value;
+}
+*/
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__get_var_float($key_name, $value_default = null)
+{
+	$value = libcore__get_var($key_name, $value_default);
+
+
+	if (libcore__is_float($value) == false)
+	{
+		if (libcore__is_float($value_default) == false)
+		{
+			return null;
+		}
+		return $value_default;
+	}
+
+
+	return $value;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/*
+function libcore__shell_get_float($key_name, $value_default = 0)
+{
+	$value = libcore__get_var($key_name, $value_default);
+
+
+	if (libcore__is_float($value) == false)
+	{
+		if (libcore__is_float($value_default) == false)
+		{
+			return 0;
+		}
+		return $value_default;
+	}
+
+
+	return $value;
+}
+*/
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__get_var_uint($key_name, $value_default = null)
+{
+	$value = libcore__get_var($key_name, $value_default);
+
+
+	if (libcore__is_uint($value) == false)
+	{
+		if (libcore__is_uint($value_default) == false)
+		{
+			return null;
+		}
+		return $value_default;
+	}
+
+
+	return $value;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/*
+function libcore__shell_get_uint($key_name, $value_default = 0)
+{
+	$value = libcore__get_var($key_name, $value_default);
+
+
+	if (libcore__is_uint($value) == false)
+	{
+		if (libcore__is_uint($value_default) == false)
+		{
+			return 0;
+		}
+		return $value_default;
+	}
+
+
+	return $value;
+}
+*/
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__get_var_sint($key_name, $value_default = null)
+{
+	$value = libcore__get_var($key_name, $value_default);
+
+
+	if (libcore__is_sint($value) == false)
+	{
+		if (libcore__is_sint($value_default) == false)
+		{
+			return null;
+		}
+		return $value_default;
+	}
+
+
+	return $value;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/*
+function libcore__shell_get_sint($key_name, $value_default = 0)
+{
+	$value = libcore__get_var($key_name, $value_default);
+
+
+	if (libcore__is_sint($value) == false)
+	{
+		if (libcore__is_sint($value_default) == false)
+		{
+			return 0;
+		}
+		return $value_default;
+	}
+
+
+	return $value;
+}
+*/
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__get_var_flag($key_name, $value_default = null)
+{
+	$value = libcore__get_var($key_name, $value_default);
+
+
+	if (libcore__is_flag($value) == false)
+	{
+		if (libcore__is_flag($value_default) == false)
+		{
+			return null;
+		}
+		return $value_default;
+	}
+
+
+	if (libcore__is_flag_set($value) == true)
+	{
+		return "1";
+	}
+
+
+	return "0";
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/*
+function libcore__shell_get_flag($key_name, $value_default = "0")
+{
+	$value = libcore__get_var($key_name, $value_default);
+
+
+	if (libcore__is_flag($value) == false)
+	{
+		if (libcore__is_flag($value_default) == false)
+		{
+			return "0";
+		}
+		return $value_default;
+	}
+
+
+	if (libcore__is_flag_set($value) == true)
+	{
+		return "1";
+	}
+
+
+	return "0";
+}
+*/
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__get_var_str($key_name, $value_default = null)
+{
+	$value = libcore__get_var($key_name, $value_default);
+
+
+	if ($value === null)
+	{
+		return $value_default;
+	}
+
+
+	return $value;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/*
+function libcore__shell_get_str($key_name, $value_default = "", $flag_drop_sql_injection = true)
+{
+	$value = libcore__get_var($key_name, $value_default);
+
+
+	if ($value == '')
+	{
+		return $value_default;
+	}
+
+
+	if ($flag_drop_sql_injection == true)
+	{
+		libcore__drop_sql_injection($value);
+	}
+
+
+	return $value;
+}
+*/
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__get_var_enum($key_name, $value_list)
+{
+	$value = libcore__get_var_str($key_name, $value_list[0]);
+
+
+	return libcore__filter_enum($value, $value_list);
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/*
 function libcore__shell_get_enum($key_name, $value_list, $flag_drop_sql_injection = true)
 {
 	$value = libcore__shell_get_str($key_name, $value_list[0], $flag_drop_sql_injection);
@@ -677,13 +854,11 @@ function libcore__shell_get_enum($key_name, $value_list, $flag_drop_sql_injectio
 
 	return libcore__filter_enum($value, $value_list);
 }
+*/
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__gzip_check()
 {
-	global $_SERVER;
-
-
-	$http_accept_encoding = libcore__shell_get_str("HTTP_ACCEPT_ENCODING");
+	$http_accept_encoding = libcore__get_var_str("HTTP_ACCEPT_ENCODING");
 
 
 	if (strstr($http_accept_encoding, "gzip") == false)
