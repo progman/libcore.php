@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.2.2
+// 0.2.3
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -1019,7 +1019,7 @@ function libcore__make_dir($path)
 
 	if ($path[0] != '/')
 	{
-		$result->error_string = "invalid path";
+		$result->set_err(1, "invalid path");
 		return $result;
 	}
 
@@ -1039,14 +1039,14 @@ function libcore__make_dir($path)
 		{
 			if (@mkdir($path) == false)
 			{
-				$result->error_string = "don't make dir";
+				$result->set_err(1, "don't make dir");
 				return $result;
 			}
 		}
 	}
 
 
-	$result->result = true;
+	$result->set_ok();
 	return $result;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -1269,7 +1269,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	$ch = curl_init($url);
 	if ($ch == false)
 	{
-		$result->error_string = curl_error($ch);
+		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
 		return $result;
 	}
@@ -1277,7 +1277,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	$rc = curl_setopt($ch, CURLOPT_POST, true);
 	if ($rc == false)
 	{
-		$result->error_string = curl_error($ch);
+		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
 		return $result;
 	}
@@ -1285,7 +1285,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	$rc = curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 	if ($rc == false)
 	{
-		$result->error_string = curl_error($ch);
+		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
 		return $result;
 	}
@@ -1293,7 +1293,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	$rc = curl_setopt($ch, CURLOPT_HTTPGET, false);
 	if ($rc == false)
 	{
-		$result->error_string = curl_error($ch);
+		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
 		return $result;
 	}
@@ -1301,7 +1301,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	$rc = curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	if ($rc == false)
 	{
-		$result->error_string = curl_error($ch);
+		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
 		return $result;
 	}
@@ -1309,7 +1309,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	$rc = curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
 	if ($rc == false)
 	{
-		$result->error_string = curl_error($ch);
+		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
 		return $result;
 	}
@@ -1317,7 +1317,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'SSLv3');
 	if ($rc == false)
 	{
-		$result->error_string = curl_error($ch);
+		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
 		return $result;
 	}
@@ -1327,7 +1327,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, 3);
 		if ($rc == false)
 		{
-			$result->error_string = curl_error($ch);
+			$result->set_err(1, curl_error($ch));
 			curl_close($ch);
 			return $result;
 		}
@@ -1335,7 +1335,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
 		if ($rc == false)
 		{
-			$result->error_string = curl_error($ch);
+			$result->set_err(1, curl_error($ch));
 			curl_close($ch);
 			return $result;
 		}
@@ -1344,13 +1344,13 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	$rc = curl_exec($ch);
 	if ($rc == false)
 	{
-		$result->error_string = curl_error($ch);
+		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
 		return $result;
 	}
 
 	curl_close($ch);
-	$result->result = true;
+	$result->set_ok();
 	$result->value  = $rc;
 	return $result;
 }
