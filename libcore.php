@@ -1169,7 +1169,7 @@ function libcore__file_get($filename)
 function libcore__file_set($filename, $str)
 {
 	$rc = libcore__make_dir($filename);
-	if ($rc->get_result() == false) return false;
+	if ($rc->is_ok() == false) return false;
 
 
 	$handle = @fopen($filename, 'wb');
@@ -1213,7 +1213,7 @@ function libcore__file_set($filename, $str)
 function libcore__file_add($filename, $str)
 {
 	$rc = libcore__make_dir($filename);
-	if ($rc->get_result() == false) return false;
+	if ($rc->is_ok() == false) return false;
 
 
 	$handle = @fopen($filename, 'ab');
