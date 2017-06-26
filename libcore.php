@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.2.5
+// 0.2.6
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -8,40 +8,42 @@ class result_t
 	private $err_code;
 	private $msg;
 	private $msg_private;
+	private $arg_name;
 	private $file_name;
 	private $function_name;
 	private $value;
 
 	function result_t($function_name = "unknown", $file_name = "unknown")
 	{
-		$this->set_err(1, "unknown", "unknown");
+		$this->set_err(1, "unknown");
 
 		$this->file_name     = $file_name;
 		$this->function_name = $function_name;
 
 		$this->set_value(0);
 	}
-
-	function copy($err_code, $msg, $msg_private, $file_name, $function_name, $value)
+/*
+	function copy($err_code, $msg, $msg_private, $arg_name, $file_name, $function_name, $value)
 	{
-		$this->set_err($err_code, $msg, $msg_private);
+		$this->set_err($err_code, $msg, $msg_private, $arg_name);
 
 		$this->file_name     = $file_name;
 		$this->function_name = $function_name;
 
 		$this->set_value($value);
 	}
-
+*/
 	function is_ok()
 	{
 		return ($this->err_code == 0) ? true : false;
 	}
 
-	function set_err($err_code = 1, $msg = "unknown error", $msg_private = "")
+	function set_err($err_code = 1, $msg = "unknown", $msg_private = "", $arg_name = "")
 	{
 		$this->err_code     = $err_code;
 		$this->msg          = $msg;
 		$this->msg_private  = $msg_private;
+		$this->arg_name     = $arg_name;
 
 		if ($this->msg_private == '')
 		{
@@ -51,7 +53,7 @@ class result_t
 
 	function set_ok()
 	{
-		$this->set_err(0, "ok", "");
+		$this->set_err(0, "ok");
 	}
 
 	function get_err_code()
@@ -67,6 +69,11 @@ class result_t
 	function get_msg_private()
 	{
 		return $this->msg_private;
+	}
+
+	function get_arg_name()
+	{
+		return $this->arg_name;
 	}
 
 	function get_file_name()
