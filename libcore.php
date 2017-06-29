@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.2.6
+// 0.2.7
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -35,7 +35,7 @@ class result_t
 */
 	function is_ok()
 	{
-		return ($this->err_code == 0) ? true : false;
+		return ($this->err_code === 0) ? true : false;
 	}
 
 	function set_err($err_code = 1, $msg = "unknown", $msg_private = "", $arg_name = "")
@@ -391,7 +391,7 @@ function libcore__is_uint($x)
 
 	$size = strlen($x);
 
-	if ($size == 0) return false;
+	if ($size === 0) return false;
 
 	for ($i=0; $i < $size; $i++)
 	{
@@ -417,7 +417,7 @@ function libcore__is_sint($x)
 
 	$size = strlen($x);
 
-	if ($size == 0) return false;
+	if ($size === 0) return false;
 
 	for ($i=0; $i < $size; $i++)
 	{
@@ -431,12 +431,12 @@ function libcore__is_sint($x)
 			continue;
 		}
 
-		if ($i == 0)
+		if ($i === 0)
 		{
 			if
 			(
-				(ord($ch) == ord('-')) ||
-				(ord($ch) == ord('+'))
+				(ord($ch) === ord('-')) ||
+				(ord($ch) === ord('+'))
 			)
 			{
 				continue;
@@ -484,7 +484,7 @@ function libcore__is_float($x, $flag_need_point = false)
 
 	$size = strlen($x);
 
-	if ($size == 0) return false;
+	if ($size === 0) return false;
 
 
 	$flag_point = false;
@@ -500,16 +500,16 @@ function libcore__is_float($x, $flag_need_point = false)
 			continue;
 		}
 
-		if ($flag_point == false)
+		if ($flag_point === false)
 		{
-			if (ord($ch) == ord('.'))
+			if (ord($ch) === ord('.'))
 			{
-				if ($i == 0) // bad ".1"
+				if ($i === 0) // bad ".1"
 				{
 					return false;
 				}
 
-				if (($i + 1) == $size) // bad "1."
+				if (($i + 1) === $size) // bad "1."
 				{
 					return false;
 				}
@@ -521,7 +521,7 @@ function libcore__is_float($x, $flag_need_point = false)
 
 		return false;
 	}
-	if (($flag_need_point != false) && ($flag_point == false))
+	if (($flag_need_point !== false) && ($flag_point === false))
 	{
 		return false;
 	}
@@ -537,12 +537,12 @@ function libcore__is_flag($x)
 
 	if
 	(
-		(strcmp($x_low, "false") == 0) ||
-		(strcmp($x_low, "off")   == 0) ||
-		(strcmp($x_low, "0")     == 0) ||
-		(strcmp($x_low, "true")  == 0) ||
-		(strcmp($x_low, "on")    == 0) ||
-		(strcmp($x_low, "1")     == 0)
+		(strcmp($x_low, "false") === 0) ||
+		(strcmp($x_low, "off")   === 0) ||
+		(strcmp($x_low, "0")     === 0) ||
+		(strcmp($x_low, "true")  === 0) ||
+		(strcmp($x_low, "on")    === 0) ||
+		(strcmp($x_low, "1")     === 0)
 	)
 	{
 		return true;
@@ -559,9 +559,9 @@ function libcore__is_flag_set($x)
 
 	if
 	(
-		(strcmp($x_low, "true") == 0) ||
-		(strcmp($x_low, "on")   == 0) ||
-		(strcmp($x_low, "1")    == 0)
+		(strcmp($x_low, "true") === 0) ||
+		(strcmp($x_low, "on")   === 0) ||
+		(strcmp($x_low, "1")    === 0)
 	)
 	{
 		return true;
@@ -572,12 +572,12 @@ function libcore__is_flag_set($x)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__flag2int($x)
 {
-	if (libcore__is_flag($x) == false)
+	if (libcore__is_flag($x) === false)
 	{
 		return 0;
 	}
 
-	if (libcore__is_flag_set($x) == false)
+	if (libcore__is_flag_set($x) === false)
 	{
 		return 0;
 	}
@@ -587,7 +587,7 @@ function libcore__flag2int($x)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__flag2str($x)
 {
-	if (libcore__flag2int($x) == 0)
+	if (libcore__flag2int($x) === 0)
 	{
 		return "false";
 	}
@@ -598,7 +598,7 @@ function libcore__flag2str($x)
 function libcore__filter_enum($value, $value_list)
 {
 	$value_list_size = sizeof($value_list);
-	if ($value_list_size == 0)
+	if ($value_list_size === 0)
 	{
 		return $value;
 	}
@@ -611,7 +611,7 @@ function libcore__filter_enum($value, $value_list)
 
 		settype($value_other, "string");
 
-		if(strcmp($value_other, $value) == 0)
+		if(strcmp($value_other, $value) === 0)
 		{
 			return $value;
 		}
@@ -737,9 +737,9 @@ function libcore__shell_get_hex($key_name, $value_default = '00')
 	$value = libcore__get_var($key_name, $value_default);
 
 
-	if (libcore__is_hex($value) == false)
+	if (libcore__is_hex($value) === false)
 	{
-		if (libcore__is_hex($value_default) == false)
+		if (libcore__is_hex($value_default) === false)
 		{
 			return 0;
 		}
@@ -756,9 +756,9 @@ function libcore__get_var_float($key_name, $value_default = null)
 	$value = libcore__get_var($key_name, $value_default);
 
 
-	if (libcore__is_float($value) == false)
+	if (libcore__is_float($value) === false)
 	{
-		if (libcore__is_float($value_default) == false)
+		if (libcore__is_float($value_default) === false)
 		{
 			return null;
 		}
@@ -775,9 +775,9 @@ function libcore__shell_get_float($key_name, $value_default = 0)
 	$value = libcore__get_var($key_name, $value_default);
 
 
-	if (libcore__is_float($value) == false)
+	if (libcore__is_float($value) === false)
 	{
-		if (libcore__is_float($value_default) == false)
+		if (libcore__is_float($value_default) === false)
 		{
 			return 0;
 		}
@@ -794,9 +794,9 @@ function libcore__get_var_uint($key_name, $value_default = null)
 	$value = libcore__get_var($key_name, $value_default);
 
 
-	if (libcore__is_uint($value) == false)
+	if (libcore__is_uint($value) === false)
 	{
-		if (libcore__is_uint($value_default) == false)
+		if (libcore__is_uint($value_default) === false)
 		{
 			return null;
 		}
@@ -813,9 +813,9 @@ function libcore__shell_get_uint($key_name, $value_default = 0)
 	$value = libcore__get_var($key_name, $value_default);
 
 
-	if (libcore__is_uint($value) == false)
+	if (libcore__is_uint($value) === false)
 	{
-		if (libcore__is_uint($value_default) == false)
+		if (libcore__is_uint($value_default) === false)
 		{
 			return 0;
 		}
@@ -832,9 +832,9 @@ function libcore__get_var_sint($key_name, $value_default = null)
 	$value = libcore__get_var($key_name, $value_default);
 
 
-	if (libcore__is_sint($value) == false)
+	if (libcore__is_sint($value) === false)
 	{
-		if (libcore__is_sint($value_default) == false)
+		if (libcore__is_sint($value_default) === false)
 		{
 			return null;
 		}
@@ -851,9 +851,9 @@ function libcore__shell_get_sint($key_name, $value_default = 0)
 	$value = libcore__get_var($key_name, $value_default);
 
 
-	if (libcore__is_sint($value) == false)
+	if (libcore__is_sint($value) === false)
 	{
-		if (libcore__is_sint($value_default) == false)
+		if (libcore__is_sint($value_default) === false)
 		{
 			return 0;
 		}
@@ -870,9 +870,9 @@ function libcore__get_var_flag($key_name, $value_default = null)
 	$value = libcore__get_var($key_name, $value_default);
 
 
-	if (libcore__is_flag($value) == false)
+	if (libcore__is_flag($value) === false)
 	{
-		if (libcore__is_flag($value_default) == false)
+		if (libcore__is_flag($value_default) === false)
 		{
 			return null;
 		}
@@ -880,7 +880,7 @@ function libcore__get_var_flag($key_name, $value_default = null)
 	}
 
 
-	if (libcore__is_flag_set($value) == true)
+	if (libcore__is_flag_set($value) === true)
 	{
 		return "1";
 	}
@@ -895,9 +895,9 @@ function libcore__shell_get_flag($key_name, $value_default = "0")
 	$value = libcore__get_var($key_name, $value_default);
 
 
-	if (libcore__is_flag($value) == false)
+	if (libcore__is_flag($value) === false)
 	{
-		if (libcore__is_flag($value_default) == false)
+		if (libcore__is_flag($value_default) === false)
 		{
 			return "0";
 		}
@@ -905,7 +905,7 @@ function libcore__shell_get_flag($key_name, $value_default = "0")
 	}
 
 
-	if (libcore__is_flag_set($value) == true)
+	if (libcore__is_flag_set($value) === true)
 	{
 		return "1";
 	}
@@ -938,7 +938,7 @@ function libcore__gzip_check()
 	$http_accept_encoding = libcore__get_var_str("HTTP_ACCEPT_ENCODING");
 
 
-	if (strstr($http_accept_encoding, "gzip") == false)
+	if (strstr($http_accept_encoding, "gzip") === false)
 	{
 		return false;
 	}
@@ -948,7 +948,7 @@ function libcore__gzip_check()
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__gzip_open($flag_gzip)
 {
-	if (libcore__is_flag_set($flag_gzip) == false)
+	if (libcore__is_flag_set($flag_gzip) === false)
 	{
 		return;
 	}
@@ -960,7 +960,7 @@ function libcore__gzip_open($flag_gzip)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__gzip_close($flag_gzip)
 {
-	if (libcore__is_flag_set($flag_gzip) == false)
+	if (libcore__is_flag_set($flag_gzip) === false)
 	{
 		return;
 	}
@@ -984,37 +984,37 @@ function libcore__gzip_close($flag_gzip)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__getmonthname($month_num, $flag_simple = false)
 {
-	if ($flag_simple == false)
+	if ($flag_simple === false)
 	{
-		if ($month_num ==  1) return 'января';
-		if ($month_num ==  2) return 'февраля';
-		if ($month_num ==  3) return 'марта';
-		if ($month_num ==  4) return 'апреля';
-		if ($month_num ==  5) return 'мая';
-		if ($month_num ==  6) return 'июня';
-		if ($month_num ==  7) return 'июля';
-		if ($month_num ==  8) return 'августа';
-		if ($month_num ==  9) return 'сентября';
-		if ($month_num == 10) return 'октября';
-		if ($month_num == 11) return 'ноября';
-		if ($month_num == 12) return 'декабря';
+		if ($month_num ===  1) return 'января';
+		if ($month_num ===  2) return 'февраля';
+		if ($month_num ===  3) return 'марта';
+		if ($month_num ===  4) return 'апреля';
+		if ($month_num ===  5) return 'мая';
+		if ($month_num ===  6) return 'июня';
+		if ($month_num ===  7) return 'июля';
+		if ($month_num ===  8) return 'августа';
+		if ($month_num ===  9) return 'сентября';
+		if ($month_num === 10) return 'октября';
+		if ($month_num === 11) return 'ноября';
+		if ($month_num === 12) return 'декабря';
 
 		return 'мартобря';
 	}
 
 
-	if ($month_num ==  1) return 'Январь';
-	if ($month_num ==  2) return 'Февраль';
-	if ($month_num ==  3) return 'Март';
-	if ($month_num ==  4) return 'Апрель';
-	if ($month_num ==  5) return 'Май';
-	if ($month_num ==  6) return 'Июнь';
-	if ($month_num ==  7) return 'Июль';
-	if ($month_num ==  8) return 'Август';
-	if ($month_num ==  9) return 'Сентябрь';
-	if ($month_num == 10) return 'Октябрь';
-	if ($month_num == 11) return 'Ноябрь';
-	if ($month_num == 12) return 'Декабрь';
+	if ($month_num ===  1) return 'Январь';
+	if ($month_num ===  2) return 'Февраль';
+	if ($month_num ===  3) return 'Март';
+	if ($month_num ===  4) return 'Апрель';
+	if ($month_num ===  5) return 'Май';
+	if ($month_num ===  6) return 'Июнь';
+	if ($month_num ===  7) return 'Июль';
+	if ($month_num ===  8) return 'Август';
+	if ($month_num ===  9) return 'Сентябрь';
+	if ($month_num === 10) return 'Октябрь';
+	if ($month_num === 11) return 'Ноябрь';
+	if ($month_num === 12) return 'Декабрь';
 
 	return 'Мартобрь';
 }
@@ -1065,7 +1065,7 @@ function libcore__convert_date($gmt_offset, $datatime)
 		$str = $str.$year;
 	}
 
-	if (strcmp($str, '30 ноября 1999, 00:00') == 0)
+	if (strcmp($str, '30 ноября 1999, 00:00') === 0)
 	{
 		return 'unknown';
 	}
@@ -1111,9 +1111,9 @@ function libcore__make_dir($path)
 	{
 		$path.=$list[$i].'/';
 
-		if (@stat($path) == false)
+		if (@stat($path) === false)
 		{
-			if (@mkdir($path) == false)
+			if (@mkdir($path) === false)
 			{
 				$result->set_err(1, "don't make dir");
 				return $result;
@@ -1186,7 +1186,7 @@ function libcore__blk_read($handle, $str_size)
 	for (;;)
 	{
 		$read_size = $str_size - strlen($str);
-		if ($read_size == 0) break;
+		if ($read_size === 0) break;
 
 		$rc = fread($handle, $read_size);
 		if ($rc === false)
@@ -1224,7 +1224,7 @@ function libcore__file_get($filename)
 
 
 	$stat = @stat($filename);
-	if ($stat == false)
+	if ($stat === false)
 	{
 		return false;
 	}
@@ -1232,7 +1232,7 @@ function libcore__file_get($filename)
 
 
 	$str = libcore__blk_read($handle, $size);
-	if ($str == false)
+	if ($str === false)
 	{
 		return false;
 	}
@@ -1245,7 +1245,7 @@ function libcore__file_get($filename)
 function libcore__file_set($filename, $str)
 {
 	$rc = libcore__make_dir($filename);
-	if ($rc->is_ok() == false) return false;
+	if ($rc->is_ok() === false) return false;
 
 
 	$handle = @fopen($filename, 'wb');
@@ -1257,9 +1257,9 @@ function libcore__file_set($filename, $str)
 
 	for (;;)
 	{
-		if (@flock($handle, LOCK_EX) == false) // set exclusive lock on file
+		if (@flock($handle, LOCK_EX) === false) // set exclusive lock on file
 		{
-			if (@stat($filename) == false)
+			if (@stat($filename) === false)
 			{
 				$handle = @fopen($filename, 'wb');
 				if ($handle === false)
@@ -1293,7 +1293,7 @@ function libcore__file_set($filename, $str)
 function libcore__file_add($filename, $str)
 {
 	$rc = libcore__make_dir($filename);
-	if ($rc->is_ok() == false) return false;
+	if ($rc->is_ok() === false) return false;
 
 
 	$handle = @fopen($filename, 'ab');
@@ -1305,9 +1305,9 @@ function libcore__file_add($filename, $str)
 
 	for (;;)
 	{
-		if (@flock($handle, LOCK_EX) == false) // file exclusive lock
+		if (@flock($handle, LOCK_EX) === false) // file exclusive lock
 		{
-			if (@stat($filename) == false)
+			if (@stat($filename) === false)
 			{
 				$handle = @fopen($filename, 'ab');
 				if ($handle === false)
@@ -1338,12 +1338,90 @@ function libcore__file_add($filename, $str)
 	return true;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__file_copy($source, $target, $flag_overwrite = false)
+{
+	$source_stat = @stat($source);
+	if ($source_stat === false)
+	{
+		return false;
+	}
+	$size = $source_stat['size'];
+
+
+	$rc = libcore__make_dir($target);
+	if ($rc->is_ok() === false)
+	{
+		return false;
+	}
+
+
+	$source_handle = @fopen($source, 'rb');
+	if ($source_handle === false)
+	{
+		return false;
+	}
+
+
+	$target_handle = @fopen($target.".tmp", 'wb');
+	if ($target_handle === false)
+	{
+		return false;
+	}
+
+
+	$target_stat = @stat($target.".tmp");
+	if ($target_stat === false)
+	{
+		return false;
+	}
+
+
+	$chunk_size = 4096;
+	for (;;)
+	{
+		if ($size < $chunk_size) $chunk_size = $size;
+
+
+		$chunk = libcore__blk_read($source_handle, $chunk_size);
+		if ($chunk === false)
+		{
+			return false;
+		}
+
+
+		$rc = libcore__blk_write($target_handle, $chunk);
+		if ($rc === false)
+		{
+			return false;
+		}
+
+		$size -= $chunk_size;
+
+		if ($size === 0) break;
+	}
+
+
+	$rc = @rename($target.".tmp", $target);
+	if ($rc === false)
+	{
+		return false;
+	}
+
+
+	@fflush($target_handle);
+	@fclose($source_handle);
+	@fclose($target_handle);
+
+
+	return true;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 {
 	$result = new result_t(__FUNCTION__, __FILE__);
 
 	$ch = curl_init($url);
-	if ($ch == false)
+	if ($ch === false)
 	{
 		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
@@ -1351,7 +1429,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	}
 
 	$rc = curl_setopt($ch, CURLOPT_POST, true);
-	if ($rc == false)
+	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
@@ -1359,7 +1437,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	}
 
 	$rc = curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-	if ($rc == false)
+	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
@@ -1367,7 +1445,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	}
 
 	$rc = curl_setopt($ch, CURLOPT_HTTPGET, false);
-	if ($rc == false)
+	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
@@ -1375,7 +1453,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	}
 
 	$rc = curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	if ($rc == false)
+	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
@@ -1383,7 +1461,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	}
 
 	$rc = curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
-	if ($rc == false)
+	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
@@ -1391,7 +1469,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	}
 
 	$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'SSLv3');
-	if ($rc == false)
+	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
@@ -1401,7 +1479,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	if ($flag_security === true)
 	{
 		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, 3);
-		if ($rc == false)
+		if ($rc === false)
 		{
 			$result->set_err(1, curl_error($ch));
 			curl_close($ch);
@@ -1409,7 +1487,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 		}
 
 		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
-		if ($rc == false)
+		if ($rc === false)
 		{
 			$result->set_err(1, curl_error($ch));
 			curl_close($ch);
@@ -1418,7 +1496,7 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 	}
 
 	$rc = curl_exec($ch);
-	if ($rc == false)
+	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
@@ -1465,7 +1543,7 @@ function libcore__hex2bin($value, $flag_force = false)
 function libcore__hex_string_parity($str)
 {
 	$str_size = strlen($str);
-	if (libcore__is_parity($str_size) == false)
+	if (libcore__is_parity($str_size) === false)
 	{
 		return "0".$str;
 	}
@@ -1488,14 +1566,14 @@ function libcore__hex_string_expand($str, $size)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__hex_string_add($source, $add, $flag_check_hex = true)
 {
-	if ($flag_check_hex == true)
+	if ($flag_check_hex === true)
 	{
-		if (libcore__is_hex($source) == false)
+		if (libcore__is_hex($source) === false)
 		{
 			return "00";
 		}
 
-		if (libcore__is_hex($add) == false)
+		if (libcore__is_hex($add) === false)
 		{
 			return "00";
 		}
@@ -1528,7 +1606,7 @@ function libcore__hex_string_add($source, $add, $flag_check_hex = true)
 
 		$source[$size - $i - 1] = dechex($x);
 
-		if ((($i + 1) == $size) && ($carry != 0))
+		if ((($i + 1) === $size) && ($carry !== 0))
 		{
 			$size++;
 			$source = libcore__hex_string_expand($source, $size);
