@@ -1401,16 +1401,18 @@ function libcore__file_copy($source, $target, $flag_overwrite = false)
 	}
 
 
+	@fflush($target_handle);
+	@fclose($target_handle);
+
+
+	@fclose($source_handle);
+
+
 	$rc = @rename($target.".tmp", $target);
 	if ($rc === false)
 	{
 		return false;
 	}
-
-
-	@fflush($target_handle);
-	@fclose($source_handle);
-	@fclose($target_handle);
 
 
 	return true;
