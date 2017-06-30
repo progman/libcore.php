@@ -1240,7 +1240,7 @@ function libcore__file_set($filename, $str)
 
 
 	$rc = @fopen($filename, 'wb');
-	if ($rc === false) return false
+	if ($rc === false) return false;
 	$handle = $rc;
 
 
@@ -1266,17 +1266,17 @@ function libcore__file_set($filename, $str)
 
 
 	$rc = libcore__blk_write($handle, $str);
-	if ($rc === false) return false
+	if ($rc === false) return false;
 
 
 	$rc = @fflush($handle);
-	if ($rc === false) return false
+	if ($rc === false) return false;
 
 	$rc = @flock($handle, LOCK_UN); // file unlock
-	if ($rc === false) return false
+	if ($rc === false) return false;
 
 	$rc = @fclose($handle);
-	if ($rc === false) return false
+	if ($rc === false) return false;
 
 
 	return true;
