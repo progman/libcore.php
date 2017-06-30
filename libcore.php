@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.2.7
+// 0.2.8
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -1189,10 +1189,8 @@ function libcore__blk_read($handle, $str_size)
 		if ($read_size === 0) break;
 
 		$rc = fread($handle, $read_size);
-		if ($rc === false)
-		{
-			return false;
-		}
+		if ($rc === false) return false;
+
 		$str = $str.$rc;
 	}
 
@@ -1204,11 +1202,9 @@ function libcore__blk_write($handle, $str)
 	$str_size = strlen($str);
 	for ($i = 0; $i < $str_size; $i += $write_size)
 	{
-		$write_size = fwrite($handle, substr($str, $i));
-		if ($write_size === false)
-		{
-			return false;
-		}
+		$rc = fwrite($handle, substr($str, $i));
+		if ($rc === false) return false;
+		$write_size = $rc;
 	}
 
 	return true;
@@ -1216,28 +1212,23 @@ function libcore__blk_write($handle, $str)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__file_get($filename)
 {
-	$handle = @fopen($filename, 'rb');
-	if ($handle === false)
-	{
-		return false;
-	}
+	$rc = @fopen($filename, 'rb');
+	if ($rc === false) return false;
+	$handle = $rc;
 
 
-	$stat = @stat($filename);
-	if ($stat === false)
-	{
-		return false;
-	}
+	$rc = @stat($filename);
+	if ($rc === false) return false;
+	$stat = $rc;
 	$size = $stat['size'];
 
 
-	$str = libcore__blk_read($handle, $size);
-	if ($str === false)
-	{
-		return false;
-	}
+	$rc = libcore__blk_read($handle, $size);
+	if ($rc === false) return false;
+	$str = $rc;
 
-	@fclose($handle);
+	$rc = @fclose($handle);
+	if ($rc === false) return false;
 
 	return $str;
 }
@@ -1248,11 +1239,9 @@ function libcore__file_set($filename, $str)
 	if ($rc->is_ok() === false) return false;
 
 
-	$handle = @fopen($filename, 'wb');
-	if ($handle === false)
-	{
-		return false;
-	}
+	$rc = @fopen($filename, 'wb');
+	if ($rc === false) return false
+	$handle = $rc;
 
 
 	for (;;)
@@ -1277,15 +1266,18 @@ function libcore__file_set($filename, $str)
 
 
 	$rc = libcore__blk_write($handle, $str);
-	if ($rc === false)
-	{
-		return false;
-	}
+	if ($rc === false) return false
 
 
-	@fflush($handle);
-	@flock($handle, LOCK_UN); // file unlock
-	@fclose($handle);
+	$rc = @fflush($handle);
+	if ($rc === false) return false
+
+	$rc = @flock($handle, LOCK_UN); // file unlock
+	if ($rc === false) return false
+
+	$rc = @fclose($handle);
+	if ($rc === false) return false
+
 
 	return true;
 }
@@ -1296,11 +1288,9 @@ function libcore__file_add($filename, $str)
 	if ($rc->is_ok() === false) return false;
 
 
-	$handle = @fopen($filename, 'ab');
-	if ($handle === false)
-	{
-		return false;
-	}
+	$rc = @fopen($filename, 'ab');
+	if ($rc === false) return false;
+	$handle = $rc;
 
 
 	for (;;)
@@ -1331,49 +1321,51 @@ function libcore__file_add($filename, $str)
 	}
 
 
-	@fflush($handle);
-	@flock($handle, LOCK_UN); // file unlock
-	@fclose($handle);
+	$rc = @fflush($handle);
+	if ($rc === false) return false;
+
+	$rc = @flock($handle, LOCK_UN); // file unlock
+	if ($rc === false) return false;
+
+	$rc = @fclose($handle);
+	if ($rc === false) return false;
+
 
 	return true;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__file_copy($source, $target, $flag_overwrite = false)
 {
-	$source_stat = @stat($source);
-	if ($source_stat === false)
-	{
-		return false;
-	}
+	$rc = @stat($source);
+	if ($rc === false) return false;
+	$source_stat = $rc;
 	$size = $source_stat['size'];
 
 
+	if ($flag_overwrite === false)
+	{
+		$rc = @stat($target);
+		if ($rc !== false) return false;
+	}
+
+
 	$rc = libcore__make_dir($target);
-	if ($rc->is_ok() === false)
-	{
-		return false;
-	}
+	if ($rc->is_ok() === false) return false;
 
 
-	$source_handle = @fopen($source, 'rb');
-	if ($source_handle === false)
-	{
-		return false;
-	}
+	$rc = @fopen($source, 'rb');
+	if ($rc === false) return false;
+	$source_handle = $rc;
 
 
-	$target_handle = @fopen($target.".tmp", 'wb');
-	if ($target_handle === false)
-	{
-		return false;
-	}
+	$rc = @fopen($target.".tmp", 'wb');
+	if ($rc === false) return false;
+	$target_handle = $rc;
 
 
-	$target_stat = @stat($target.".tmp");
-	if ($target_stat === false)
-	{
-		return false;
-	}
+	$rc = @stat($target.".tmp");
+	if ($rc === false) return false;
+	$target_stat = $rc;
 
 
 	$chunk_size = 4096;
@@ -1382,18 +1374,13 @@ function libcore__file_copy($source, $target, $flag_overwrite = false)
 		if ($size < $chunk_size) $chunk_size = $size;
 
 
-		$chunk = libcore__blk_read($source_handle, $chunk_size);
-		if ($chunk === false)
-		{
-			return false;
-		}
+		$rc = libcore__blk_read($source_handle, $chunk_size);
+		if ($rc === false) return false;
+		$chunk = $rc;
 
 
 		$rc = libcore__blk_write($target_handle, $chunk);
-		if ($rc === false)
-		{
-			return false;
-		}
+		if ($rc === false) return false;
 
 		$size -= $chunk_size;
 
@@ -1401,18 +1388,18 @@ function libcore__file_copy($source, $target, $flag_overwrite = false)
 	}
 
 
-	@fflush($target_handle);
-	@fclose($target_handle);
+	$rc = @fflush($target_handle);
+	if ($rc === false) return false;
 
+	$rc = @fclose($target_handle);
+	if ($rc === false) return false;
 
-	@fclose($source_handle);
+	$rc = @fclose($source_handle);
+	if ($rc === false) return false;
 
 
 	$rc = @rename($target.".tmp", $target);
-	if ($rc === false)
-	{
-		return false;
-	}
+	if ($rc === false) return false;
 
 
 	return true;
