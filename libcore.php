@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.2.8
+// 0.2.9
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -1111,7 +1111,7 @@ function libcore__make_dir($path)
 	{
 		$path.=$list[$i].'/';
 
-		if (@stat($path) === false)
+		if (@file_exists($path) === false)
 		{
 			if (@mkdir($path) === false)
 			{
@@ -1134,14 +1134,14 @@ function libcore__get_cache_file($filename)
 	for (;;)
 	{
 		$fd = @stat($_SERVER['DOCUMENT_ROOT'].$filename);
-		if ($fd != false)
+		if ($fd !== false)
 		{
 			$mtime = $fd['mtime'];
 			break;
 		}
 
 		$fd = @stat($filename);
-		if ($fd != false)
+		if ($fd !== false)
 		{
 			$mtime = $fd['mtime'];
 			break;
@@ -1161,14 +1161,14 @@ function libcore__get_time_file($filename, $gmt_offset)
 	for (;;)
 	{
 		$fd = @stat($_SERVER['DOCUMENT_ROOT'].$filename);
-		if ($fd != false)
+		if ($fd !== false)
 		{
 			$mtime = $fd['mtime'];
 			break;
 		}
 
 		$fd = @stat($filename);
-		if ($fd != false)
+		if ($fd !== false)
 		{
 			$mtime = $fd['mtime'];
 			break;
@@ -1248,7 +1248,7 @@ function libcore__file_set($filename, $str)
 	{
 		if (@flock($handle, LOCK_EX) === false) // set exclusive lock on file
 		{
-			if (@stat($filename) === false)
+			if (@file_exists($filename) === false)
 			{
 				$handle = @fopen($filename, 'wb');
 				if ($handle === false)
@@ -1297,7 +1297,7 @@ function libcore__file_add($filename, $str)
 	{
 		if (@flock($handle, LOCK_EX) === false) // file exclusive lock
 		{
-			if (@stat($filename) === false)
+			if (@file_exists($filename) === false)
 			{
 				$handle = @fopen($filename, 'ab');
 				if ($handle === false)
@@ -1344,7 +1344,7 @@ function libcore__file_copy($source, $target, $flag_overwrite = false)
 
 	if ($flag_overwrite === false)
 	{
-		$rc = @stat($target);
+		$rc = @file_exists($target);
 		if ($rc !== false) return false;
 	}
 
@@ -1363,9 +1363,8 @@ function libcore__file_copy($source, $target, $flag_overwrite = false)
 	$target_handle = $rc;
 
 
-	$rc = @stat($target.".tmp");
+	$rc = @file_exists($target.".tmp");
 	if ($rc === false) return false;
-	$target_stat = $rc;
 
 
 	$chunk_size = 4096;
