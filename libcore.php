@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.3.4
+// 0.3.5
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -1649,6 +1649,231 @@ function libcore__hex_string_add($source, $add, $flag_check_hex = true)
 
 	return $source;
 }
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+// like http://php.net/manual/en/language.oop5.object-comparison.php
+function libcore__cmp_value($v1, $v2): bool
+{
+	$type1 = gettype($v1);
+	$type2 = gettype($v2);
+
+	if (strcmp($type1, $type2) !== 0)
+	{
+		return false;
+	}
+
+	if (strcmp($type1, 'boolean') === 0)
+	{
+		return $v1 === $v2;
+	}
+
+	if (strcmp($type1, 'integer') === 0)
+	{
+		return $v1 === $v2;
+	}
+
+	if (strcmp($type1, 'double') === 0)
+	{
+		if (strcmp(((string)$v1), ((string)$v2)) === 0)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	if (strcmp($type1, 'string') === 0)
+	{
+		if (strcmp($v1, $v2) === 0)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	if (strcmp($type1, 'array') === 0)
+	{
+		return libcore__cmp_array($v1, $v2);
+	}
+
+	if (strcmp($type1, 'object') === 0)
+	{
+		return libcore__cmp_object($v1, $v2);
+	}
+
+	if (strcmp($type1, 'resource') === 0)
+	{
+		return false; // I do not know how compare it
+	}
+
+	if (strcmp($type1, 'NULL') === 0)
+	{
+		return true;
+	}
+
+	if (strcmp($type1, 'unknown type') === 0)
+	{
+		return false; // I do not know how compare it
+	}
+
+	return false;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__cmp_object__inner($obj1, $objReflection1, $obj2, $objReflection2, $property_type): bool
+{
+	$arrProperties1 = $objReflection1->getProperties($property_type);
+	$arrProperties2 = $objReflection2->getProperties($property_type);
+
+
+	$arrProperties1_size = count($arrProperties1);
+	$arrProperties2_size = count($arrProperties2);
+
+	if ($arrProperties1_size !== $arrProperties2_size)
+	{
+		return false;
+	}
+
+
+	$arr1 = array();
+	for ($i=0; $i < $arrProperties1_size; $i++)
+	{
+		$arr1[$arrProperties1[$i]->{'name'}] = $arrProperties1[$i]->{'class'};
+	}
+	array_multisort($arr1);
+
+
+	$arr2 = array();
+	for ($i=0; $i < $arrProperties2_size; $i++)
+	{
+		$arr2[$arrProperties2[$i]->{'name'}] = $arrProperties2[$i]->{'class'};
+	}
+	array_multisort($arr2);
+
+
+	if (libcore__cmp_array($arr1, $arr2) === false)
+	{
+		return false;
+	}
+
+
+	foreach ($arr1 as $key => $value)
+	{
+		$rc = libcore__cmp_value($obj1->{$key}, $obj2->{$key});
+		if ($rc === false)
+		{
+			return false;
+		}
+	}
+
+
+	return true;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__cmp_object($obj1, $obj2): bool
+{
+	if ($obj1 != $obj2)
+	{
+		return false;
+	}
+
+	$objReflection1 = new ReflectionObject($obj1);
+	$objReflection2 = new ReflectionObject($obj2);
+
+	$rc = libcore__cmp_object__inner($obj1, $objReflection1, $obj2, $objReflection2, ReflectionProperty::IS_STATIC);
+	if ($rc === false) return false;
+
+	$rc = libcore__cmp_object__inner($obj1, $objReflection1, $obj2, $objReflection2, ReflectionProperty::IS_PUBLIC);
+	if ($rc === false) return false;
+
+	$rc = libcore__cmp_object__inner($obj1, $objReflection1, $obj2, $objReflection2, ReflectionProperty::IS_PROTECTED);
+	if ($rc === false) return false;
+
+	$rc = libcore__cmp_object__inner($obj1, $objReflection1, $obj2, $objReflection2, ReflectionProperty::IS_PRIVATE);
+	if ($rc === false) return false;
+
+	return true;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__cmp_array(array $arr1, array $arr2): bool
+{
+	$size = count($arr1);
+
+	if (count($arr2) !== $size)
+	{
+		return false;
+	}
+
+	$arrKeysInCommon = array_intersect_key($arr1, $arr2);
+	if (count($arrKeysInCommon) !== $size)
+	{
+		return false;
+	}
+
+	$arrKeys1 = array_keys($arr1);
+	$arrKeys2 = array_keys($arr2);
+
+	$arr1flag_number = true;
+	for ($i=0; $i < $size; $i++)
+	{
+		if (libcore__is_uint($arrKeys1[$i]) === false)
+		{
+			$arr1flag_number = false;
+			break;
+		}
+	}
+
+	$arr2flag_number = true;
+	for ($i=0; $i < $size; $i++)
+	{
+		if (libcore__is_uint($arrKeys2[$i]) === false)
+		{
+			$arr2flag_number = false;
+			break;
+		}
+	}
+
+	if ($arr1flag_number !== $arr2flag_number)
+	{
+		return false;
+	}
+
+	if ($arr1flag_number === false)
+	{
+		array_multisort($arrKeys1);
+		array_multisort($arrKeys2);
+
+		foreach ($arrKeys1 as $key => $val)
+		{
+			if (strcmp($arrKeys1[$key], $arrKeys2[$key]) !== 0)
+			{
+				return false;
+			}
+		}
+
+		foreach ($arr1 as $key => $val)
+		{
+			$rc = libcore__cmp_value($arr1[$key], $arr2[$key]);
+			if ($rc === false)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	for ($i=0; $i < $size; $i++)
+	{
+		$rc = libcore__cmp_value($arr1[$i], $arr2[$i]);
+		if ($rc === false)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
