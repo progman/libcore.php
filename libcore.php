@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.3.5
+// 0.3.6
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -13,6 +13,18 @@ class result_t
 	private $file_name;
 	private $function_name;
 	private $value;
+
+	function get_object()
+	{
+		$result                = new stdClass();
+		$result->err_code      = $this->get_err_code();
+		$result->msg           = $this->get_msg();
+		$result->msg_private   = $this->get_msg_private();
+		$result->arg_name      = $this->get_arg_name();
+		$result->file_name     = $this->get_file_name();
+		$result->function_name = $this->get_function_name();
+		return $result;
+	}
 
 	function result_t($function_name = "unknown", $file_name = "unknown")
 	{
