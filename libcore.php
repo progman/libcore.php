@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.4.0
+// 0.4.1
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -144,6 +144,7 @@ static $libcore__hex2bin_table = array
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 /*
 function libcore__tojson($in)
+function libcore__drop_sql_injection(&$obj)
 function libcore__rnd_bin_string($size)
 function libcore__rnd($min, $max)
 function libcore__get_rnd()
@@ -155,20 +156,27 @@ function libcore__is_float($x, $flag_need_point = false)
 function libcore__is_flag_unset($x)
 function libcore__is_flag_set($x)
 function libcore__is_flag($x)
-function libcore__bool2flag($x, $value_default = "0")
+function libcore__var2flag($x, $value_default = "0")
+function libcore__flag2bool($x, $value_default = false)
 function libcore__flag2int($x, $value_default = 0)
 function libcore__flag2str($x)
 function libcore__filter_enum($value, $value_list)
-
 function libcore__get_var($key_name, $value_default = null)
+function libcore__get_var_json($key_name = null, $value_default = null)
 function libcore__get_var_str($key_name, $value_default = null)
+function libcore__shell_get_str($key_name, $value_default = "", $flag_drop_sql_injection = true)
 function libcore__get_var_hex($key_name, $value_default = null)
+function libcore__shell_get_hex($key_name, $value_default = '00')
 function libcore__get_var_float($key_name, $value_default = null)
+function libcore__shell_get_float($key_name, $value_default = 0)
 function libcore__get_var_uint($key_name, $value_default = null)
+function libcore__shell_get_uint($key_name, $value_default = 0)
 function libcore__get_var_sint($key_name, $value_default = null)
+function libcore__shell_get_sint($key_name, $value_default = 0)
 function libcore__get_var_flag($key_name, $value_default = null)
+function libcore__shell_get_flag($key_name, $value_default = "0")
 function libcore__get_var_enum($key_name, $value_list)
-
+function libcore__shell_get_enum($key_name, $value_list, $flag_drop_sql_injection = true)
 function libcore__gzip_check()
 function libcore__gzip_open($flag_gzip)
 function libcore__gzip_close($flag_gzip)
@@ -184,11 +192,16 @@ function libcore__blk_write($handle, $str)
 function libcore__file_get($filename)
 function libcore__file_set($filename, $str)
 function libcore__file_add($filename, $str)
+function libcore__file_copy($source, $target, $flag_overwrite = false)
 function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
 function libcore__hex2bin($value, $flag_force = false)
 function libcore__hex_string_parity($str)
 function libcore__hex_string_expand($str, $size)
 function libcore__hex_string_add($source, $add, $flag_check_hex = true)
+function libcore__cmp_value($v1, $v2)
+function libcore__cmp_object__inner($obj1, $objReflection1, $obj2, $objReflection2, $property_type)
+function libcore__cmp_object($obj1, $obj2)
+function libcore__cmp_array(array $arr1, array $arr2)
 function libcore__array_uniq_concat($val1, $val2)
 */
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -556,17 +569,115 @@ function libcore__is_float($x, $flag_need_point = false)
 	return true;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__is_flag_unset($x)
+// detect as unset flag: false::bool, 0::int, "false"::string, "off"::string, "0"::string
+function libcore__is_flag_unset($val)
 {
-	settype($x, "string");
+/*
+	settype($val, "string");
 
-	$x_low = strtolower($x);
+	$val_low = strtolower($val);
 
 	if
 	(
-		(strcmp($x_low, "false") === 0) ||
-		(strcmp($x_low, "off")   === 0) ||
-		(strcmp($x_low, "0")     === 0)
+		(strcmp($val_low, "false") === 0) ||
+		(strcmp($val_low, "off")   === 0) ||
+		(strcmp($val_low, "0")     === 0)
+	)
+	{
+		return true;
+	}
+
+	return false;
+*/
+
+
+	if (is_bool($val) === true)
+	{
+		return ($val === false) ? true : false;
+	}
+
+	if (is_int($val) === true)
+	{
+		return ($val === 0) ? true : false;
+	}
+
+	if (is_string($val) === true)
+	{
+		$val_low = strtolower($val);
+
+		if
+		(
+			(strcmp($val_low, "false") === 0) ||
+			(strcmp($val_low, "off")   === 0) ||
+			(strcmp($val_low, "0")     === 0)
+		)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	return false;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+// detect as set flag: true::bool, not 0::int, "true"::string, "on"::string, "1"::string
+function libcore__is_flag_set($val)
+{
+/*
+	settype($val, "string");
+
+	$val_low = strtolower($val);
+
+	if
+	(
+		(strcmp($val_low, "true") === 0) ||
+		(strcmp($val_low, "on")   === 0) ||
+		(strcmp($val_low, "1")    === 0)
+	)
+	{
+		return true;
+	}
+
+	return false;
+*/
+
+	if (is_bool($val) === true)
+	{
+		return ($val === true) ? true : false;
+	}
+
+	if (is_int($val) === true)
+	{
+		return ($val !== 0) ? true : false;
+	}
+
+	if (is_string($val) === true)
+	{
+		$val_low = strtolower($val);
+
+		if
+		(
+			(strcmp($val_low, "true") === 0) ||
+			(strcmp($val_low, "on")   === 0) ||
+			(strcmp($val_low, "1")    === 0)
+		)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	return false;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__is_flag($val)
+{
+	if
+	(
+		(libcore__is_flag_unset($val) !== false) ||
+		(libcore__is_flag_set($val)   !== false)
 	)
 	{
 		return true;
@@ -575,51 +686,14 @@ function libcore__is_flag_unset($x)
 	return false;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__is_flag_set($x)
+function libcore__var2flag($val, $value_default = "0")
 {
-	settype($x, "string");
-
-	$x_low = strtolower($x);
-
-	if
-	(
-		(strcmp($x_low, "true") === 0) ||
-		(strcmp($x_low, "on")   === 0) ||
-		(strcmp($x_low, "1")    === 0)
-	)
-	{
-		return true;
-	}
-
-	return false;
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__is_flag($x)
-{
-	if
-	(
-		(libcore__is_flag_unset($x) !== false) ||
-		(libcore__is_flag_set($x)   !== false)
-	)
-	{
-		return true;
-	}
-
-	return false;
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__bool2flag($x, $value_default = "0")
-{
-	if
-	(
-		($x !== false) &&
-		($x !== true)
-	)
+	if (libcore__is_flag($val) === false)
 	{
 		return $value_default;
 	}
 
-	if ($x === false)
+	if (libcore__is_flag_set($val) === false)
 	{
 		return "0";
 	}
@@ -627,7 +701,7 @@ function libcore__bool2flag($x, $value_default = "0")
 	return "1";
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__flag2int($x, $value_default = 0)
+function libcore__flag2bool($x, $value_default = false)
 {
 	if (libcore__is_flag($x) === false)
 	{
@@ -636,15 +710,30 @@ function libcore__flag2int($x, $value_default = 0)
 
 	if (libcore__is_flag_set($x) === false)
 	{
+		return false;
+	}
+
+	return true;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__flag2int($val, $value_default = 0)
+{
+	if (libcore__is_flag($val) === false)
+	{
+		return $value_default;
+	}
+
+	if (libcore__is_flag_set($val) === false)
+	{
 		return 0;
 	}
 
 	return 1;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__flag2str($x)
+function libcore__flag2str($val)
 {
-	if (libcore__flag2int($x) === 0)
+	if (libcore__flag2int($val) === 0)
 	{
 		return "false";
 	}

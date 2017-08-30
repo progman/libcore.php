@@ -461,6 +461,249 @@ function test__libcore__array_uniq_concat()
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function test__libcore__flag()
+{
+	if (libcore__is_flag_unset(false) === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_unset(0) === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_unset("false") === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step003\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_unset("off") === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step004\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_unset("0") === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step005\n";
+		exit(1);
+	}
+
+
+
+	if (libcore__is_flag_set(false) !== false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step006\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_set(0) !== false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step007\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_set("false") !== false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step008\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_set("off") !== false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step009\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_set("0") !== false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step010\n";
+		exit(1);
+	}
+
+
+
+	if (libcore__is_flag_set(true) === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step011\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_set(100) === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step012\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_set("true") === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step013\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_set("on") === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step014\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_set("1") === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step015\n";
+		exit(1);
+	}
+
+
+
+	if (libcore__is_flag_unset(true) !== false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step016\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_unset(100) !== false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step017\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_unset("true") !== false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step018\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_unset("on") !== false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step019\n";
+		exit(1);
+	}
+
+	if (libcore__is_flag_unset("1") !== false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step020\n";
+		exit(1);
+	}
+
+
+
+	if (libcore__is_flag("moon") !== false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step021\n";
+		exit(1);
+	}
+
+
+
+	if (strcmp(libcore__var2flag(false),   "0") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step022\n";
+		exit(1);
+	}
+
+	if (strcmp(libcore__var2flag(0),       "0") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step023\n";
+		exit(1);
+	}
+
+	if (strcmp(libcore__var2flag("false"), "0") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step024\n";
+		exit(1);
+	}
+
+	if (strcmp(libcore__var2flag("off"),   "0") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step025\n";
+		exit(1);
+	}
+
+	if (strcmp(libcore__var2flag("0"),     "0") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step026\n";
+		exit(1);
+	}
+
+
+
+	if (strcmp(libcore__var2flag(true),    "1") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step027\n";
+		exit(1);
+	}
+
+	if (strcmp(libcore__var2flag(100),     "1") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step028\n";
+		exit(1);
+	}
+
+	if (strcmp(libcore__var2flag("true"),  "1") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step029\n";
+		exit(1);
+	}
+
+	if (strcmp(libcore__var2flag("on"),    "1") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step030\n";
+		exit(1);
+	}
+
+	if (strcmp(libcore__var2flag("1"),     "1") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step031\n";
+		exit(1);
+	}
+
+
+
+	if (libcore__flag2bool("0") !== false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step032\n";
+		exit(1);
+	}
+
+	if (libcore__flag2bool("1") === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step033\n";
+		exit(1);
+	}
+
+
+
+	if (libcore__flag2int("0") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step034\n";
+		exit(1);
+	}
+
+	if (libcore__flag2int("1") === 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step035\n";
+		exit(1);
+	}
+
+
+
+	if (strcmp(libcore__flag2str("0"), "false") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step036\n";
+		exit(1);
+	}
+
+	if (strcmp(libcore__flag2str("1"), "true") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step037\n";
+		exit(1);
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 test__libcore__tojson();
 test__libcore__is_uint();
 test__libcore__is_sint();
@@ -474,6 +717,7 @@ test__libcore__hex_string_expand();
 test__libcore__hex_string_add();
 test__libcore__cmp();
 test__libcore__array_uniq_concat();
+test__libcore__flag();
 
 echo "ok, test passed\n";
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
