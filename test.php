@@ -736,7 +736,6 @@ function test__libcore__array_uniq()
 		exit(1);
 	}
 
-
 	if (strcmp($out_list[0], "1") !== 0)
 	{
 		echo "ERROR[".__FUNCTION__."()]: step002\n";
@@ -751,7 +750,26 @@ function test__libcore__array_uniq()
 
 	if (strcmp($out_list[2], "3") !== 0)
 	{
+		echo "ERROR[".__FUNCTION__."()]: step004\n";
+		exit(1);
+	}
+
+
+	$in_list = array("a" => "green", "b" => "green", "c" => "green");
+
+
+	$out_list = libcore__array_uniq($in_list);
+
+
+	if (count($out_list) !== 1)
+	{
 		echo "ERROR[".__FUNCTION__."()]: step005\n";
+		exit(1);
+	}
+
+	if (strcmp($out_list['a'], "green") !== 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step006\n";
 		exit(1);
 	}
 }

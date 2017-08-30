@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.4.3
+// 0.4.4
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -2009,29 +2009,49 @@ function libcore__cmp_array(array $arr1, array $arr2)
 	return true;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__array_add($val1, $val2)
+function libcore__array_add($arr1, $arr2)
 {
-	if (is_array($val1) === false)
+	if (is_array($arr1) === false)
 	{
-		$val1 = array();
+		$arr1 = array();
 	}
 
-	if (is_array($val2) === false)
+	if (is_array($arr2) === false)
 	{
-		$val2 = array();
+		$arr2 = array();
 	}
 
-	$item_list = array_merge($val1, $val2);
+	$tmp_list = array_merge($arr1, $arr2);
 
-	return $item_list;
+	return $tmp_list;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__array_uniq($val)
+function libcore__array_uniq($arr)
 {
-	$item_list = array_unique($val);
+	$flag_simple_array = true;
+	$index = 0;
+	foreach ($arr as $key => $value)
+	{
+		if ($key !== $index)
+		{
+			$flag_simple_array = false;
+			break;
+		}
+		$index++;
+	}
+
+
+	$uniq_list = array_unique($arr);
+
+
+	if ($flag_simple_array === false)
+	{
+		return $uniq_list;
+	}
+
 
 	$tmp_list = array();
-	foreach ($item_list as &$value)
+	foreach ($uniq_list as &$value)
 	{
 		array_push($tmp_list, $value);
 	}
@@ -2039,28 +2059,28 @@ function libcore__array_uniq($val)
 	return $tmp_list;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__array_sub($val1, $val2)
+function libcore__array_sub($arr1, $arr2)
 {
-	if (is_array($val1) === false)
+	if (is_array($arr1) === false)
 	{
-		$val1 = array();
+		$arr1 = array();
 	}
 
-	if (is_array($val2) === false)
+	if (is_array($arr2) === false)
 	{
-		$val2 = array();
+		$arr2 = array();
 	}
 
-	$val1_size = count($val1);
-	$val2_size = count($val2);
+	$arr1_size = count($arr1);
+	$arr2_size = count($arr2);
 
 	$tmp_list = array();
-	for ($i=0; $i < $val1_size; $i++)
+	for ($i=0; $i < $arr1_size; $i++)
 	{
 		$flag_found = false;
-		for ($j=0; $j < $val2_size; $j++)
+		for ($j=0; $j < $arr2_size; $j++)
 		{
-			if (libcore__cmp_value($val1[$i], $val2[$j]) === true)
+			if (libcore__cmp_value($arr1[$i], $arr2[$j]) === true)
 			{
 				$flag_found = true;
 				break;
@@ -2068,7 +2088,7 @@ function libcore__array_sub($val1, $val2)
 		}
 		if ($flag_found === false)
 		{
-			array_push($tmp_list, $val1[$i]);
+			array_push($tmp_list, $arr1[$i]);
 		}
 	}
 
