@@ -2,6 +2,70 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 require_once("libcore.php");
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/*
+	function libcore__tojson($in)
+function libcore__drop_sql_injection(&$obj)
+function libcore__rnd_bin_string($size)
+	function libcore__rnd($min, $max)
+function libcore__get_rnd()
+	function libcore__is_parity($val)
+	function libcore__is_uint($x)
+	function libcore__is_sint($x)
+	function libcore__is_hex($x, $flag_parity = false)
+	function libcore__is_float($x, $flag_need_point = false)
+	function libcore__is_flag_unset($val)
+	function libcore__is_flag_set($val)
+	function libcore__is_flag($val)
+	function libcore__var2flag($val, $value_default = "0")
+	function libcore__flag2bool($x, $value_default = false)
+	function libcore__flag2int($val, $value_default = 0)
+	function libcore__flag2str($val)
+function libcore__filter_enum($value, $value_list)
+function libcore__get_var($key_name, $value_default = null)
+function libcore__get_var_json($key_name = null, $value_default = null)
+function libcore__get_var_str($key_name, $value_default = null)
+function libcore__shell_get_str($key_name, $value_default = "", $flag_drop_sql_injection = true)
+function libcore__get_var_hex($key_name, $value_default = null)
+function libcore__shell_get_hex($key_name, $value_default = '00')
+function libcore__get_var_float($key_name, $value_default = null)
+function libcore__shell_get_float($key_name, $value_default = 0)
+function libcore__get_var_uint($key_name, $value_default = null)
+function libcore__shell_get_uint($key_name, $value_default = 0)
+function libcore__get_var_sint($key_name, $value_default = null)
+function libcore__shell_get_sint($key_name, $value_default = 0)
+function libcore__get_var_flag($key_name, $value_default = null)
+function libcore__shell_get_flag($key_name, $value_default = "0")
+function libcore__get_var_enum($key_name, $value_list)
+function libcore__shell_get_enum($key_name, $value_list, $flag_drop_sql_injection = true)
+function libcore__gzip_check()
+function libcore__gzip_open($flag_gzip)
+function libcore__gzip_close($flag_gzip)
+function libcore__getmonthname($month_num, $flag_simple = false)
+function libcore__convert_date($gmt_offset, $datatime)
+function libcore__set_cookie($cookie_name, $cookie_value, $expired)
+function libcore__unixtime2datatime($unixtime)
+function libcore__make_dir($path)
+function libcore__get_cache_file($filename)
+function libcore__get_time_file($filename, $gmt_offset)
+function libcore__blk_read($handle, $str_size)
+function libcore__blk_write($handle, $str)
+function libcore__file_get($filename)
+function libcore__file_set($filename, $str)
+function libcore__file_add($filename, $str)
+function libcore__file_copy($source, $target, $flag_overwrite = false)
+function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
+	function libcore__hex2bin($value, $flag_force = false)
+	function libcore__hex_string_parity($str)
+	function libcore__hex_string_expand($str, $size)
+	function libcore__hex_string_add($source, $add, $flag_check_hex = true)
+	function libcore__cmp_value($v1, $v2)
+	function libcore__cmp_object($obj1, $obj2)
+	function libcore__cmp_array(array $arr1, array $arr2)
+	function libcore__array_add($arr1, $arr2)
+	function libcore__array_uniq($arr)
+	function libcore__array_sub($arr1, $arr2)
+*/
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function test__libcore__tojson()
 {
 // \u0022 - " - Unicode Character 'QUOTATION MARK' (U+0022)
@@ -77,6 +141,55 @@ function test__libcore__tojson()
 	if (strcmp($rc, '\t') !== 0)
 	{
 		echo "ERROR[".__FUNCTION__."()]: step009\n";
+		exit(1);
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//!function libcore__drop_sql_injection(&$obj)
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//!function libcore__rnd_bin_string($size)
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function test__libcore__rnd()
+{
+	$max = 100;
+	for ($i=0; $i < ($max + 1); $i++)
+	{
+		$count = 0;
+		for (;;)
+		{
+			$x = libcore__rnd(0, $max);
+			if ($x == $i) break;
+
+			if ($x == ($max + 1))
+			{
+				echo "ERROR[".__FUNCTION__."()]: step001\n";
+				exit(1);
+			}
+
+			$count++;
+
+			if ($count == 1000000000)
+			{
+				echo "ERROR[".__FUNCTION__."()]: step002\n";
+				exit(1);
+			}
+		}
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//!function libcore__get_rnd()
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function test__libcore__is_parity()
+{
+	if (libcore__is_parity(1) == true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		exit(1);
+	}
+
+	if (libcore__is_parity(2) == false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 }
@@ -205,230 +318,7 @@ function test__libcore__is_float()
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function test__libcore__hex2bin()
-{
-	$x = 'super puper';
-
-	$x_hex = bin2hex($x);
-
-	$y = libcore__hex2bin($x_hex, true);
-
-	if ($x !== $y)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
-		exit(1);
-	}
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function test__libcore__is_parity()
-{
-	if (libcore__is_parity(1) == true)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
-		exit(1);
-	}
-
-	if (libcore__is_parity(2) == false)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
-		exit(1);
-	}
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function test__libcore__rnd()
-{
-	$max = 100;
-	for ($i=0; $i < ($max + 1); $i++)
-	{
-		$count = 0;
-		for (;;)
-		{
-			$x = libcore__rnd(0, $max);
-			if ($x == $i) break;
-
-			if ($x == ($max + 1))
-			{
-				echo "ERROR[".__FUNCTION__."()]: step001\n";
-				exit(1);
-			}
-
-			$count++;
-
-			if ($count == 1000000000)
-			{
-				echo "ERROR[".__FUNCTION__."()]: step002\n";
-				exit(1);
-			}
-		}
-	}
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function test__libcore__hex_string_parity()
-{
-	$x = libcore__hex_string_parity("0");
-	if (strcmp($x, "00") != 0)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
-		exit(1);
-	}
-
-	$x = libcore__hex_string_parity("00");
-	if (strcmp($x, "00") != 0)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
-		exit(1);
-	}
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function test__libcore__hex_string_expand()
-{
-	$x = libcore__hex_string_expand("0", 2);
-	if (strcmp($x, "00") != 0)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
-		exit(1);
-	}
-
-	$x = libcore__hex_string_expand("00", 2);
-	if (strcmp($x, "00") != 0)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
-		exit(1);
-	}
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function test__libcore__hex_string_add()
-{
-	$x = "1";
-	$y = "2";
-	$z = libcore__hex_string_add($x, $y);
-	if (strcmp($z, "03") != 0)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
-		exit(1);
-	}
-
-
-	$x = "fe";
-	$y = "1";
-	$z = libcore__hex_string_add($x, $y);
-	if (strcmp($z, "ff") != 0)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
-		exit(1);
-	}
-
-
-	$x = "ff";
-	$y = "1";
-	$z = libcore__hex_string_add($x, $y);
-	if (strcmp($z, "0100") != 0)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step003\n";
-		exit(1);
-	}
-
-	$x = "ff";
-	$y = "ff";
-	$z = libcore__hex_string_add($x, $y);
-	if (strcmp($z, "01fe") != 0)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step004\n";
-		exit(1);
-	}
-
-
-	for ($i=0; $i < 1000; $i++)
-	{
-		$a = libcore__hex_string_expand(dechex(rand(0, 9223372036854775807)), 32);
-		$b = libcore__hex_string_expand(dechex(rand(0, 9223372036854775807)), 32);
-
-
-		$c1 = libcore__hex_string_add($a, $b);
-		$c2 = libcore__hex_string_expand((dechex(hexdec($a) + hexdec($b))), 32);
-
-
-		if (strcmp($c1, $c2) != 0)
-		{
-			echo "ERROR[".__FUNCTION__."()]: step005\n";
-			echo "c1     : ".$c1."\n";
-			echo "c2     : ".$c2."\n";
-			exit(1);
-		}
-	}
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function test__libcore__cmp()
-{
-	$o1 = new stdClass();
-	$o1->x = new stdClass();
-
-	$o2 = new stdClass();
-
-	if (libcore__cmp_value($o1, $o2) === true)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
-		exit(1);
-	}
-
-
-	$o1 = new stdClass();
-	$o1->x = array('blue'  => 1, 'red'  => 2, 'green'  => 3, 'purple' => 4);
-
-	$o2 = new stdClass();
-	$o2->x = array('green' => 5, 'blue' => 6, 'yellow' => 7, 'cyan'   => 8);
-
-	if (libcore__cmp_value($o1, $o2) === true)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
-		exit(1);
-	}
-
-
-	$o1 = new stdClass();
-	$o1->x = array('blue'  => 1, 'red'  => 2, 'green'  => 5, 'purple' => 4);
-
-	$o2 = new stdClass();
-	$o2->x = array('green' => 5, 'blue' => 6, 'red'    => 2, 'purple' => 4);
-
-	if (libcore__cmp_value($o1, $o2) === true)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step003\n";
-		exit(1);
-	}
-
-
-	$o1 = new stdClass();
-	$o1->x = array();
-	array_push($o1->x, '10');
-	array_push($o1->x, '20');
-
-	$o2 = new stdClass();
-	$o2->x = array();
-	array_push($o2->x, '20');
-	array_push($o2->x, '10');
-
-	if (libcore__cmp_value($o1, $o2) === true)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step004\n";
-		exit(1);
-	}
-
-
-	$o1 = new stdClass();
-	$o1->x = array('blue'  => 6, 'red'  => 2, 'green'  => 5, 'purple' => 4);
-
-	$o2 = new stdClass();
-	$o2->x = array('green' => 5, 'blue' => 6, 'red'    => 2, 'purple' => 4);
-
-	if (libcore__cmp_value($o1, $o2) === false)
-	{
-		echo "ERROR[".__FUNCTION__."()]: step005\n";
-		exit(1);
-	}
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function test__libcore__flag()
+function test__libcore__flag() // libcore__is_flag_unset(), libcore__is_flag_set(), libcore__is_flag(), libcore__var2flag(), libcore__flag2bool(), libcore__flag2int(), libcore__flag2str()
 {
 	if (libcore__is_flag_unset(false) === false)
 	{
@@ -671,6 +561,221 @@ function test__libcore__flag()
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//!function libcore__filter_enum($value, $value_list)
+//!function libcore__get_var($key_name, $value_default = null)
+//!function libcore__get_var_json($key_name = null, $value_default = null)
+//!function libcore__get_var_str($key_name, $value_default = null)
+//!function libcore__shell_get_str($key_name, $value_default = "", $flag_drop_sql_injection = true)
+//!function libcore__get_var_hex($key_name, $value_default = null)
+//!function libcore__shell_get_hex($key_name, $value_default = '00')
+//!function libcore__get_var_float($key_name, $value_default = null)
+//!function libcore__shell_get_float($key_name, $value_default = 0)
+//!function libcore__get_var_uint($key_name, $value_default = null)
+//!function libcore__shell_get_uint($key_name, $value_default = 0)
+//!function libcore__get_var_sint($key_name, $value_default = null)
+//!function libcore__shell_get_sint($key_name, $value_default = 0)
+//!function libcore__get_var_flag($key_name, $value_default = null)
+//!function libcore__shell_get_flag($key_name, $value_default = "0")
+//!function libcore__get_var_enum($key_name, $value_list)
+//!function libcore__shell_get_enum($key_name, $value_list, $flag_drop_sql_injection = true)
+//!function libcore__gzip_check()
+//!function libcore__gzip_open($flag_gzip)
+//!function libcore__gzip_close($flag_gzip)
+//!function libcore__getmonthname($month_num, $flag_simple = false)
+//!function libcore__convert_date($gmt_offset, $datatime)
+//!function libcore__set_cookie($cookie_name, $cookie_value, $expired)
+//!function libcore__unixtime2datatime($unixtime)
+//!function libcore__make_dir($path)
+//!function libcore__get_cache_file($filename)
+//!function libcore__get_time_file($filename, $gmt_offset)
+//!function libcore__blk_read($handle, $str_size)
+//!function libcore__blk_write($handle, $str)
+//!function libcore__file_get($filename)
+//!function libcore__file_set($filename, $str)
+//!function libcore__file_add($filename, $str)
+//!function libcore__file_copy($source, $target, $flag_overwrite = false)
+//!function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function test__libcore__hex2bin()
+{
+	$x = 'super puper';
+
+	$x_hex = bin2hex($x);
+
+	$y = libcore__hex2bin($x_hex, true);
+
+	if ($x !== $y)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		exit(1);
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function test__libcore__hex_string_parity()
+{
+	$x = libcore__hex_string_parity("0");
+	if (strcmp($x, "00") != 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		exit(1);
+	}
+
+	$x = libcore__hex_string_parity("00");
+	if (strcmp($x, "00") != 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		exit(1);
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function test__libcore__hex_string_expand()
+{
+	$x = libcore__hex_string_expand("0", 2);
+	if (strcmp($x, "00") != 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		exit(1);
+	}
+
+	$x = libcore__hex_string_expand("00", 2);
+	if (strcmp($x, "00") != 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		exit(1);
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function test__libcore__hex_string_add()
+{
+	$x = "1";
+	$y = "2";
+	$z = libcore__hex_string_add($x, $y);
+	if (strcmp($z, "03") != 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		exit(1);
+	}
+
+
+	$x = "fe";
+	$y = "1";
+	$z = libcore__hex_string_add($x, $y);
+	if (strcmp($z, "ff") != 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		exit(1);
+	}
+
+
+	$x = "ff";
+	$y = "1";
+	$z = libcore__hex_string_add($x, $y);
+	if (strcmp($z, "0100") != 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step003\n";
+		exit(1);
+	}
+
+	$x = "ff";
+	$y = "ff";
+	$z = libcore__hex_string_add($x, $y);
+	if (strcmp($z, "01fe") != 0)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step004\n";
+		exit(1);
+	}
+
+
+	for ($i=0; $i < 1000; $i++)
+	{
+		$a = libcore__hex_string_expand(dechex(rand(0, 9223372036854775807)), 32);
+		$b = libcore__hex_string_expand(dechex(rand(0, 9223372036854775807)), 32);
+
+
+		$c1 = libcore__hex_string_add($a, $b);
+		$c2 = libcore__hex_string_expand((dechex(hexdec($a) + hexdec($b))), 32);
+
+
+		if (strcmp($c1, $c2) != 0)
+		{
+			echo "ERROR[".__FUNCTION__."()]: step005\n";
+			echo "c1     : ".$c1."\n";
+			echo "c2     : ".$c2."\n";
+			exit(1);
+		}
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function test__libcore__cmp() // libcore__cmp_value(), libcore__cmp_object(), libcore__cmp_array()
+{
+	$o1 = new stdClass();
+	$o1->x = new stdClass();
+
+	$o2 = new stdClass();
+
+	if (libcore__cmp_value($o1, $o2) === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		exit(1);
+	}
+
+
+	$o1 = new stdClass();
+	$o1->x = array('blue'  => 1, 'red'  => 2, 'green'  => 3, 'purple' => 4);
+
+	$o2 = new stdClass();
+	$o2->x = array('green' => 5, 'blue' => 6, 'yellow' => 7, 'cyan'   => 8);
+
+	if (libcore__cmp_value($o1, $o2) === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		exit(1);
+	}
+
+
+	$o1 = new stdClass();
+	$o1->x = array('blue'  => 1, 'red'  => 2, 'green'  => 5, 'purple' => 4);
+
+	$o2 = new stdClass();
+	$o2->x = array('green' => 5, 'blue' => 6, 'red'    => 2, 'purple' => 4);
+
+	if (libcore__cmp_value($o1, $o2) === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step003\n";
+		exit(1);
+	}
+
+
+	$o1 = new stdClass();
+	$o1->x = array();
+	array_push($o1->x, '10');
+	array_push($o1->x, '20');
+
+	$o2 = new stdClass();
+	$o2->x = array();
+	array_push($o2->x, '20');
+	array_push($o2->x, '10');
+
+	if (libcore__cmp_value($o1, $o2) === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step004\n";
+		exit(1);
+	}
+
+
+	$o1 = new stdClass();
+	$o1->x = array('blue'  => 6, 'red'  => 2, 'green'  => 5, 'purple' => 4);
+
+	$o2 = new stdClass();
+	$o2->x = array('green' => 5, 'blue' => 6, 'red'    => 2, 'purple' => 4);
+
+	if (libcore__cmp_value($o1, $o2) === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step005\n";
+		exit(1);
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function test__libcore__array_add()
 {
 	$in1_list = array();
@@ -813,18 +918,67 @@ function test__libcore__array_sub()
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 test__libcore__tojson();
+
+
+//function libcore__drop_sql_injection(&$obj)
+//function libcore__rnd_bin_string($size)
+
+
+test__libcore__rnd();
+
+
+//function libcore__get_rnd()
+
+
+test__libcore__is_parity();
 test__libcore__is_uint();
 test__libcore__is_sint();
 test__libcore__is_hex();
 test__libcore__is_float();
+test__libcore__flag(); // libcore__is_flag_unset(), libcore__is_flag_set(), libcore__is_flag(), libcore__var2flag(), libcore__flag2bool(), libcore__flag2int(), libcore__flag2str()
+
+
+//function libcore__filter_enum($value, $value_list)
+//function libcore__get_var($key_name, $value_default = null)
+//function libcore__get_var_json($key_name = null, $value_default = null)
+//function libcore__get_var_str($key_name, $value_default = null)
+//function libcore__shell_get_str($key_name, $value_default = "", $flag_drop_sql_injection = true)
+//function libcore__get_var_hex($key_name, $value_default = null)
+//function libcore__shell_get_hex($key_name, $value_default = '00')
+//function libcore__get_var_float($key_name, $value_default = null)
+//function libcore__shell_get_float($key_name, $value_default = 0)
+//function libcore__get_var_uint($key_name, $value_default = null)
+//function libcore__shell_get_uint($key_name, $value_default = 0)
+//function libcore__get_var_sint($key_name, $value_default = null)
+//function libcore__shell_get_sint($key_name, $value_default = 0)
+//function libcore__get_var_flag($key_name, $value_default = null)
+//function libcore__shell_get_flag($key_name, $value_default = "0")
+//function libcore__get_var_enum($key_name, $value_list)
+//function libcore__shell_get_enum($key_name, $value_list, $flag_drop_sql_injection = true)
+//function libcore__gzip_check()
+//function libcore__gzip_open($flag_gzip)
+//function libcore__gzip_close($flag_gzip)
+//function libcore__getmonthname($month_num, $flag_simple = false)
+//function libcore__convert_date($gmt_offset, $datatime)
+//function libcore__set_cookie($cookie_name, $cookie_value, $expired)
+//function libcore__unixtime2datatime($unixtime)
+//function libcore__make_dir($path)
+//function libcore__get_cache_file($filename)
+//function libcore__get_time_file($filename, $gmt_offset)
+//function libcore__blk_read($handle, $str_size)
+//function libcore__blk_write($handle, $str)
+//function libcore__file_get($filename)
+//function libcore__file_set($filename, $str)
+//function libcore__file_add($filename, $str)
+//function libcore__file_copy($source, $target, $flag_overwrite = false)
+//function libcore__do_post($url, $data, $flag_security = true, $timeout = 30)
+
+
 test__libcore__hex2bin();
-test__libcore__is_parity();
-test__libcore__rnd();
 test__libcore__hex_string_parity();
 test__libcore__hex_string_expand();
 test__libcore__hex_string_add();
-test__libcore__cmp();
-test__libcore__flag();
+test__libcore__cmp(); // libcore__cmp_value(), libcore__cmp_object(), libcore__cmp_array()
 test__libcore__array_add();
 test__libcore__array_uniq();
 test__libcore__array_sub();
