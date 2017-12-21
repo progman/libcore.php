@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.4.9
+// 0.5.0
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -175,6 +175,7 @@ function libcore__shell_get_uint($key_name, $value_default = 0)
 function libcore__get_var_sint($key_name, $value_default = null)
 function libcore__shell_get_sint($key_name, $value_default = 0)
 function libcore__get_var_flag($key_name, $value_default = null)
+function libcore__get_var_bool($key_name, $value_default = null)
 function libcore__shell_get_flag($key_name, $value_default = "0")
 function libcore__get_var_enum($key_name, $value_list)
 function libcore__shell_get_enum($key_name, $value_list, $flag_drop_sql_injection = true)
@@ -781,24 +782,39 @@ function libcore__get_var($key_name, $value_default = null)
 	global $_COOKIE;
 
 
+	$item = new stdClass();
+
+
 	if (isset($_ENV[$key_name]) === true)
 	{
-		return $_ENV[$key_name];
+		$item->flag_set       = true;
+		$item->value          = $_ENV[$key_name];
+		$item->value_original = $item->value;
+		return $item;
 	}
 
 	if (isset($_SERVER[$key_name]) === true)
 	{
-		return $_SERVER[$key_name];
+		$item->flag_set       = true;
+		$item->value          = $_SERVER[$key_name];
+		$item->value_original = $item->value;
+		return $item;
 	}
 
 	if (isset($_GET[$key_name]) === true)
 	{
-		return $_GET[$key_name];
+		$item->flag_set       = true;
+		$item->value          = $_GET[$key_name];
+		$item->value_original = $item->value;
+		return $item;
 	}
 
 	if (isset($_POST[$key_name]) === true)
 	{
-		return $_POST[$key_name];
+		$item->flag_set       = true;
+		$item->value          = $_POST[$key_name];
+		$item->value_original = $item->value;
+		return $item;
 	}
 
 
@@ -813,7 +829,10 @@ function libcore__get_var($key_name, $value_default = null)
 
 		if (isset($request->{$key_name}) === true)
 		{
-			return $request->{$key_name};
+			$item->flag_set       = true;
+			$item->value          = $request->{$key_name};
+			$item->value_original = $item->value;
+			return $item;
 		}
 
 		break;
@@ -822,75 +841,25 @@ function libcore__get_var($key_name, $value_default = null)
 
 	if (isset($_COOKIE[$key_name]) === true)
 	{
-		return $_COOKIE[$key_name];
+		$item->flag_set       = true;
+		$item->value          = $_COOKIE[$key_name];
+		$item->value_original = $item->value;
+		return $item;
 	}
 
 
-	return $value_default;
-}
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__is_var_set($key_name)
-{
-	global $_ENV;
-	global $_SERVER;
-	global $_GET;
-	global $_POST;
-	global $_COOKIE;
-
-
-	if (isset($_ENV[$key_name]) === true)
-	{
-		return true;
-	}
-
-	if (isset($_SERVER[$key_name]) === true)
-	{
-		return true;
-	}
-
-	if (isset($_GET[$key_name]) === true)
-	{
-		return true;
-	}
-
-	if (isset($_POST[$key_name]) === true)
-	{
-		return true;
-	}
-
-
-	for (;;)
-	{
-		$postdata = file_get_contents("php://input");
-		$request = json_decode($postdata);
-		if (json_last_error() !== JSON_ERROR_NONE)
-		{
-			break;
-		}
-
-		if (isset($request->{$key_name}) === true)
-		{
-			return true;
-		}
-
-		break;
-	}
-
-
-	if (isset($_COOKIE[$key_name]) === true)
-	{
-		return true;
-	}
-
-
-	return false;
+	$item->flag_set       = false;
+	$item->value          = $value_default;
+	$item->value_original = null;
+	return $item;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__get_var_json($key_name = null, $value_default = null)
 {
 	if ($key_name !== null)
 	{
-		$value_json = libcore__get_var($key_name, $value_default);
+		$var = libcore__get_var($key_name, $value_default);
+		$value_json = $var->value;
 		$value = json_decode($value_json);
 		if (json_last_error() !== JSON_ERROR_NONE)
 		{
@@ -919,7 +888,8 @@ function libcore__get_var_json($key_name = null, $value_default = null)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__get_var_str($key_name, $value_default = null)
 {
-	$value = libcore__get_var($key_name, $value_default);
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
 	if ($value === null)
@@ -934,7 +904,8 @@ function libcore__get_var_str($key_name, $value_default = null)
 /*
 function libcore__shell_get_str($key_name, $value_default = "", $flag_drop_sql_injection = true)
 {
-	$value = libcore__get_var($key_name, $value_default);
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
 	if ($value == '')
@@ -955,7 +926,8 @@ function libcore__shell_get_str($key_name, $value_default = "", $flag_drop_sql_i
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__get_var_hex($key_name, $value_default = null)
 {
-	$value = libcore__get_var($key_name, $value_default);
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
 	if (libcore__is_hex($value) === false)
@@ -974,7 +946,8 @@ function libcore__get_var_hex($key_name, $value_default = null)
 /*
 function libcore__shell_get_hex($key_name, $value_default = '00')
 {
-	$value = libcore__get_var($key_name, $value_default);
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
 	if (libcore__is_hex($value) === false)
@@ -993,7 +966,8 @@ function libcore__shell_get_hex($key_name, $value_default = '00')
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__get_var_float($key_name, $value_default = null)
 {
-	$value = libcore__get_var($key_name, $value_default);
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
 	if (libcore__is_float($value) === false)
@@ -1012,7 +986,8 @@ function libcore__get_var_float($key_name, $value_default = null)
 /*
 function libcore__shell_get_float($key_name, $value_default = 0)
 {
-	$value = libcore__get_var($key_name, $value_default);
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
 	if (libcore__is_float($value) === false)
@@ -1031,7 +1006,8 @@ function libcore__shell_get_float($key_name, $value_default = 0)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__get_var_uint($key_name, $value_default = null)
 {
-	$value = libcore__get_var($key_name, $value_default);
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
 	if (libcore__is_uint($value) === false)
@@ -1050,7 +1026,8 @@ function libcore__get_var_uint($key_name, $value_default = null)
 /*
 function libcore__shell_get_uint($key_name, $value_default = 0)
 {
-	$value = libcore__get_var($key_name, $value_default);
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
 	if (libcore__is_uint($value) === false)
@@ -1069,7 +1046,8 @@ function libcore__shell_get_uint($key_name, $value_default = 0)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__get_var_sint($key_name, $value_default = null)
 {
-	$value = libcore__get_var($key_name, $value_default);
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
 	if (libcore__is_sint($value) === false)
@@ -1088,7 +1066,8 @@ function libcore__get_var_sint($key_name, $value_default = null)
 /*
 function libcore__shell_get_sint($key_name, $value_default = 0)
 {
-	$value = libcore__get_var($key_name, $value_default);
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
 	if (libcore__is_sint($value) === false)
@@ -1107,10 +1086,18 @@ function libcore__shell_get_sint($key_name, $value_default = 0)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__get_var_flag($key_name, $value_default = null)
 {
-	$flag_set = libcore__is_var_set($key_name);
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
-	$value = libcore__get_var($key_name, $value_default);
+// if flag is set but flag is null then flag is true
+	if ($var->flag_set === true)
+	{
+		if ($var->value_original === null)
+		{
+			$value = "1";
+		}
+	}
 
 
 	if (libcore__is_flag($value) === false)
@@ -1123,15 +1110,6 @@ function libcore__get_var_flag($key_name, $value_default = null)
 	}
 
 
-	if (libcore__is_flag_set($value) === false)
-	{
-		if ($flag_set === true)
-		{
-			$value = "1";
-		}
-	}
-
-
 	if (libcore__is_flag_set($value) === true)
 	{
 		return "1";
@@ -1141,10 +1119,18 @@ function libcore__get_var_flag($key_name, $value_default = null)
 	return "0";
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__get_var_bool($key_name, $value_default = null)
+{
+	$value = libcore__get_var_flag($key_name, $value_default);
+
+	return libcore__flag2bool($value, $value_default);
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 /*
 function libcore__shell_get_flag($key_name, $value_default = "0")
 {
-	$value = libcore__get_var($key_name, $value_default);
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
 	if (libcore__is_flag($value) === false)
@@ -1169,7 +1155,8 @@ function libcore__shell_get_flag($key_name, $value_default = "0")
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__get_var_enum($key_name, $value_list)
 {
-	$value = libcore__get_var_str($key_name, $value_list[0]);
+	$var = libcore__get_var_str($key_name, $value_list[0]);
+	$value = $var->value;
 
 
 	return libcore__filter_enum($value, $value_list);
