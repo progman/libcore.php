@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.4.8
+// 0.4.9
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 class result_t
@@ -162,6 +162,7 @@ function libcore__flag2int($val, $value_default = 0)
 function libcore__flag2str($val)
 function libcore__filter_enum($value, $value_list)
 function libcore__get_var($key_name, $value_default = null)
+function libcore__is_var_set($key_name)
 function libcore__get_var_json($key_name = null, $value_default = null)
 function libcore__get_var_str($key_name, $value_default = null)
 function libcore__shell_get_str($key_name, $value_default = "", $flag_drop_sql_injection = true)
@@ -828,6 +829,63 @@ function libcore__get_var($key_name, $value_default = null)
 	return $value_default;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__is_var_set($key_name)
+{
+	global $_ENV;
+	global $_SERVER;
+	global $_GET;
+	global $_POST;
+	global $_COOKIE;
+
+
+	if (isset($_ENV[$key_name]) === true)
+	{
+		return true;
+	}
+
+	if (isset($_SERVER[$key_name]) === true)
+	{
+		return true;
+	}
+
+	if (isset($_GET[$key_name]) === true)
+	{
+		return true;
+	}
+
+	if (isset($_POST[$key_name]) === true)
+	{
+		return true;
+	}
+
+
+	for (;;)
+	{
+		$postdata = file_get_contents("php://input");
+		$request = json_decode($postdata);
+		if (json_last_error() !== JSON_ERROR_NONE)
+		{
+			break;
+		}
+
+		if (isset($request->{$key_name}) === true)
+		{
+			return true;
+		}
+
+		break;
+	}
+
+
+	if (isset($_COOKIE[$key_name]) === true)
+	{
+		return true;
+	}
+
+
+	return false;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__get_var_json($key_name = null, $value_default = null)
 {
 	if ($key_name !== null)
@@ -1049,6 +1107,9 @@ function libcore__shell_get_sint($key_name, $value_default = 0)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function libcore__get_var_flag($key_name, $value_default = null)
 {
+	$flag_set = libcore__is_var_set($key_name);
+
+
 	$value = libcore__get_var($key_name, $value_default);
 
 
@@ -1059,6 +1120,15 @@ function libcore__get_var_flag($key_name, $value_default = null)
 			return null;
 		}
 		return $value_default;
+	}
+
+
+	if (libcore__is_flag_set($value) === false)
+	{
+		if ($flag_set === true)
+		{
+			$value = "1";
+		}
 	}
 
 
