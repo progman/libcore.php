@@ -11,12 +11,14 @@ function libcore__blk_write($handle, $str)
 	$str_offset = 0;
 
 
+// maybe we read all in first time
 	if ($str_size === $str_offset) return true;
-	$rc = @fwrite($handle, $str);
+	$rc = @fwrite($handle, $str); // write without substr
 	if ($rc === false) return false;
 	$str_offset += $rc;
 
 
+// it if we did not read all in first time
 	for (;;)
 	{
 		if ($str_size === $str_offset) break;
