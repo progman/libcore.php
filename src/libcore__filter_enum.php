@@ -9,13 +9,13 @@ function libcore__filter_enum($value, $value_list)
 
 	settype($value, "string");
 
-	for($i=0; $i < $value_list_size; $i++)
+	for ($i=0; $i < $value_list_size; $i++)
 	{
 		$value_other = $value_list[$i];
 
 		settype($value_other, "string");
 
-		if(strcmp($value_other, $value) === 0)
+		if (strcmp($value_other, $value) === 0)
 		{
 			return $value;
 		}
