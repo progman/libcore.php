@@ -160,10 +160,10 @@ function libcore__blk_read($handle, $size)
 	$str = '';
 	for (;;)
 	{
-		$read_size = $size - strlen($str);
-		if ($read_size === 0) break;
+		$next_size = $size - strlen($str);
+		if ($next_size === 0) break;
 
-		$rc = fread($handle, $read_size);
+		$rc = fread($handle, $next_size);
 		if ($rc === false) return false;
 
 		$str = $str.$rc;
@@ -185,12 +185,14 @@ function libcore__blk_write($handle, $str)
 	$str_offset = 0;
 
 
+// maybe we read all in first time
 	if ($str_size === $str_offset) return true;
-	$rc = @fwrite($handle, $str);
+	$rc = @fwrite($handle, $str); // write without substr
 	if ($rc === false) return false;
 	$str_offset += $rc;
 
 
+// it if we did not read all in first time
 	for (;;)
 	{
 		if ($str_size === $str_offset) break;
