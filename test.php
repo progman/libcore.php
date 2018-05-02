@@ -196,6 +196,156 @@ function test__libcore__is_parity()
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function test__libcore__is_uuid()
+{
+	if (is_uuid('{a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12}') === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		exit(1);
+	}
+	if (is_uuid('{a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12}', 'TYPE38') === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		exit(1);
+	}
+	if (is_uuid('{a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12}', 'TYPE36') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step003\n";
+		exit(1);
+	}
+	if (is_uuid('{a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12}', 'TYPE34') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step004\n";
+		exit(1);
+	}
+	if (is_uuid('{a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12}', 'TYPE32') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step005\n";
+		exit(1);
+	}
+	if (is_uuid('{a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12]') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step006\n";
+		exit(1);
+	}
+	if (is_uuid('{a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a1z}') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step007\n";
+		exit(1);
+	}
+
+
+	if (is_uuid('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12') === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step008\n";
+		exit(1);
+	}
+	if (is_uuid('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'TYPE38') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step009\n";
+		exit(1);
+	}
+	if (is_uuid('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'TYPE36') === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step010\n";
+		exit(1);
+	}
+	if (is_uuid('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'TYPE34') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step011\n";
+		exit(1);
+	}
+	if (is_uuid('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'TYPE32') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step012\n";
+		exit(1);
+	}
+	if (is_uuid('a0eebc99-9c0b-4ef8-bb6d+6bb9bd380a12') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step013\n";
+		exit(1);
+	}
+	if (is_uuid('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a1z') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step014\n";
+		exit(1);
+	}
+
+
+	if (is_uuid('{a0eebc999c0b4ef8bb6d6bb9bd380a12}') === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step015\n";
+		exit(1);
+	}
+	if (is_uuid('{a0eebc999c0b4ef8bb6d6bb9bd380a12}', 'TYPE38') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step016\n";
+		exit(1);
+	}
+	if (is_uuid('{a0eebc999c0b4ef8bb6d6bb9bd380a12}', 'TYPE36') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step017\n";
+		exit(1);
+	}
+	if (is_uuid('{a0eebc999c0b4ef8bb6d6bb9bd380a12}', 'TYPE34') === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step018\n";
+		exit(1);
+	}
+	if (is_uuid('{a0eebc999c0b4ef8bb6d6bb9bd380a12}', 'TYPE32') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step019\n";
+		exit(1);
+	}
+	if (is_uuid('{a0eebc999c0b4ef8bb6d6bb9bd380a12]') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step020\n";
+		exit(1);
+	}
+	if (is_uuid('{a0eebc999c0b4ef8bb6d6bb9bd380a1z}') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step021\n";
+		exit(1);
+	}
+
+
+	if (is_uuid('a0eebc999c0b4ef8bb6d6bb9bd380a12') === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step022\n";
+		exit(1);
+	}
+	if (is_uuid('a0eebc999c0b4ef8bb6d6bb9bd380a12', 'TYPE38') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step023\n";
+		exit(1);
+	}
+	if (is_uuid('a0eebc999c0b4ef8bb6d6bb9bd380a12', 'TYPE36') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step024\n";
+		exit(1);
+	}
+	if (is_uuid('a0eebc999c0b4ef8bb6d6bb9bd380a12', 'TYPE34') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step025\n";
+		exit(1);
+	}
+	if (is_uuid('a0eebc999c0b4ef8bb6d6bb9bd380a12', 'TYPE32') === false)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step026\n";
+		exit(1);
+	}
+	if (is_uuid('a0eebc999c0b4ef8bb6d6bb9bd380a1}') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step027\n";
+		exit(1);
+	}
+	if (is_uuid('a0eebc999c0b4ef8bb6d6bb9bd380a1z') === true)
+	{
+		echo "ERROR[".__FUNCTION__."()]: step028\n";
+		exit(1);
+	}
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 function test__libcore__is_uint()
 {
 	if (libcore__is_uint("") == true)
@@ -695,12 +845,18 @@ function test__libcore__hex_string_add()
 
 
 		$c1 = libcore__hex_string_add($a, $b);
-		$c2 = libcore__hex_string_expand((dechex(hexdec($a) + hexdec($b))), 32);
+//		$c2 = libcore__hex_string_expand((dechex(hexdec($a) + hexdec($b))), 32);
 
+		$x = gmp_init($a, 16);
+		$y = gmp_init($b, 16);
+		$z = gmp_add($x, $y);
+		$c2 = libcore__hex_string_expand(gmp_strval($z, 16), 32);
 
 		if (strcmp($c1, $c2) != 0)
 		{
 			echo "ERROR[".__FUNCTION__."()]: step005\n";
+			echo "a      : ".$a."\n";
+			echo "b      : ".$b."\n";
 			echo "c1     : ".$c1."\n";
 			echo "c2     : ".$c2."\n";
 			exit(1);
@@ -936,6 +1092,7 @@ test__libcore__rnd();
 
 
 test__libcore__is_parity();
+test__libcore__is_uuid();
 test__libcore__is_uint();
 test__libcore__is_sint();
 test__libcore__is_hex();
