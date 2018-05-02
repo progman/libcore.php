@@ -1,4 +1,11 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
+ * copy file to file
+ * \param[in] source name of source file
+ * \param[in] target name of target file
+ * \param[in] flag_overwrite flag of overwriting target file
+ * \return status
+ */
 function libcore__file_copy($source, $target, $flag_overwrite = false)
 {
 	$rc = @stat($source);

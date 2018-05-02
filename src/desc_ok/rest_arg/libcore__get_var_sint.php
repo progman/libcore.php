@@ -1,32 +1,26 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 /**
- * check uint
- * \param[in] val source value
- * \return uint flag
+ * get sint var from $_ENV or $_SERVER or $_GET or $_POST or php://input or $_COOKIE
+ * \param[in] key_name name of key
+ * \param[in] value_default default value if key is not found
+ * \return value of key
  */
-function libcore__is_uint($x)
+function libcore__get_var_sint($key_name, $value_default = null)
 {
-	settype($x, "string");
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
-	$size = strlen($x);
 
-	if ($size === 0) return false;
-
-	for ($i=0; $i < $size; $i++)
+	if (libcore__is_sint($value) === false)
 	{
-		$ch = $x[$i];
-
-		if
-		(
-			(ord($ch) >= ord('0')) && (ord($ch) <= ord('9'))
-		)
+		if (libcore__is_sint($value_default) === false)
 		{
-			continue;
+			return null;
 		}
-
-		return false;
+		return $value_default;
 	}
 
-	return true;
+
+	return $value;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

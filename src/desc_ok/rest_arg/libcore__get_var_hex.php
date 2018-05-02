@@ -1,52 +1,26 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__is_float($x, $flag_need_point = false)
+/**
+ * get hex var from $_ENV or $_SERVER or $_GET or $_POST or php://input or $_COOKIE
+ * \param[in] key_name name of key
+ * \param[in] value_default default value if key is not found
+ * \return value of key
+ */
+function libcore__get_var_hex($key_name, $value_default = null)
 {
-	settype($x, "string");
-
-	$size = strlen($x);
-
-	if ($size === 0) return false;
+	$var = libcore__get_var($key_name, $value_default);
+	$value = $var->value;
 
 
-	$flag_point = false;
-	for ($i=0; $i < $size; $i++)
+	if (libcore__is_hex($value) === false)
 	{
-		$ch = $x[$i];
-
-		if
-		(
-			(ord($ch) >= ord('0')) && (ord($ch) <= ord('9'))
-		)
+		if (libcore__is_hex($value_default) === false)
 		{
-			continue;
+			return null;
 		}
-
-		if ($flag_point === false)
-		{
-			if (ord($ch) === ord('.'))
-			{
-				if ($i === 0) // bad ".1"
-				{
-					return false;
-				}
-
-				if (($i + 1) === $size) // bad "1."
-				{
-					return false;
-				}
-
-				$flag_point = true;
-				continue;
-			}
-		}
-
-		return false;
-	}
-	if (($flag_need_point !== false) && ($flag_point === false))
-	{
-		return false;
+		return $value_default;
 	}
 
-	return true;
+
+	return $value;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

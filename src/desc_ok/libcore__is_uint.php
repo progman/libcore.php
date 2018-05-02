@@ -1,22 +1,29 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__blk_write($handle, $str)
+/**
+ * check uint
+ * \param[in] val source value
+ * \return uint flag
+ */
+function libcore__is_uint($val)
 {
-	$str_size = strlen($str);
-/*
-	for ($i = 0; $i < $str_size; $i += $write_size)
+	settype($val, "string");
+
+	$size = strlen($val);
+	if ($size === 0) return false;
+
+	for ($i=0; $i < $size; $i++)
 	{
-		$rc = fwrite($handle, substr($str, $i));
-		if ($rc === false) return false;
-		$write_size = $rc;
-	}
-*/
-	$str_offset = 0;
-	for (;;)
-	{
-		if ($str_size === $str_offset) break;
-		$rc = fwrite($handle, substr($str, $str_offset));
-		if ($rc === false) return false;
-		$str_offset += $rc;
+		$ch = $val[$i];
+
+		if
+		(
+			(ord($ch) >= ord('0')) && (ord($ch) <= ord('9'))
+		)
+		{
+			continue;
+		}
+
+		return false;
 	}
 
 	return true;

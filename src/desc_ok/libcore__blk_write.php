@@ -1,10 +1,31 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__set_cookie($cookie_name, $cookie_value, $expired)
+/**
+ * write block to file
+ * \param[in] handle handle of file
+ * \param[in] str str for writing
+ * \return write status
+ */
+function libcore__blk_write($handle, $str)
 {
-	global $_COOKIE;
+	$str_size = strlen($str);
+	$str_offset = 0;
 
-	setcookie($cookie_name, $cookie_value, $expired, "/");
 
-	$_COOKIE[$cookie_name] = $cookie_value;
+	if ($str_size === $str_offset) return true;
+	$rc = @fwrite($handle, $str);
+	if ($rc === false) return false;
+	$str_offset += $rc;
+
+
+	for (;;)
+	{
+		if ($str_size === $str_offset) break;
+		$rc = @fwrite($handle, substr($str, $str_offset));
+		if ($rc === false) return false;
+		$str_offset += $rc;
+	}
+
+
+	return true;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

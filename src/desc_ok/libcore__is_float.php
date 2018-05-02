@@ -1,49 +1,57 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__file_set($filename, $str)
+/**
+ * check float
+ * \param[in] val source value
+ * \param[in] flag_need_point flag_need_point
+ * \return float flag
+ */
+function libcore__is_float($val, $flag_need_point = false)
 {
-	$rc = libcore__make_dir($filename);
-	if ($rc->is_ok() === false) return false;
+	settype($val, "string");
+
+	$size = strlen($val);
+
+	if ($size === 0) return false;
 
 
-	$rc = @fopen($filename, 'wb');
-	if ($rc === false) return false;
-	$handle = $rc;
-
-
-	for (;;)
+	$flag_point = false;
+	for ($i=0; $i < $size; $i++)
 	{
-		if (@flock($handle, LOCK_EX) === false) // set exclusive lock on file
-		{
-			if (@file_exists($filename) === false)
-			{
-				$handle = @fopen($filename, 'wb');
-				if ($handle === false)
-				{
-					return false;
-				}
-			}
+		$ch = $val[$i];
 
-			usleep(100);
+		if
+		(
+			(ord($ch) >= ord('0')) && (ord($ch) <= ord('9'))
+		)
+		{
 			continue;
 		}
 
-		break;
+		if ($flag_point === false)
+		{
+			if (ord($ch) === ord('.'))
+			{
+				if ($i === 0) // bad ".1"
+				{
+					return false;
+				}
+
+				if (($i + 1) === $size) // bad "1."
+				{
+					return false;
+				}
+
+				$flag_point = true;
+				continue;
+			}
+		}
+
+		return false;
 	}
-
-
-	$rc = libcore__blk_write($handle, $str);
-	if ($rc === false) return false;
-
-
-	$rc = @fflush($handle);
-	if ($rc === false) return false;
-
-	$rc = @flock($handle, LOCK_UN); // file unlock
-	if ($rc === false) return false;
-
-	$rc = @fclose($handle);
-	if ($rc === false) return false;
-
+	if (($flag_need_point !== false) && ($flag_point === false))
+	{
+		return false;
+	}
 
 	return true;
 }

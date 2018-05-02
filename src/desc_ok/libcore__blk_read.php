@@ -1,20 +1,24 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__get_var_uint($key_name, $value_default = null)
+/**
+ * read block from file
+ * \param[in] handle handle of file
+ * \param[in] size size of block
+ * \return block or error
+ */
+function libcore__blk_read($handle, $size)
 {
-	$var = libcore__get_var($key_name, $value_default);
-	$value = $var->value;
-
-
-	if (libcore__is_uint($value) === false)
+	$str = '';
+	for (;;)
 	{
-		if (libcore__is_uint($value_default) === false)
-		{
-			return null;
-		}
-		return $value_default;
+		$read_size = $size - strlen($str);
+		if ($read_size === 0) break;
+
+		$rc = fread($handle, $read_size);
+		if ($rc === false) return false;
+
+		$str = $str.$rc;
 	}
 
-
-	return $value;
+	return $str;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

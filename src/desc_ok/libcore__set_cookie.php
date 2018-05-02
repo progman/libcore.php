@@ -1,18 +1,17 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__blk_read($handle, $str_size)
+/**
+ * set cookie
+ * \param[in] cookie_name name of cookie
+ * \param[in] cookie_value value of cookie
+ * \param[in] expired expired time of cookie
+ * \return nothing
+ */
+function libcore__set_cookie($cookie_name, $cookie_value, $expired)
 {
-	$str = '';
-	for (;;)
-	{
-		$read_size = $str_size - strlen($str);
-		if ($read_size === 0) break;
+	global $_COOKIE;
 
-		$rc = fread($handle, $read_size);
-		if ($rc === false) return false;
+	setcookie($cookie_name, $cookie_value, $expired, "/");
 
-		$str = $str.$rc;
-	}
-
-	return $str;
+	$_COOKIE[$cookie_name] = $cookie_value;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

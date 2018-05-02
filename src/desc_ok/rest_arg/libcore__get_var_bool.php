@@ -1,18 +1,14 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__array_add($arr1, $arr2)
+/**
+ * get bool var from $_ENV or $_SERVER or $_GET or $_POST or php://input or $_COOKIE
+ * \param[in] key_name name of key
+ * \param[in] value_default default value if key is not found
+ * \return value of key
+ */
+function libcore__get_var_bool($key_name, $value_default = null)
 {
-	if (is_array($arr1) === false)
-	{
-		$arr1 = array();
-	}
+	$value = libcore__get_var_flag($key_name, $value_default);
 
-	if (is_array($arr2) === false)
-	{
-		$arr2 = array();
-	}
-
-	$tmp_list = array_merge($arr1, $arr2);
-
-	return $tmp_list;
+	return libcore__flag2bool($value, $value_default);
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

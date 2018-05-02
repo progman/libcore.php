@@ -1,33 +1,43 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-function libcore__get_var_json($key_name = null, $value_default = null)
+/**
+ * check sint
+ * \param[in] val source value
+ * \return sint flag
+ */
+function libcore__is_sint($val)
 {
-	if ($key_name !== null)
+	settype($val, "string");
+
+	$size = strlen($val);
+	if ($size === 0) return false;
+
+	for ($i=0; $i < $size; $i++)
 	{
-		$var = libcore__get_var($key_name, $value_default);
-		$value_json = $var->value;
-		$value = json_decode($value_json);
-		if (json_last_error() !== JSON_ERROR_NONE)
+		$ch = $val[$i];
+
+		if
+		(
+			(ord($ch) >= ord('0')) && (ord($ch) <= ord('9'))
+		)
 		{
-			$value = null;
+			continue;
 		}
-	}
-	else
-	{
-		$value_json = file_get_contents("php://input");
-		$value = json_decode($value_json);
-		if (json_last_error() !== JSON_ERROR_NONE)
+
+		if ($i === 0)
 		{
-			$value = null;
+			if
+			(
+				(ord($ch) === ord('-')) ||
+				(ord($ch) === ord('+'))
+			)
+			{
+				continue;
+			}
 		}
+
+		return false;
 	}
 
-
-	if ($value === null)
-	{
-		return $value_default;
-	}
-
-
-	return $value;
+	return true;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
