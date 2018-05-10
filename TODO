@@ -1,0 +1,46 @@
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+curl_setopt($curl, CURLOPT_SSLVERSION, 3);
+
+curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
+
+curl_setopt($curl, CURLOPT_USERAGENT, $this->useragent);
+curl_setopt($curl, CURLOPT_VERBOSE, 0);
+curl_setopt($curl, CURLOPT_HEADER, FALSE);
+curl_setopt($curl, CURLOPT_HTTPHEADER, $this->headers);
+
+if(substr($url, 0, 5)=='https') curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+
+if($this->ciastko)
+{
+    curl_setopt($curl, CURLOPT_COOKIEJAR, $this->ciastko);
+    curl_setopt($curl, CURLOPT_COOKIEFILE, $this->ciastko);
+}
+
+if($this->post)
+{
+    if( is_array($this->post) && count($this->post) > 0 )
+    {
+        $postdata = http_build_query($this->post,'','&');
+    }
+    elseif( is_string($this->post) )
+    {
+        $postdata = $this->post;
+    }
+    else $postdata = '';
+
+}
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+http://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html
+
+U+0022	QUOTATION MARK	￼	quotedbl
+U+0027	APOSTROPHE	￼	quotesingle
+
+console.log(" \u0022 \u0027  wow");
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+__LINE__ в set_err
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
