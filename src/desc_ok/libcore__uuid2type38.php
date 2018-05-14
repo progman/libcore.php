@@ -30,7 +30,7 @@ function libcore__uuid2type38($uuid)
 	$type38 = $type38.substr($type32, 16, 4);
 	$type38 = $type38.'-';
 	$type38 = $type38.substr($type32, 20, 12);
-	$type38 = '}';
+	$type38 = $type38.'}';
 
 
 	return $type38;

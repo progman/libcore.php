@@ -54,7 +54,7 @@ function libcore__uuid2type32($uuid)
 	{
 		if ($template[$i] === 'x')
 		{
-			$out .= $template[$i];
+			$out .= $uuid[$i];
 		}
 	}
 
