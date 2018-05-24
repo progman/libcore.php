@@ -12,6 +12,7 @@ class result_t
 	private $file_name;
 	private $function_name;
 	private $value;
+	private $flag_value;
 
 	function get_object()
 	{
@@ -32,9 +33,10 @@ class result_t
 		$this->file_name     = $file_name;
 		$this->function_name = $function_name;
 
-		$this->set_value(0);
+		$this->value         = null;
+		$this->flag_value    = false;
 
-		$this->flag_skip = false;
+		$this->flag_skip     = false;
 	}
 /*
 	function copy($err_code, $msg, $msg_private, $arg_name, $file_name, $function_name, $value)
@@ -100,9 +102,15 @@ class result_t
 		return $this->function_name;
 	}
 
+	function is_value()
+	{
+		return $this->flag_value;
+	}
+
 	function set_value($value)
 	{
 		$this->value = $value;
+		$this->flag_value = true;
 	}
 
 	function get_value()
@@ -110,13 +118,14 @@ class result_t
 		return $this->value;
 	}
 
-	function set_skip($flag_skip = true)
-	{
-		$this->flag_skip = $flag_skip;
-	}
 	function is_skip()
 	{
 		return $this->flag_skip;
+	}
+
+	function set_skip($flag_skip = true)
+	{
+		$this->flag_skip = $flag_skip;
 	}
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
