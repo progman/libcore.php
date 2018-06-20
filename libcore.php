@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.6.3
+// 0.6.4
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -16,6 +16,7 @@ class result_t
 	private $msg_private;
 	private $arg_name;
 	private $file_name;
+	private $line_number;
 	private $function_name;
 	private $value;
 	private $flag_value;
@@ -28,15 +29,17 @@ class result_t
 		$result->msg_private   = $this->get_msg_private();
 		$result->arg_name      = $this->get_arg_name();
 		$result->file_name     = $this->get_file_name();
+		$result->line_number   = $this->get_line_number();
 		$result->function_name = $this->get_function_name();
 		return $result;
 	}
 
-	function result_t($function_name = "unknown", $file_name = "unknown")
+	function result_t($function_name = "unknown", $file_name = "unknown", $line_number = "unknown")
 	{
 		$this->set_err(1, "unknown");
 
 		$this->file_name     = $file_name;
+		$this->line_number   = $line_number;
 		$this->function_name = $function_name;
 
 		$this->value         = null;
@@ -101,6 +104,11 @@ class result_t
 	function get_file_name()
 	{
 		return $this->file_name;
+	}
+
+	function get_line_number()
+	{
+		return $this->line_number;
 	}
 
 	function get_function_name()
