@@ -28,7 +28,7 @@ class result_t
 		return $result;
 	}
 
-	function result_t($function_name = "unknown", $file_name = "unknown", $line_number = "unknown")
+	function __construct($function_name = "unknown", $file_name = "unknown", $line_number = "unknown") // work in php5 and php7
 	{
 		$this->set_err(1, "unknown");
 
