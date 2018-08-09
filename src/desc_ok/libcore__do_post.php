@@ -12,6 +12,16 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30, $he
 {
 	$result = new result_t(__FUNCTION__, __FILE__);
 
+
+	$header_line_list = [];
+	$header_callback = function ($ch, $header_line) use (&$header_line_list)
+	{
+		array_push($header_line_list, $header_line);
+//		echo $header_line;
+		return strlen($header_line);
+	};
+
+
 	$ch = curl_init($url);
 	if ($ch === false)
 	{
@@ -53,6 +63,14 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30, $he
 	}
 
 	$rc = curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	if ($rc === false)
+	{
+		$result->set_err(1, curl_error($ch));
+		curl_close($ch);
+		return $result;
+	}
+
+	$rc = curl_setopt($ch, CURLOPT_HEADERFUNCTION, $header_callback);
 	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
@@ -102,6 +120,10 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30, $he
 		curl_close($ch);
 		return $result;
 	}
+
+
+//	print_r($header_line_list);
+
 
 	curl_close($ch);
 	$result->set_ok();

@@ -44,3 +44,41 @@ console.log(" \u0022 \u0027  wow");
 __LINE__ в set_err
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+$cookies = Array();
+$ch = curl_init('http://www.google.com/');
+// Ask for the callback.
+curl_setopt($ch, CURLOPT_HEADERFUNCTION, "curlResponseHeaderCallback");
+$result = curl_exec($ch);
+var_dump($cookies);
+
+function curlResponseHeaderCallback($ch, $headerLine) {
+    global $cookies;
+    if (preg_match('/^Set-Cookie:\s*([^;]*)/mi', $headerLine, $cookie) == 1)
+        $cookies[] = $cookie;
+    return strlen($headerLine); // Needed by curl
+}
+
+
+
+<?php
+
+
+function a()
+{
+	$x = 0;
+
+	$b = function () use (&$x)
+	{
+		$x++;
+		echo "b() x:".$x."\n";
+	};
+
+	echo "a() x:".$x."\n";
+	$b();
+	echo "a() x:".$x."\n";
+}
+
+a();
+
+?>
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
