@@ -1,5 +1,44 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.6.6
-// Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
+/**
+ * make dir
+ * \param[in] path path
+ * \return error flag
+ */
+function libcore__make_dir($path)
+{
+	$result = new result_t(__FUNCTION__, __FILE__);
+
+
+	if ($path[0] != '/')
+	{
+		$result->set_err(1, "invalid path");
+		return $result;
+	}
+
+
+	$dirname = dirname($path);
+
+	$list = explode('/', $dirname); // get array
+	$list_size = count($list);
+
+
+	$path = '/';
+	for ($i=1; $i < $list_size; $i++)
+	{
+		$path.=$list[$i].'/';
+
+		if (@file_exists($path) === false)
+		{
+			if (@mkdir($path) === false)
+			{
+				$result->set_err(1, "don't make dir");
+				return $result;
+			}
+		}
+	}
+
+
+	$result->set_ok();
+	return $result;
+}
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh

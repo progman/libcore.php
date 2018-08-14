@@ -9,7 +9,6 @@ function do_it()
 		LOCAL_TMPDIR="${TMPDIR}";
 	fi
 
-
 	local TMP1;
 	TMP1="$(mktemp --tmpdir="${LOCAL_TMPDIR}" 2> /dev/null)";
 	if [ "${?}" != "0" ];
@@ -19,15 +18,13 @@ function do_it()
 	fi
 
 
-	find ./src/ -type f | grep -v 'head.php' | grep -v 'result_t.php' | sort >> "${TMP1}";
 
+	find ./src/ -type f | grep -v 'head.php' | grep -v 'test_tail.php' | grep -v 'result_t.php' | grep -v 'test.php' | sort > "${TMP1}";
 
 	echo "<?php" > libcore.php
 
-
 	cat src/head.php >> libcore.php;
 	cat src/result_t.php >> libcore.php;
-
 
 	while read -r LINE;
 	do
@@ -36,11 +33,30 @@ function do_it()
 
 	done < "${TMP1}";
 
-
 	echo -n "?>" >> libcore.php
 
 
+
+	find ./src/ -type f | grep 'test.php' | sort > "${TMP1}";
+
+	echo "<?php" > test.php
+	cat src/head.php >> test.php;
+	cat src/test_head.php >> test.php;
+
+	while read -r LINE;
+	do
+
+		cat "${LINE}" >> test.php;
+
+	done < "${TMP1}";
+
+	cat src/test_tail.php >> test.php;
+	echo -n "?>" >> test.php
+
+
+
 	rm -rf -- "${TMP1}" &> /dev/null;
+
 
 
 	return 0;

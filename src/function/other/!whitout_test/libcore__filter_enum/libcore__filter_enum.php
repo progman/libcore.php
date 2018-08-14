@@ -1,5 +1,32 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.6.6
-// Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
+/**
+ * filter value
+ * \param[in] value value
+ * \param[in] value_list value list
+ * \return filtered value
+ */
+function libcore__filter_enum($value, $value_list)
+{
+	$value_list_size = sizeof($value_list);
+	if ($value_list_size === 0)
+	{
+		return $value;
+	}
+
+	settype($value, "string");
+
+	for ($i=0; $i < $value_list_size; $i++)
+	{
+		$value_other = $value_list[$i];
+
+		settype($value_other, "string");
+
+		if (strcmp($value_other, $value) === 0)
+		{
+			return $value;
+		}
+	}
+
+	return $value_list[0];
+}
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh

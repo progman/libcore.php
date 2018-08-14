@@ -1,5 +1,38 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.6.6
-// Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
+/**
+ * convert from hex string to bin string
+ * \param[in] value hex string
+ * \param[in] flag_force always use it function
+ * \return bin string
+ */
+function libcore__hex2bin($value, $flag_force = false)
+{
+	$value_size = strlen($value);
+	if ((round($value_size / 2) * 2) != $value_size)
+	{
+		$tmp = $value;
+		$value = '0'.$tmp;
+		$value_size++;
+	}
+
+
+	if (function_exists("hex2bin") === true)
+	{
+		if ($flag_force === false)
+		{
+			return hex2bin($value);
+		}
+	}
+
+
+	$bin = '';
+	for ($i=0; $i < $value_size; $i += 2)
+	{
+		$hex  = substr($value, $i, 2);
+		$bin .= pack("H*", $hex);
+	}
+
+
+	return $bin;
+}
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh

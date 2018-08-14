@@ -1,5 +1,33 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.6.6
-// Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
+/**
+ * get file modify time for control web cache of browser
+ * \param[in] filename file name
+ * \return URL with timestamp
+ */
+function libcore__get_cache_file($filename)
+{
+	global $_SERVER;
+
+	$mtime = floor(microtime(true));
+	for (;;)
+	{
+		$fd = @stat($_SERVER['DOCUMENT_ROOT'].$filename);
+		if ($fd !== false)
+		{
+			$mtime = $fd['mtime'];
+			break;
+		}
+
+		$fd = @stat($filename);
+		if ($fd !== false)
+		{
+			$mtime = $fd['mtime'];
+			break;
+		}
+
+		break;
+	}
+
+	return $filename.'?time='.$mtime;
+}
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
