@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.6.8
+// 0.6.9
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -1965,10 +1965,17 @@ function libcore__draw_time($desc = '')
  * add string to file
  * \param[in] filename name of file
  * \param[in] str string
+ * \param[in] flag_overwrite will over write this file?
  * \return status
  */
-function libcore__file_add($filename, $str)
+function libcore__file_add($filename, $str, $flag_overwrite = true)
 {
+	if (@file_exists($filename) === true)
+	{
+		if ($flag_overwrite === false) return true;
+	}
+
+
 	$rc = libcore__make_dir($filename);
 	if ($rc->is_ok() === false) return false;
 
@@ -2133,10 +2140,17 @@ function libcore__file_get($filename)
  * write file from string
  * \param[in] filename name of file
  * \param[in] str string
+ * \param[in] flag_overwrite will over write this file?
  * \return status
  */
-function libcore__file_set($filename, $str)
+function libcore__file_set($filename, $str, $flag_overwrite = true)
 {
+	if (@file_exists($filename) === true)
+	{
+		if ($flag_overwrite === false) return true;
+	}
+
+
 	$rc = libcore__make_dir($filename);
 	if ($rc->is_ok() === false) return false;
 

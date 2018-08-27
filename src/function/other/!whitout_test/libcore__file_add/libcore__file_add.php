@@ -3,10 +3,17 @@
  * add string to file
  * \param[in] filename name of file
  * \param[in] str string
+ * \param[in] flag_overwrite will over write this file?
  * \return status
  */
-function libcore__file_add($filename, $str)
+function libcore__file_add($filename, $str, $flag_overwrite = true)
 {
+	if (@file_exists($filename) === true)
+	{
+		if ($flag_overwrite === false) return true;
+	}
+
+
 	$rc = libcore__make_dir($filename);
 	if ($rc->is_ok() === false) return false;
 
