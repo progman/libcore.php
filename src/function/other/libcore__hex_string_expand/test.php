@@ -4,17 +4,19 @@
  */
 (function()
 {
+	$__FUNCTION__='libcore__hex_string_expand';
+
 	$x = libcore__hex_string_expand("0", 2);
 	if (strcmp($x, "00") != 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
 
 	$x = libcore__hex_string_expand("00", 2);
 	if (strcmp($x, "00") != 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 })();

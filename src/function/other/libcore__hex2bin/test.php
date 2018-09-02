@@ -4,6 +4,8 @@
  */
 (function()
 {
+	$__FUNCTION__='libcore__hex2bin';
+
 	$x = 'super puper';
 
 	$x_hex = bin2hex($x);
@@ -12,7 +14,7 @@
 
 	if ($x !== $y)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
 })();

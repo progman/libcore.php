@@ -4,21 +4,23 @@
  */
 (function()
 {
+	$__FUNCTION__='libcore__is_uint';
+
 	if (libcore__is_uint("") == true)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
 
 	if (libcore__is_uint("+1") == true)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 
 	if (libcore__is_uint("-1") == true)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step003\n";
+		echo "ERROR[".$__FUNCTION__."()]: step003\n";
 		exit(1);
 	}
 })();

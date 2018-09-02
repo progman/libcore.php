@@ -4,15 +4,17 @@
  */
 (function()
 {
+	$__FUNCTION__='libcore__flag2str';
+
 	if (strcmp(libcore__flag2str("0"), "false") !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
 
 	if (strcmp(libcore__flag2str("1"), "true") !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 

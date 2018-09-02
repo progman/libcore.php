@@ -4,6 +4,8 @@
  */
 (function()
 {
+	$__FUNCTION__='libcore__cmp_value';
+
 	$o1 = new stdClass();
 	$o1->x = new stdClass();
 
@@ -11,7 +13,7 @@
 
 	if (libcore__cmp_value($o1, $o2) === true)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
 
@@ -24,7 +26,7 @@
 
 	if (libcore__cmp_value($o1, $o2) === true)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 
@@ -37,7 +39,7 @@
 
 	if (libcore__cmp_value($o1, $o2) === true)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step003\n";
+		echo "ERROR[".$__FUNCTION__."()]: step003\n";
 		exit(1);
 	}
 
@@ -54,7 +56,7 @@
 
 	if (libcore__cmp_value($o1, $o2) === true)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step004\n";
+		echo "ERROR[".$__FUNCTION__."()]: step004\n";
 		exit(1);
 	}
 
@@ -67,7 +69,7 @@
 
 	if (libcore__cmp_value($o1, $o2) === false)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step005\n";
+		echo "ERROR[".$__FUNCTION__."()]: step005\n";
 		exit(1);
 	}
 })();

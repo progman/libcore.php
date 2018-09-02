@@ -4,6 +4,8 @@
  */
 (function()
 {
+	$__FUNCTION__='libcore__array_uniq';
+
 	$in_list = array();
 	array_push($in_list, "1");
 	array_push($in_list, "2");
@@ -16,25 +18,25 @@
 
 	if (count($out_list) !== 3)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
 
 	if (strcmp($out_list[0], "1") !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 
 	if (strcmp($out_list[1], "2") !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step003\n";
+		echo "ERROR[".$__FUNCTION__."()]: step003\n";
 		exit(1);
 	}
 
 	if (strcmp($out_list[2], "3") !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step004\n";
+		echo "ERROR[".$__FUNCTION__."()]: step004\n";
 		exit(1);
 	}
 
@@ -47,13 +49,13 @@
 
 	if (count($out_list) !== 1)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step005\n";
+		echo "ERROR[".$__FUNCTION__."()]: step005\n";
 		exit(1);
 	}
 
 	if (strcmp($out_list['a'], "green") !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step006\n";
+		echo "ERROR[".$__FUNCTION__."()]: step006\n";
 		exit(1);
 	}
 })();

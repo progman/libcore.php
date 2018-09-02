@@ -4,12 +4,14 @@
  */
 (function()
 {
+	$__FUNCTION__='libcore__hex_string_add';
+
 	$x = "1";
 	$y = "2";
 	$z = libcore__hex_string_add($x, $y);
 	if (strcmp($z, "03") != 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
 
@@ -19,7 +21,7 @@
 	$z = libcore__hex_string_add($x, $y);
 	if (strcmp($z, "ff") != 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 
@@ -29,7 +31,7 @@
 	$z = libcore__hex_string_add($x, $y);
 	if (strcmp($z, "0100") != 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step003\n";
+		echo "ERROR[".$__FUNCTION__."()]: step003\n";
 		exit(1);
 	}
 
@@ -38,7 +40,7 @@
 	$z = libcore__hex_string_add($x, $y);
 	if (strcmp($z, "01fe") != 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step004\n";
+		echo "ERROR[".$__FUNCTION__."()]: step004\n";
 		exit(1);
 	}
 
@@ -59,7 +61,7 @@
 
 		if (strcmp($c1, $c2) != 0)
 		{
-			echo "ERROR[".__FUNCTION__."()]: step005\n";
+			echo "ERROR[".$__FUNCTION__."()]: step005\n";
 			echo "a      : ".$a."\n";
 			echo "b      : ".$b."\n";
 			echo "c1     : ".$c1."\n";

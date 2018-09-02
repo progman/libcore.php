@@ -4,15 +4,17 @@
  */
 (function()
 {
+	$__FUNCTION__='libcore__is_parity';
+
 	if (libcore__is_parity(1) == true)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
 
 	if (libcore__is_parity(2) == false)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 })();

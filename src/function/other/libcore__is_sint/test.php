@@ -4,22 +4,24 @@
  */
 (function()
 {
+	$__FUNCTION__='libcore__is_sint';
+
 	if (libcore__is_sint("") == true)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
 
 	if (libcore__is_sint("+1+") == true)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 
 
 	if (libcore__is_sint("-1-") == true)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step003\n";
+		echo "ERROR[".$__FUNCTION__."()]: step003\n";
 		exit(1);
 	}
 })();

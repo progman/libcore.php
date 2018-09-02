@@ -4,6 +4,8 @@
  */
 (function()
 {
+	$__FUNCTION__='libcore__tojson';
+
 // \u0022 - " - Unicode Character 'QUOTATION MARK' (U+0022)
 // \u005c - \ - Unicode Character 'REVERSE SOLIDUS' (U+005C)
 // \u002f - / - Unicode Character 'SOLIDUS' (U+002F) /
@@ -20,63 +22,63 @@
 	$rc = libcore__tojson(" ");
 	if (strcmp($rc, ' ') !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step001\n";
+		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
 
 	$rc = libcore__tojson("\x22");
 	if (strcmp($rc, '\"') !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step002\n";
+		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 
 	$rc = libcore__tojson("\x5c");
 	if (strcmp($rc, "\\\\") !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step003\n";
+		echo "ERROR[".$__FUNCTION__."()]: step003\n";
 		exit(1);
 	}
 
 	$rc = libcore__tojson("\x2f");
 	if (strcmp($rc, '\/') !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step004\n";
+		echo "ERROR[".$__FUNCTION__."()]: step004\n";
 		exit(1);
 	}
 
 	$rc = libcore__tojson("\x08");
 	if (strcmp($rc, '\b') !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step005\n";
+		echo "ERROR[".$__FUNCTION__."()]: step005\n";
 		exit(1);
 	}
 
 	$rc = libcore__tojson("\x0c");
 	if (strcmp($rc, '\f') !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step006\n";
+		echo "ERROR[".$__FUNCTION__."()]: step006\n";
 		exit(1);
 	}
 
 	$rc = libcore__tojson("\x0a");
 	if (strcmp($rc, '\n') !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step007\n";
+		echo "ERROR[".$__FUNCTION__."()]: step007\n";
 		exit(1);
 	}
 
 	$rc = libcore__tojson("\x0d");
 	if (strcmp($rc, '\r') !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step008\n";
+		echo "ERROR[".$__FUNCTION__."()]: step008\n";
 		exit(1);
 	}
 
 	$rc = libcore__tojson("\x09");
 	if (strcmp($rc, '\t') !== 0)
 	{
-		echo "ERROR[".__FUNCTION__."()]: step009\n";
+		echo "ERROR[".$__FUNCTION__."()]: step009\n";
 		exit(1);
 	}
 })();

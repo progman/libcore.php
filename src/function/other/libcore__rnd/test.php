@@ -4,6 +4,8 @@
  */
 (function()
 {
+	$__FUNCTION__='libcore__rnd';
+
 	$max = 100;
 	for ($i=0; $i < ($max + 1); $i++)
 	{
@@ -15,7 +17,7 @@
 
 			if ($x == ($max + 1))
 			{
-				echo "ERROR[".__FUNCTION__."()]: step001\n";
+				echo "ERROR[".$__FUNCTION__."()]: step001\n";
 				exit(1);
 			}
 
@@ -23,7 +25,7 @@
 
 			if ($count == 1000000000)
 			{
-				echo "ERROR[".__FUNCTION__."()]: step002\n";
+				echo "ERROR[".$__FUNCTION__."()]: step002\n";
 				exit(1);
 			}
 		}
