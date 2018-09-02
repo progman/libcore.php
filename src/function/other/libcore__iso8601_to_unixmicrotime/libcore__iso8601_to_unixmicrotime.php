@@ -259,11 +259,7 @@ function libcore__iso8601_to_unixmicrotime($iso8601)
 		$index = $i;
 		$count++;
 	}
-	if ($count === 0)
-	{
-		return false;
-	}
-	if ($count > 1)
+	if ($count !== 1)
 	{
 		return false;
 	}
