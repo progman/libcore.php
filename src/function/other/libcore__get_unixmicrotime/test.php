@@ -1,54 +1,36 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 /**
- * test libcore__array_add()
+ * test libcore__get_unixmicrotime()
  */
 (function()
 {
-	$__FUNCTION__='libcore__array_add';
+	$__FUNCTION__='libcore__get_unixmicrotime';
 	$start = libcore__get_unixmicrotime();
 
 
-	$in1_list = array();
-	array_push($in1_list, "1");
-	array_push($in1_list, "2");
+	$time_start = time();
 
+	$unixmicrotime = libcore__get_unixmicrotime();
 
-	$in2_list = array();
-	array_push($in2_list, "2");
-	array_push($in2_list, "3");
+	$time_stop = time();
 
-
-	$out_list = libcore__array_add($in1_list, $in2_list);
-
-
-	if (count($out_list) !== 4)
+	if (strlen($unixmicrotime) != 16)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
 
+	$unixtime = substr($unixmicrotime, 0, 10);
 
-	if (strcmp($out_list[0], "1") !== 0)
+	if ($unixtime < $time_start)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 
-	if (strcmp($out_list[1], "2") !== 0)
+	if ($unixtime > $time_stop)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step003\n";
-		exit(1);
-	}
-
-	if (strcmp($out_list[2], "2") !== 0)
-	{
-		echo "ERROR[".$__FUNCTION__."()]: step004\n";
-		exit(1);
-	}
-
-	if (strcmp($out_list[3], "3") !== 0)
-	{
-		echo "ERROR[".$__FUNCTION__."()]: step005\n";
 		exit(1);
 	}
 

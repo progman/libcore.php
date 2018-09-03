@@ -14,7 +14,20 @@ function libcore__unixmicrotime_to_iso8601($unixmicrotime, $gmt_offset = 0)
 //1508150177310040
 //1528799349
 
+	for (;;)
+	{
+		if (strlen($unixmicrotime) >= 16) break;
+
+		$unixmicrotime = "0".$unixmicrotime;
+	}
+
 	if (strlen($unixmicrotime) != 16)
+	{
+		$unixmicrotime = '0000000000000000';
+		$gmt_offset = 0;
+	}
+
+	if (libcore__is_uint($unixmicrotime) === false)
 	{
 		$unixmicrotime = '0000000000000000';
 		$gmt_offset = 0;
@@ -32,9 +45,17 @@ function libcore__unixmicrotime_to_iso8601($unixmicrotime, $gmt_offset = 0)
 		$gmt_offset = 0;
 	}
 
+	if (libcore__is_sint($gmt_offset) === false)
+	{
+		$unixmicrotime = '0000000000000000';
+		$gmt_offset = 0;
+	}
+
 
 	$unixtime  = substr($unixmicrotime, 0, 10);
 	$microtime = substr($unixmicrotime, 10, 6);
+//echo "unixtime: ".$unixtime."\n";
+//echo "microtime: ".$microtime."\n";
 
 
 	$microtime = rtrim($microtime, "0");
