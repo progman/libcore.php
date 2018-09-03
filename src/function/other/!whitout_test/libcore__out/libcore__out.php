@@ -7,13 +7,25 @@
  */
 function libcore__out($list = array(), $callback = '')
 {
-	if ($callback != '') echo $callback."(\n";
+	if ($callback != '')
+	{
+		if ($callback != '?')
+		{
+			echo $callback."(\n";
+		}
+	}
 
 	$obj = (object)$list;
 
 	echo json_encode($obj, JSON_PRETTY_PRINT);
 
-	if ($callback != '') echo ");";
+	if ($callback != '')
+	{
+		if ($callback != '?')
+		{
+			echo ");";
+		}
+	}
 
 	echo "\n";
 }
