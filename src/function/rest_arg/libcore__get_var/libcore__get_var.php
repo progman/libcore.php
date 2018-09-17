@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 /**
- * get var from $_ENV or $_SERVER or $_GET or $_POST or php://input or $_COOKIE
+ * get var from $_ENV or $_SERVER or $_GET or $_POST or $_FILES or php://input or $_COOKIE
  * \param[in] key_name name of key
  * \param[in] value_default default value if key is not found
  * \return value of key
@@ -11,6 +11,7 @@ function libcore__get_var($key_name, $value_default = null)
 	global $_SERVER;
 	global $_GET;
 	global $_POST;
+	global $_FILES;
 	global $_COOKIE;
 
 
@@ -45,6 +46,14 @@ function libcore__get_var($key_name, $value_default = null)
 	{
 		$item->flag_set       = true;
 		$item->value          = $_POST[$key_name];
+		$item->value_original = $item->value;
+		return $item;
+	}
+
+	if (isset($_FILES[$key_name]) === true)
+	{
+		$item->flag_set       = true;
+		$item->value          = $_FILES[$key_name];
 		$item->value_original = $item->value;
 		return $item;
 	}
