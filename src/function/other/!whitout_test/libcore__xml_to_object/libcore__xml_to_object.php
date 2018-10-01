@@ -4,7 +4,7 @@
  * \param[in] xml
  * \return php object
  */
-function libcore__libcore__xml_to_object($xml)
+function libcore__xml_to_object($xml)
 {
 	$result = new result_t(__FUNCTION__, __FILE__);
 
