@@ -1,18 +1,35 @@
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 /**
  * perform http post
- * \param[in] url url
- * \param[in] data data for query
- * \param[in] flag_security flag security
- * \param[in] timeout timeout
- * \param[in] header_list list of headers
+ * \param[in] arg arguments for query
  * \return result
  */
-function libcore__http_post($url, $data, $flag_security = true, $timeout = 30, $header_list = [])
+function libcore__http_post($arg)
 {
 	$result = new result_t(__FUNCTION__, __FILE__);
 
 
+// check args
+	if (@isset($arg->url) === false)
+	{
+		$result->set_err(1, 'url is not set');
+		return $result;
+	}
+	if (@isset($arg->flag_security) === false)
+	{
+		$arg->flag_security = true;
+	}
+	if (@isset($arg->timeout) === false)
+	{
+		$arg->timeout = 30;
+	}
+	if (@isset($arg->header_list) === false)
+	{
+		$arg->header_list = [];
+	}
+
+
+// header callback function
 	$output_header_list = [];
 	$header_callback = function ($ch, $header_line) use (&$output_header_list)
 	{
@@ -22,7 +39,7 @@ function libcore__http_post($url, $data, $flag_security = true, $timeout = 30, $
 	};
 
 
-	$ch = curl_init($url);
+	$ch = curl_init($arg->url);
 	if ($ch === false)
 	{
 		$result->set_err(1, curl_error($ch));
@@ -30,7 +47,7 @@ function libcore__http_post($url, $data, $flag_security = true, $timeout = 30, $
 		return $result;
 	}
 
-	$rc = curl_setopt($ch, CURLOPT_HTTPHEADER, $header_list);
+	$rc = curl_setopt($ch, CURLOPT_HTTPHEADER, $arg->header_list);
 	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
@@ -78,7 +95,7 @@ function libcore__http_post($url, $data, $flag_security = true, $timeout = 30, $
 		return $result;
 	}
 
-	$rc = curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+	$rc = curl_setopt($ch, CURLOPT_TIMEOUT, $arg->timeout);
 	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
@@ -94,7 +111,7 @@ function libcore__http_post($url, $data, $flag_security = true, $timeout = 30, $
 		return $result;
 	}
 
-	if ($flag_security === true)
+	if ($arg->flag_security === true)
 	{
 		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, 3);
 		if ($rc === false)
