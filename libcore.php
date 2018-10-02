@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.8.5
+// 0.8.6
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -2882,13 +2882,17 @@ function libcore__http_get($arg)
 	$output_header_list = [];
 	$header_callback = function ($ch, $header_line) use (&$output_header_list)
 	{
-		$header_line_size = strlen($header_line);
-		if ($header_line_size !== 0)
+		$header_line_size1 = strlen($header_line);
+		$header_line = str_replace(array("\n", "\r"), '', $header_line);
+		$header_line_size2 = strlen($header_line);
+
+		if ($header_line_size2 !== 0)
 		{
 			array_push($output_header_list, $header_line);
 		}
+
 //		echo $header_line;
-		return $header_line_size;
+		return $header_line_size1;
 	};
 
 
@@ -3039,13 +3043,17 @@ function libcore__http_post($arg)
 	$output_header_list = [];
 	$header_callback = function ($ch, $header_line) use (&$output_header_list)
 	{
-		$header_line_size = strlen($header_line);
-		if ($header_line_size !== 0)
+		$header_line_size1 = strlen($header_line);
+		$header_line = str_replace(array("\n", "\r"), '', $header_line);
+		$header_line_size2 = strlen($header_line);
+
+		if ($header_line_size2 !== 0)
 		{
 			array_push($output_header_list, $header_line);
 		}
+
 //		echo $header_line;
-		return $header_line_size;
+		return $header_line_size1;
 	};
 
 
