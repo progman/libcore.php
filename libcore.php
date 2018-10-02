@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.8.2
+// 0.8.3
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -2328,7 +2328,14 @@ function libcore__do_post($url, $data, $flag_security = true, $timeout = 30, $he
 	$result = new result_t(__FUNCTION__, __FILE__);
 
 
-	$rc = libcore__http_post($url, $data, $flag_security, $timeout, $header_list);
+	$http_post_arg = new stdClass();
+	$http_post_arg->url           = $url;
+	$http_post_arg->data          = $data;
+	$http_post_arg->flag_security = $flag_security;
+	$http_post_arg->timeout       = $timeout;
+	$http_post_arg->header_list   = $header_list;
+
+	$rc = libcore__http_post($http_post_arg);
 	if ($rc->is_ok() === false) return $rc;
 	$answer = $rc->get_value();
 
