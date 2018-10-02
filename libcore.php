@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.8.3
+// 0.8.4
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -3013,6 +3013,10 @@ function libcore__http_post($arg)
 		$result->set_err(1, 'url is not set');
 		return $result;
 	}
+	if (@isset($arg->data) === false)
+	{
+		$arg->data = '';
+	}
 	if (@isset($arg->flag_security) === false)
 	{
 		$arg->flag_security = true;
@@ -3061,7 +3065,7 @@ function libcore__http_post($arg)
 		return $result;
 	}
 
-	$rc = curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	$rc = curl_setopt($ch, CURLOPT_POSTFIELDS, $arg->data);
 	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
