@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.8.4
+// 0.8.5
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -2882,9 +2882,13 @@ function libcore__http_get($arg)
 	$output_header_list = [];
 	$header_callback = function ($ch, $header_line) use (&$output_header_list)
 	{
-		array_push($output_header_list, $header_line);
+		$header_line_size = strlen($header_line);
+		if ($header_line_size !== 0)
+		{
+			array_push($output_header_list, $header_line);
+		}
 //		echo $header_line;
-		return strlen($header_line);
+		return $header_line_size;
 	};
 
 
@@ -3035,9 +3039,13 @@ function libcore__http_post($arg)
 	$output_header_list = [];
 	$header_callback = function ($ch, $header_line) use (&$output_header_list)
 	{
-		array_push($output_header_list, $header_line);
+		$header_line_size = strlen($header_line);
+		if ($header_line_size !== 0)
+		{
+			array_push($output_header_list, $header_line);
+		}
 //		echo $header_line;
-		return strlen($header_line);
+		return $header_line_size;
 	};
 
 
