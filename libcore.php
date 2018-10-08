@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.8.6
+// 0.8.7
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -2952,7 +2952,8 @@ function libcore__http_get($arg)
 		return $result;
 	}
 
-	$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'SSLv3');
+//	$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'SSLv3');
+	$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
 	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
@@ -2962,15 +2963,16 @@ function libcore__http_get($arg)
 
 	if ($arg->flag_security === true)
 	{
-		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, 3);
-		if ($rc === false)
-		{
-			$result->set_err(1, curl_error($ch));
-			curl_close($ch);
-			return $result;
-		}
+//		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, 3);
+//		if ($rc === false)
+//		{
+//			$result->set_err(1, curl_error($ch));
+//			curl_close($ch);
+//			return $result;
+//		}
 
-		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+//		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
 		if ($rc === false)
 		{
 			$result->set_err(1, curl_error($ch));
@@ -3121,7 +3123,8 @@ function libcore__http_post($arg)
 		return $result;
 	}
 
-	$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'SSLv3');
+//	$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'SSLv3');
+	$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
 	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
@@ -3131,15 +3134,16 @@ function libcore__http_post($arg)
 
 	if ($arg->flag_security === true)
 	{
-		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, 3);
-		if ($rc === false)
-		{
-			$result->set_err(1, curl_error($ch));
-			curl_close($ch);
-			return $result;
-		}
+//		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, 3);
+//		if ($rc === false)
+//		{
+//			$result->set_err(1, curl_error($ch));
+//			curl_close($ch);
+//			return $result;
+//		}
 
-		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+//		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
+		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
 		if ($rc === false)
 		{
 			$result->set_err(1, curl_error($ch));
