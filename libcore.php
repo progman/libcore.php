@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.8.8
+// 0.8.9
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -3055,28 +3055,37 @@ function libcore__http_get($arg)
 			return $result;
 		}
 
-		$rc = curl_setopt($ch, CURLOPT_SSLCERT, $arg->ssl_cert);
-		if ($rc === false)
+		if (strcmp($arg->ssl_cert, "") !== 0)
 		{
-			$result->set_err(1, curl_error($ch));
-			curl_close($ch);
-			return $result;
+			$rc = curl_setopt($ch, CURLOPT_SSLCERT, $arg->ssl_cert);
+			if ($rc === false)
+			{
+				$result->set_err(1, curl_error($ch));
+				curl_close($ch);
+				return $result;
+			}
 		}
 
-		$rc = curl_setopt($ch, CURLOPT_SSLCERTTYPE, $arg->ssl_cert_type);
-		if ($rc === false)
+		if (strcmp($arg->ssl_cert_type, "") !== 0)
 		{
-			$result->set_err(1, curl_error($ch));
-			curl_close($ch);
-			return $result;
+			$rc = curl_setopt($ch, CURLOPT_SSLCERTTYPE, $arg->ssl_cert_type);
+			if ($rc === false)
+			{
+				$result->set_err(1, curl_error($ch));
+				curl_close($ch);
+				return $result;
+			}
 		}
 
-		$rc = curl_setopt($ch, CURLOPT_SSLKEY, $arg->ssl_key);
-		if ($rc === false)
+		if (strcmp($arg->ssl_key, "") !== 0)
 		{
-			$result->set_err(1, curl_error($ch));
-			curl_close($ch);
-			return $result;
+			$rc = curl_setopt($ch, CURLOPT_SSLKEY, $arg->ssl_key);
+			if ($rc === false)
+			{
+				$result->set_err(1, curl_error($ch));
+				curl_close($ch);
+				return $result;
+			}
 		}
 	}
 
@@ -3325,28 +3334,37 @@ function libcore__http_post($arg)
 			return $result;
 		}
 
-		$rc = curl_setopt($ch, CURLOPT_SSLCERT, $arg->ssl_cert);
-		if ($rc === false)
+		if (strcmp($arg->ssl_cert, "") !== 0)
 		{
-			$result->set_err(1, curl_error($ch));
-			curl_close($ch);
-			return $result;
+			$rc = curl_setopt($ch, CURLOPT_SSLCERT, $arg->ssl_cert);
+			if ($rc === false)
+			{
+				$result->set_err(1, curl_error($ch));
+				curl_close($ch);
+				return $result;
+			}
 		}
 
-		$rc = curl_setopt($ch, CURLOPT_SSLCERTTYPE, $arg->ssl_cert_type);
-		if ($rc === false)
+		if (strcmp($arg->ssl_cert_type, "") !== 0)
 		{
-			$result->set_err(1, curl_error($ch));
-			curl_close($ch);
-			return $result;
+			$rc = curl_setopt($ch, CURLOPT_SSLCERTTYPE, $arg->ssl_cert_type);
+			if ($rc === false)
+			{
+				$result->set_err(1, curl_error($ch));
+				curl_close($ch);
+				return $result;
+			}
 		}
 
-		$rc = curl_setopt($ch, CURLOPT_SSLKEY, $arg->ssl_key);
-		if ($rc === false)
+		if (strcmp($arg->ssl_key, "") !== 0)
 		{
-			$result->set_err(1, curl_error($ch));
-			curl_close($ch);
-			return $result;
+			$rc = curl_setopt($ch, CURLOPT_SSLKEY, $arg->ssl_key);
+			if ($rc === false)
+			{
+				$result->set_err(1, curl_error($ch));
+				curl_close($ch);
+				return $result;
+			}
 		}
 	}
 
