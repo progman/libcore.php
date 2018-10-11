@@ -10,7 +10,15 @@ function libcore__http_post($arg)
 
 
 // check args
-	if (@isset($arg->url) === false)
+	if (@is_bool($arg->flag_verbose) === false)
+	{
+		$arg->flag_verbose = false;
+	}
+	if (@is_bool($arg->flag_failonerror) === false)
+	{
+		$arg->flag_failonerror = false;
+	}
+	if (@is_string($arg->url) === false)
 	{
 		$result->set_err(1, 'url is not set');
 		return $result;
@@ -19,7 +27,7 @@ function libcore__http_post($arg)
 	{
 		$arg->data = '';
 	}
-	if (@isset($arg->flag_security) === false)
+	if (@is_bool($arg->flag_security) === false)
 	{
 		$arg->flag_security = true;
 	}
@@ -27,9 +35,25 @@ function libcore__http_post($arg)
 	{
 		$arg->timeout = 30;
 	}
-	if (@isset($arg->header_list) === false)
+	if (@is_array($arg->header_list) === false)
 	{
 		$arg->header_list = [];
+	}
+	if (@is_string($arg->referer) === false)
+	{
+		$arg->referer = "";
+	}
+	if (@is_string($arg->ssl_cert) === false)
+	{
+		$arg->ssl_cert = "";
+	}
+	if (@is_string($arg->ssl_cert_type) === false)
+	{
+		$arg->ssl_cert_type = "";
+	}
+	if (@is_string($arg->ssl_key) === false)
+	{
+		$arg->ssl_key = "";
 	}
 
 
@@ -51,8 +75,32 @@ function libcore__http_post($arg)
 	};
 
 
-	$ch = curl_init($arg->url);
-	if ($ch === false)
+	$rc = curl_init();
+	if ($rc === false)
+	{
+		$result->set_err(1, 'curl is not init');
+		return $result;
+	}
+	$ch = $rc;
+
+	$rc = curl_setopt($ch, CURLOPT_VERBOSE, $arg->flag_verbose);
+	if ($rc === false)
+	{
+		$result->set_err(1, curl_error($ch));
+		curl_close($ch);
+		return $result;
+	}
+
+	$rc = curl_setopt($ch, CURLOPT_FAILONERROR, $arg->flag_failonerror);
+	if ($rc === false)
+	{
+		$result->set_err(1, curl_error($ch));
+		curl_close($ch);
+		return $result;
+	}
+
+	$rc = curl_setopt($ch, CURLOPT_URL, $arg->url);
+	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
 		curl_close($ch);
@@ -67,7 +115,7 @@ function libcore__http_post($arg)
 		return $result;
 	}
 
-	$rc = curl_setopt($ch, CURLOPT_POST, true);
+	$rc = curl_setopt($ch, CURLOPT_POST, 1);
 	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
@@ -83,7 +131,7 @@ function libcore__http_post($arg)
 		return $result;
 	}
 
-	$rc = curl_setopt($ch, CURLOPT_HTTPGET, false);
+	$rc = curl_setopt($ch, CURLOPT_HTTPGET, 0);
 	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
@@ -91,7 +139,7 @@ function libcore__http_post($arg)
 		return $result;
 	}
 
-	$rc = curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$rc = curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
@@ -115,17 +163,28 @@ function libcore__http_post($arg)
 		return $result;
 	}
 
-//	$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'SSLv3');
-	$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
-	if ($rc === false)
+	if (strcmp($arg->referer, "") !== 0)
 	{
-		$result->set_err(1, curl_error($ch));
-		curl_close($ch);
-		return $result;
+		$rc = curl_setopt($ch, CURLOPT_REFERER, $arg->referer);
+		if ($rc === false)
+		{
+			$result->set_err(1, curl_error($ch));
+			curl_close($ch);
+			return $result;
+		}
 	}
 
 	if ($arg->flag_security === true)
 	{
+//		$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'SSLv3');
+		$rc = curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
+		if ($rc === false)
+		{
+			$result->set_err(1, curl_error($ch));
+			curl_close($ch);
+			return $result;
+		}
+
 //		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, 3);
 //		if ($rc === false)
 //		{
@@ -136,6 +195,46 @@ function libcore__http_post($arg)
 
 //		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1);
 		$rc = curl_setopt($ch, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);
+		if ($rc === false)
+		{
+			$result->set_err(1, curl_error($ch));
+			curl_close($ch);
+			return $result;
+		}
+
+		$rc = curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+		if ($rc === false)
+		{
+			$result->set_err(1, curl_error($ch));
+			curl_close($ch);
+			return $result;
+		}
+
+		$rc = curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+		if ($rc === false)
+		{
+			$result->set_err(1, curl_error($ch));
+			curl_close($ch);
+			return $result;
+		}
+
+		$rc = curl_setopt($ch, CURLOPT_SSLCERT, $arg->ssl_cert);
+		if ($rc === false)
+		{
+			$result->set_err(1, curl_error($ch));
+			curl_close($ch);
+			return $result;
+		}
+
+		$rc = curl_setopt($ch, CURLOPT_SSLCERTTYPE, $arg->ssl_cert_type);
+		if ($rc === false)
+		{
+			$result->set_err(1, curl_error($ch));
+			curl_close($ch);
+			return $result;
+		}
+
+		$rc = curl_setopt($ch, CURLOPT_SSLKEY, $arg->ssl_key);
 		if ($rc === false)
 		{
 			$result->set_err(1, curl_error($ch));
