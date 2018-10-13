@@ -14,7 +14,10 @@ function libcore__get_unixmicrotime($flag_utc = false)
 
 	if ($flag_utc !== false)
 	{
-		date_default_timezone_set("UTC");
+		if (date_default_timezone_set("UTC") === false)
+		{
+			return $unixmicrotime;
+		}
 	}
 
 
