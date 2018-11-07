@@ -1,3 +1,7 @@
 #!/bin/bash
 
-php -f test.php
+./make.sh;
+
+php -f test.php;
+STATUS=${?};
+exit ${STATUS};

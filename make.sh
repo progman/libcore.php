@@ -19,7 +19,7 @@ function do_it()
 
 
 
-	find ./src/ -type f | grep -v 'head.php' | grep -v 'test_tail.php' | grep -v 'result_t.php' | grep -v 'test.php' | sort > "${TMP1}";
+	find ./src/ -type f | grep -v 'head.php' | grep -v 'result_t.php' | grep -v 'test.php' | grep -v 'test_head.php' | grep -v 'test_tail.php' | sort > "${TMP1}";
 
 	echo "<?php" > libcore.php
 
