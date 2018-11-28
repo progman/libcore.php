@@ -6,6 +6,16 @@
  */
 function libcore__is_sint($val)
 {
+	$type = gettype($val);
+	if
+	(
+		(strcmp($type, "integer") !== 0) &&
+		(strcmp($type, "string")  !== 0)
+	)
+	{
+		return false;
+	}
+
 	settype($val, "string");
 
 	$size = strlen($val);
