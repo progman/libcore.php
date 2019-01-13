@@ -384,7 +384,7 @@ function libcore__iso8601_to_unixmicrotime($iso8601)
 	echo "gmt_offset_min:".$gmt_offset_min."\n";
 */
 
-	$unixtime = gmmktime ($hour, $min, $sec, $month, $day, $year);
+	$unixtime = gmmktime($hour, $min, $sec, $month, $day, $year);
 
 
 	$gmt_offset = ($gmt_offset_hour * 60 * 60) + ($gmt_offset_min * 60);

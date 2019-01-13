@@ -1,6 +1,6 @@
 <?php
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.9.4
+// 0.9.5
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -3267,6 +3267,35 @@ function libcore__get_var_uint($key_name, $value_default = null)
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 /**
+ * convert from daymicrotime_text to daymicrotime, from "23:59:59.999999" to 86399999999
+ * \param[in] daymicrotime_text like "23:59:59.999999"
+ * \return result like 86399999999 or FALSE if args are bad
+ */
+function libcore__daymicrotime_text_to_daymicrotime($daymicrotime_text)
+{
+	$result = new result_t(__FUNCTION__, __FILE__);
+
+
+	$rc = libcore__parse_daymicrotime_text($daymicrotime_text);
+	if ($rc->is_ok() === false) return $rc;
+	$value = $rc->get_value();
+
+	$hour     = $value->hour;
+	$min      = $value->min;
+	$sec      = $value->sec;
+	$microsec = $value->microsec;
+
+
+	$value = ((($hour * 60 * 60) + ($min * 60) + $sec) * 1000000) + $microsec;
+
+
+	$result->set_ok();
+	$result->set_value($value);
+	return $result;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
  * get unixmicrotime
  * \param[in] flag_utc use UTC timezone
  * \return unixmicrotime
@@ -3759,7 +3788,7 @@ function libcore__iso8601_to_unixmicrotime($iso8601)
 	echo "gmt_offset_min:".$gmt_offset_min."\n";
 */
 
-	$unixtime = gmmktime ($hour, $min, $sec, $month, $day, $year);
+	$unixtime = gmmktime($hour, $min, $sec, $month, $day, $year);
 
 
 	$gmt_offset = ($gmt_offset_hour * 60 * 60) + ($gmt_offset_min * 60);
@@ -3786,6 +3815,146 @@ function libcore__iso8601_to_unixmicrotime($iso8601)
 
 
 	return $unixmicrotime;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
+ * convert from daymicrotime_text to parts, from "23:59:59.999999" to hour, min, sec, microsec
+ * \param[in] daymicrotime_text like "23:59:59.999999"
+ * \return result as hour, min, sec, microsec or FALSE if args are bad
+ */
+function libcore__parse_daymicrotime_text($daymicrotime_text)
+{
+	$result = new result_t(__FUNCTION__, __FILE__);
+
+
+	settype($daymicrotime_text, "string");
+
+//0         1
+//012345678901234
+//23:59:59.999999
+
+	if (ord($daymicrotime_text[2]) !== ord(':'))
+	{
+		$result->set_err(7, 'invalid daymicrotime_text');
+		return $result;
+	}
+
+	if (ord($daymicrotime_text[5]) !== ord(':'))
+	{
+		$result->set_err(7, 'invalid daymicrotime_text');
+		return $result;
+	}
+
+	if (ord($daymicrotime_text[8]) !== ord('.'))
+	{
+		$result->set_err(7, 'invalid daymicrotime_text');
+		return $result;
+	}
+
+	$hour     = substr($daymicrotime_text, 0, 2);
+	$min      = substr($daymicrotime_text, 3, 2);
+	$sec      = substr($daymicrotime_text, 6, 2);
+	$microsec = substr($daymicrotime_text, 9, 6);
+
+	if (libcore__is_uint($hour) === false)
+	{
+		$result->set_err(7, 'invalid daymicrotime_text');
+		return $result;
+	}
+
+	if (libcore__is_uint($min) === false)
+	{
+		$result->set_err(7, 'invalid daymicrotime_text');
+		return $result;
+	}
+
+	if (libcore__is_uint($sec) === false)
+	{
+		$result->set_err(7, 'invalid daymicrotime_text');
+		return $result;
+	}
+
+	if (libcore__is_uint($microsec) === false)
+	{
+		$result->set_err(7, 'invalid daymicrotime_text');
+		return $result;
+	}
+
+
+	$value = new stdClass();
+	$value->hour     = $hour;
+	$value->min      = $min;
+	$value->sec      = $sec;
+	$value->microsec = $microsec;
+
+
+	$result->set_ok();
+	$result->set_value($value);
+	return $result;
+}
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
+ * convert unixmicrotime to daymicrotime_text, from "1508150177310040" to "10:36:17.310040"
+ * \param[in] unixmicrotime time in microseconds like 1508150177310040 it is 2017-10-16 13:36:17.31004
+ * \return result daymicrotime_text like "10:36:17.310040"
+ */
+function libcore__unixmicrotime_to_daymicrotime_text($unixmicrotime)
+{
+	$result = new result_t(__FUNCTION__, __FILE__);
+
+
+	settype($unixmicrotime, "string");
+
+//1234567890123456
+//1508150177310040
+//1528799349
+
+	for (;;)
+	{
+		if (strlen($unixmicrotime) >= 16) break;
+
+		$unixmicrotime = "0".$unixmicrotime;
+	}
+
+	if (strlen($unixmicrotime) != 16)
+	{
+		$unixmicrotime = '0000000000000000';
+	}
+
+	if (libcore__is_uint($unixmicrotime) === false)
+	{
+		$unixmicrotime = '0000000000000000';
+	}
+
+
+	$unixtime  = substr($unixmicrotime, 0, 10);
+	$microtime = substr($unixmicrotime, 10, 6);
+//echo "unixtime: ".$unixtime."\n";
+//echo "microtime: ".$microtime."\n";
+
+
+	if (empty($microtime) === true)
+	{
+		$microtime = "000000";
+	}
+
+	for (;;)
+	{
+		if (strlen($microtime) >= 6) break;
+
+		$microtime = $microtime."0";
+	}
+
+
+	$value = gmdate("H:i:s", $unixtime);
+	$value = $value.".".$microtime;
+
+
+	$result->set_ok();
+	$result->set_value($value);
+	return $result;
 }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
