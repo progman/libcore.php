@@ -5,7 +5,7 @@
 (function()
 {
 	$__FUNCTION__='libcore__get_unixtime';
-	$start = libcore__get_unixtime();
+	$start = libcore__get_unixmicrotime();
 
 
 	$time_start = time();
