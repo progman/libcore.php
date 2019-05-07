@@ -17,6 +17,12 @@ function libcore__filter_enum($value, $value_list, $value_default = null)
 	}
 
 
+	if (strcmp(gettype($value_list), 'array') !== 0)
+	{
+		return $value_default;
+	}
+
+
 	$value_list_size = count($value_list);
 	if ($value_list_size === 0)
 	{

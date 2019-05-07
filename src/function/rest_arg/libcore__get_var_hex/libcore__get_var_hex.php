@@ -17,8 +17,9 @@ function libcore__get_var_hex($key_name, $value_default = null)
 		{
 			return null;
 		}
-		return $value_default;
+		$value = $value_default;
 	}
+	$value = libcore__hex_string_parity($value);
 
 
 	return $value;

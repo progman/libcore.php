@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 0.9.7
+// 0.9.8
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -2031,6 +2031,12 @@ function libcore__filter_enum($value, $value_list, $value_default = null)
 	}
 
 
+	if (strcmp(gettype($value_list), 'array') !== 0)
+	{
+		return $value_default;
+	}
+
+
 	$value_list_size = count($value_list);
 	if ($value_list_size === 0)
 	{
@@ -2951,21 +2957,24 @@ function libcore__get_var_bool($key_name, $value_default = null)
  * \param[in] value_default default value if key is not found
  * \return value of key
  */
-function libcore__get_var_enum($key_name, $value_list = null)
+function libcore__get_var_enum($key_name, $value_list = null, $value_default = null)
 {
-	$value_default = null;
-
-	if (strcmp(gettype($value_list), 'array') === 0)
+	if ($value_list === null)
 	{
-		if (count($value_list) !== 0)
-		{
-			$value_default = $value_list[0];
-		}
+		return $value_default;
 	}
+
+
+	if (strcmp(gettype($value_list), 'array') !== 0)
+	{
+		return $value_default;
+	}
+
 
 	$value = libcore__get_var_str($key_name, $value_default);
 
-	return libcore__filter_enum($value, $value_list);
+
+	return libcore__filter_enum($value, $value_list, $value_default);
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -3058,8 +3067,9 @@ function libcore__get_var_hex($key_name, $value_default = null)
 		{
 			return null;
 		}
-		return $value_default;
+		$value = $value_default;
 	}
+	$value = libcore__hex_string_parity($value);
 
 
 	return $value;
