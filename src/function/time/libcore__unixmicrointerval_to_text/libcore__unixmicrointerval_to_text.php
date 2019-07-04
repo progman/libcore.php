@@ -52,7 +52,29 @@ function libcore__unixmicrointerval_to_text($unixmicrointerval)
 	}
 
 
-	$tmp = $day." days ".$hour." hours ".$min." mins ".$sec." secs ".$unixmicrointerval." microseconds";
+	$tmp = "";
+
+	if ($day !== 0)
+	{
+		$tmp .= $day." days ";
+	}
+
+	if ($hour !== 0)
+	{
+		$tmp .= $hour." hours ";
+	}
+
+	if ($min !== 0)
+	{
+		$tmp .= $min." mins ";
+	}
+
+	if ($sec !== 0)
+	{
+		$tmp .= $sec." secs ";
+	}
+
+	$tmp .= $unixmicrointerval." microseconds";
 
 
 	$result->set_ok();
