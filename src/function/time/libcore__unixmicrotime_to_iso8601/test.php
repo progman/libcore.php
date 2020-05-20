@@ -9,9 +9,17 @@
 
 
 	$iso8601 = libcore__unixmicrotime_to_iso8601('1508150177310040');
-	if (strcmp($iso8601, "2017-10-16T10:36:17.31004+0000") !== 0)
+	if (strcmp($iso8601, "2017-10-16T10:36:17.310040+0000") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step001\n";
+		echo "iso8601:".$iso8601."\n";
+		exit(1);
+	}
+
+	$iso8601 = libcore__unixmicrotime_to_iso8601('0');
+	if (strcmp($iso8601, "1970-01-01T00:00:00.000000+0000") !== 0)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		echo "iso8601:".$iso8601."\n";
 		exit(1);
 	}
@@ -25,7 +33,7 @@
 	}
 
 	$iso8601 = libcore__unixmicrotime_to_iso8601('1508150177310040', 180);
-	if (strcmp($iso8601, "2017-10-16T10:36:17.31004+0300") !== 0)
+	if (strcmp($iso8601, "2017-10-16T10:36:17.310040+0300") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step003\n";
 		echo "iso8601:".$iso8601."\n";
@@ -33,7 +41,7 @@
 	}
 
 	$iso8601 = libcore__unixmicrotime_to_iso8601('1508150177310040', -180);
-	if (strcmp($iso8601, "2017-10-16T10:36:17.31004-0300") !== 0)
+	if (strcmp($iso8601, "2017-10-16T10:36:17.310040-0300") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step004\n";
 		echo "iso8601:".$iso8601."\n";
@@ -41,7 +49,7 @@
 	}
 
 	$iso8601 = libcore__unixmicrotime_to_iso8601(null);
-	if (strcmp($iso8601, "1970-01-01T00:00:00.0+0000") !== 0)
+	if (strcmp($iso8601, "1970-01-01T00:00:00.000000+0000") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step005\n";
 		echo "iso8601:".$iso8601."\n";
@@ -49,7 +57,7 @@
 	}
 
 	$iso8601 = libcore__unixmicrotime_to_iso8601('aaa', 'bbb');
-	if (strcmp($iso8601, "1970-01-01T00:00:00.0+0000") !== 0)
+	if (strcmp($iso8601, "1970-01-01T00:00:00.000000+0000") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step006\n";
 		echo "iso8601:".$iso8601."\n";

@@ -58,12 +58,13 @@ function libcore__unixmicrotime_to_iso8601($unixmicrotime, $gmt_offset = 0) // T
 //echo "microtime: ".$microtime."\n";
 
 
+/*
 	$microtime = rtrim($microtime, "0");
 	if (empty($microtime) === true)
 	{
 		$microtime = "0";
 	}
-
+*/
 
 	$tmp = gmdate("Y-m-d\TH:i:s", $unixtime);
 	$tmp = $tmp.".".$microtime;
