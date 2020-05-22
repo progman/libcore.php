@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.0.4
+// 1.0.6
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -3366,6 +3366,29 @@ function libcore__daymicrotime_text_to_daymicrotime($daymicrotime_text)
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 /**
+ * get GMT offset in seconds
+ * \return result GMT offset in seconds
+ */
+function libcore__get_gmt_offset()
+{
+	$unixtime1 = gmmktime(0, 0, 0, 1, 1, 1970);
+	$unixtime2 =   mktime(0, 0, 0, 1, 1, 1970);
+//	echo "unixtime1:".$unixtime1."\n";
+//	echo "unixtime2:".$unixtime2."\n";
+
+
+	$gmt_offset = floor(($unixtime1 - $unixtime2) / 60);
+//	echo "gmt_offset:".$gmt_offset."\n";
+
+
+	settype($gmt_offset, "int");
+
+
+	return $gmt_offset;
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
  * get unixmicrotime
  * \param[in] flag_utc use UTC timezone
  * \return unixmicrotime
@@ -4153,7 +4176,7 @@ function libcore__unixmicrotime_to_dayofweek($unixmicrotime, $flag_iso8601)
  * \param[in] gmt_offset time shift in minutes from GMT
  * \return result time in iso8601
  */
-function libcore__unixmicrotime_to_iso8601($unixmicrotime, $gmt_offset = 0) // TODO: $filter = "2017-10-16T10:36:17.31004+0000"
+function libcore__unixmicrotime_to_iso8601($unixmicrotime, $gmt_offset = 0, $flag_timezone = true) // TODO: $filter = "2017-10-16T10:36:17.31004+0000"
 {
 	settype($unixmicrotime, "string");
 	settype($gmt_offset, "integer");
@@ -4214,34 +4237,37 @@ function libcore__unixmicrotime_to_iso8601($unixmicrotime, $gmt_offset = 0) // T
 	}
 */
 
-	$tmp = gmdate("Y-m-d\TH:i:s", $unixtime);
+	$tmp = gmdate("Y-m-d H:i:s", $unixtime);
 	$tmp = $tmp.".".$microtime;
 
 
-	$gmt_offset_hour = floor(abs($gmt_offset) / 60);
-	$gmt_offset_min  = abs($gmt_offset) - ($gmt_offset_hour * 60);
-
-
-	if (strlen($gmt_offset_hour) === 1)
+	if ($flag_timezone === true)
 	{
-		$gmt_offset_hour = "0".$gmt_offset_hour;
-	}
+		$gmt_offset_hour = floor(abs($gmt_offset) / 60);
+		$gmt_offset_min  = abs($gmt_offset) - ($gmt_offset_hour * 60);
 
-	if (strlen($gmt_offset_min) === 1)
-	{
-		$gmt_offset_min = "0".$gmt_offset_min;
-	}
 
-	if ($gmt_offset < 0)
-	{
-		$tmp = $tmp."-";
-	}
-	else
-	{
-		$tmp = $tmp."+";
-	}
+		if (strlen($gmt_offset_hour) === 1)
+		{
+			$gmt_offset_hour = "0".$gmt_offset_hour;
+		}
 
-	$tmp = $tmp.$gmt_offset_hour.$gmt_offset_min;
+		if (strlen($gmt_offset_min) === 1)
+		{
+			$gmt_offset_min = "0".$gmt_offset_min;
+		}
+
+		if ($gmt_offset < 0)
+		{
+			$tmp = $tmp."-";
+		}
+		else
+		{
+			$tmp = $tmp."+";
+		}
+
+		$tmp = $tmp.$gmt_offset_hour.$gmt_offset_min;
+	}
 
 	return $tmp;
 }

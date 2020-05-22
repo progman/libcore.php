@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.0.4
+// 1.0.6
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -1982,6 +1982,86 @@ echo "ok\n";
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 /**
+ * test libcore__get_gmt_offset()
+ */
+(function()
+{
+	$__FUNCTION__='libcore__get_gmt_offset';
+	$start = libcore__get_unixmicrotime();
+
+
+	$tz = date_default_timezone_get();
+//	echo "tz:".$tz."\n";
+
+
+	$old_gmt_offset = libcore__get_gmt_offset();
+
+
+	if (date_default_timezone_set("UTC") === false)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step001\n";
+		exit(1);
+	}
+
+
+	$gmt_offset = libcore__get_gmt_offset();
+	if ($gmt_offset !== 0)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step002\n";
+		echo "gmt_offset:".$gmt_offset."\n";
+		exit(1);
+	}
+
+
+	if (date_default_timezone_set("Europe/Moscow") === false)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step003\n";
+		exit(1);
+	}
+
+
+	$gmt_offset = libcore__get_gmt_offset();
+	if ($gmt_offset !== 180)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step004\n";
+		echo "gmt_offset:".$gmt_offset."\n";
+		exit(1);
+	}
+
+
+	if (date_default_timezone_set($tz) === false)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step005\n";
+		exit(1);
+	}
+
+
+	$new_gmt_offset = libcore__get_gmt_offset();
+
+
+	if (strcmp($old_gmt_offset, $new_gmt_offset) !== 0)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step006\n";
+		exit(1);
+	}
+
+
+	$stop = libcore__get_unixmicrotime();
+	echo $__FUNCTION__."(): ".($stop - $start)."\n"; flush();
+
+
+//	$stop = libcore__get_unixmicrotime();
+//	$rc = libcore__unixmicrointerval_to_text($stop - $start);
+//	if ($rc->is_ok() === false)
+//	{
+//		echo "ERROR[".$__FUNCTION__."()]: libcore__unixmicrointerval_to_text is broken\n";
+//		exit(1);
+//	}
+//	echo $__FUNCTION__."(): ".($rc->get_value())."\n"; flush();
+})();
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
  * test libcore__get_unixmicrotime()
  */
 (function()
@@ -2675,65 +2755,81 @@ echo "ok\n";
 
 
 	$iso8601 = libcore__unixmicrotime_to_iso8601('1508150177310040');
-	if (strcmp($iso8601, "2017-10-16T10:36:17.310040+0000") !== 0)
+	if (strcmp($iso8601, "2017-10-16 10:36:17.310040+0000") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		echo "iso8601:".$iso8601."\n";
 		exit(1);
 	}
 
-	$iso8601 = libcore__unixmicrotime_to_iso8601('0');
-	if (strcmp($iso8601, "1970-01-01T00:00:00.000000+0000") !== 0)
+	$iso8601 = libcore__unixmicrotime_to_iso8601('1508150177310040', 0, false);
+	if (strcmp($iso8601, "2017-10-16 10:36:17.310040") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		echo "iso8601:".$iso8601."\n";
 		exit(1);
 	}
 
-	$iso8601 = libcore__unixmicrotime_to_iso8601('1');
-	if (strcmp($iso8601, "1970-01-01T00:00:00.000001+0000") !== 0)
+	$iso8601 = libcore__unixmicrotime_to_iso8601('0');
+	if (strcmp($iso8601, "1970-01-01 00:00:00.000000+0000") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step003\n";
 		echo "iso8601:".$iso8601."\n";
 		exit(1);
 	}
 
-	$iso8601 = libcore__unixmicrotime_to_iso8601('0', 1);
-	if (strcmp($iso8601, "1970-01-01T00:00:00.000000+0001") !== 0)
+	$iso8601 = libcore__unixmicrotime_to_iso8601('1');
+	if (strcmp($iso8601, "1970-01-01 00:00:00.000001+0000") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step004\n";
 		echo "iso8601:".$iso8601."\n";
 		exit(1);
 	}
 
-	$iso8601 = libcore__unixmicrotime_to_iso8601('1508150177310040', 180);
-	if (strcmp($iso8601, "2017-10-16T10:36:17.310040+0300") !== 0)
+	$iso8601 = libcore__unixmicrotime_to_iso8601('0', 1);
+	if (strcmp($iso8601, "1970-01-01 00:00:00.000000+0001") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step005\n";
 		echo "iso8601:".$iso8601."\n";
 		exit(1);
 	}
 
-	$iso8601 = libcore__unixmicrotime_to_iso8601('1508150177310040', -180);
-	if (strcmp($iso8601, "2017-10-16T10:36:17.310040-0300") !== 0)
+	$iso8601 = libcore__unixmicrotime_to_iso8601('1508150177310040', 180);
+	if (strcmp($iso8601, "2017-10-16 10:36:17.310040+0300") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step006\n";
 		echo "iso8601:".$iso8601."\n";
 		exit(1);
 	}
 
-	$iso8601 = libcore__unixmicrotime_to_iso8601(null);
-	if (strcmp($iso8601, "1970-01-01T00:00:00.000000+0000") !== 0)
+	$iso8601 = libcore__unixmicrotime_to_iso8601('1508150177310040', -180);
+	if (strcmp($iso8601, "2017-10-16 10:36:17.310040-0300") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step007\n";
 		echo "iso8601:".$iso8601."\n";
 		exit(1);
 	}
 
-	$iso8601 = libcore__unixmicrotime_to_iso8601('aaa', 'bbb');
-	if (strcmp($iso8601, "1970-01-01T00:00:00.000000+0000") !== 0)
+	$iso8601 = libcore__unixmicrotime_to_iso8601(null);
+	if (strcmp($iso8601, "1970-01-01 00:00:00.000000+0000") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step008\n";
+		echo "iso8601:".$iso8601."\n";
+		exit(1);
+	}
+
+	$iso8601 = libcore__unixmicrotime_to_iso8601('aaa', 'bbb');
+	if (strcmp($iso8601, "1970-01-01 00:00:00.000000+0000") !== 0)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step009\n";
+		echo "iso8601:".$iso8601."\n";
+		exit(1);
+	}
+
+	$iso8601 = libcore__unixmicrotime_to_iso8601('aaa', 'bbb', false);
+	if (strcmp($iso8601, "1970-01-01 00:00:00.000000") !== 0)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step010\n";
 		echo "iso8601:".$iso8601."\n";
 		exit(1);
 	}
