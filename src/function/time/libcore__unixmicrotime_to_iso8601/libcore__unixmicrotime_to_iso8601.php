@@ -70,7 +70,7 @@ function libcore__unixmicrotime_to_iso8601($unixmicrotime, $gmt_offset = 0) // T
 	$tmp = $tmp.".".$microtime;
 
 
-	$gmt_offset_hour = abs($gmt_offset) / 60;
+	$gmt_offset_hour = floor(abs($gmt_offset) / 60);
 	$gmt_offset_min  = abs($gmt_offset) - ($gmt_offset_hour * 60);
 
 

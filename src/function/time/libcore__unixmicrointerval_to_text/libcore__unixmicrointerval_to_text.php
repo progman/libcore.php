@@ -10,7 +10,7 @@ function libcore__unixmicrointerval_to_text($unixmicrointerval)
 
 
 	settype($unixmicrointerval, "int");
-
+	$unixmicrointerval = abs($unixmicrointerval);
 
 	$sec  = 0;
 	$min  = 0;

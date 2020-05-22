@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.0.3
+// 1.0.4
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -3976,7 +3976,7 @@ function libcore__unixmicrointerval_to_text($unixmicrointerval)
 
 
 	settype($unixmicrointerval, "int");
-
+	$unixmicrointerval = abs($unixmicrointerval);
 
 	$sec  = 0;
 	$min  = 0;
@@ -4218,7 +4218,7 @@ function libcore__unixmicrotime_to_iso8601($unixmicrotime, $gmt_offset = 0) // T
 	$tmp = $tmp.".".$microtime;
 
 
-	$gmt_offset_hour = abs($gmt_offset) / 60;
+	$gmt_offset_hour = floor(abs($gmt_offset) / 60);
 	$gmt_offset_min  = abs($gmt_offset) - ($gmt_offset_hour * 60);
 
 
