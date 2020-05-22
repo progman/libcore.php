@@ -5,8 +5,13 @@
  * \param[in] gmt_offset time shift in minutes from GMT
  * \return result time in iso8601
  */
-function libcore__unixmicrotime_to_iso8601($unixmicrotime, $gmt_offset = 0, $flag_timezone = true) // TODO: $filter = "2017-10-16T10:36:17.31004+0000"
+function libcore__unixmicrotime_to_iso8601($unixmicrotime, $gmt_offset = null, $flag_timezone = true) // TODO: $filter = "2017-10-16T10:36:17.31004+0000"
 {
+	if (is_null($gmt_offset) === true)
+	{
+		$gmt_offset = libcore__get_gmt_offset();
+	}
+
 	settype($unixmicrotime, "string");
 	settype($gmt_offset, "integer");
 

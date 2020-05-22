@@ -9,30 +9,9 @@ function libcore__get_unixmicrotime($flag_utc = false)
 	$unixmicrotime = "0000000000000000";
 
 
-	$tz = date_default_timezone_get();
-//echo "tz:".$tz."\n";
-
-	if ($flag_utc !== false)
-	{
-		if (date_default_timezone_set("UTC") === false)
-		{
-			return $unixmicrotime;
-		}
-	}
-
-
 	list($part2, $part1) = explode(" ", microtime());
 //echo "part1:".$part1."\n";
 //echo "part2:".$part2."\n";
-
-
-	if ($flag_utc !== false)
-	{
-		if (date_default_timezone_set($tz) === false)
-		{
-			return $unixmicrotime;
-		}
-	}
 
 
 	if (strlen($part2) != 10)
@@ -54,7 +33,16 @@ function libcore__get_unixmicrotime($flag_utc = false)
 
 
 	$unixmicrotime = $part1.$microsec;
-//echo "unixmicrotime:".$unixmicrotime."\n";
+//echo "1unixmicrotime:".$unixmicrotime."\n";
+
+
+	if ($flag_utc === false)
+	{
+		settype($unixmicrotime, "int");
+		$unixmicrotime += (libcore__get_gmt_offset() * 60 * 1000000);
+		settype($unixmicrotime, "string");
+	}
+//echo "2unixmicrotime:".$unixmicrotime."\n";
 
 
 	for (;;)
@@ -62,7 +50,7 @@ function libcore__get_unixmicrotime($flag_utc = false)
 		if (strlen($unixmicrotime) >= 16) break;
 		$unixmicrotime = "0".$unixmicrotime;
 	}
-//echo "unixmicrotime:".$unixmicrotime."\n";
+//echo "3unixmicrotime:".$unixmicrotime."\n";
 
 
 	return $unixmicrotime;

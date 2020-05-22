@@ -8,11 +8,20 @@
 	$start = libcore__get_unixmicrotime();
 
 
+	$gmt_offset = libcore__get_gmt_offset();
+
+
 	$time_start = time();
+	$time_start += ($gmt_offset * 60);
+
 
 	$unixmicrotime = libcore__get_unixmicrotime();
+//echo "unixmicrotime:".$unixmicrotime."\n";
+
 
 	$time_stop = time();
+	$time_stop += ($gmt_offset * 60);
+
 
 	if (strlen($unixmicrotime) != 16)
 	{
@@ -21,6 +30,8 @@
 	}
 
 	$unixtime = substr($unixmicrotime, 0, 10);
+//echo "unixtime:".$unixtime."\n";
+//echo "time_stop:".$time_stop."\n";
 
 	if ($unixtime < $time_start)
 	{

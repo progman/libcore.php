@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.0.6
+// 1.0.7
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -3398,30 +3398,9 @@ function libcore__get_unixmicrotime($flag_utc = false)
 	$unixmicrotime = "0000000000000000";
 
 
-	$tz = date_default_timezone_get();
-//echo "tz:".$tz."\n";
-
-	if ($flag_utc !== false)
-	{
-		if (date_default_timezone_set("UTC") === false)
-		{
-			return $unixmicrotime;
-		}
-	}
-
-
 	list($part2, $part1) = explode(" ", microtime());
 //echo "part1:".$part1."\n";
 //echo "part2:".$part2."\n";
-
-
-	if ($flag_utc !== false)
-	{
-		if (date_default_timezone_set($tz) === false)
-		{
-			return $unixmicrotime;
-		}
-	}
 
 
 	if (strlen($part2) != 10)
@@ -3443,7 +3422,16 @@ function libcore__get_unixmicrotime($flag_utc = false)
 
 
 	$unixmicrotime = $part1.$microsec;
-//echo "unixmicrotime:".$unixmicrotime."\n";
+//echo "1unixmicrotime:".$unixmicrotime."\n";
+
+
+	if ($flag_utc === false)
+	{
+		settype($unixmicrotime, "int");
+		$unixmicrotime += (libcore__get_gmt_offset() * 60 * 1000000);
+		settype($unixmicrotime, "string");
+	}
+//echo "2unixmicrotime:".$unixmicrotime."\n";
 
 
 	for (;;)
@@ -3451,7 +3439,7 @@ function libcore__get_unixmicrotime($flag_utc = false)
 		if (strlen($unixmicrotime) >= 16) break;
 		$unixmicrotime = "0".$unixmicrotime;
 	}
-//echo "unixmicrotime:".$unixmicrotime."\n";
+//echo "3unixmicrotime:".$unixmicrotime."\n";
 
 
 	return $unixmicrotime;
@@ -4176,8 +4164,13 @@ function libcore__unixmicrotime_to_dayofweek($unixmicrotime, $flag_iso8601)
  * \param[in] gmt_offset time shift in minutes from GMT
  * \return result time in iso8601
  */
-function libcore__unixmicrotime_to_iso8601($unixmicrotime, $gmt_offset = 0, $flag_timezone = true) // TODO: $filter = "2017-10-16T10:36:17.31004+0000"
+function libcore__unixmicrotime_to_iso8601($unixmicrotime, $gmt_offset = null, $flag_timezone = true) // TODO: $filter = "2017-10-16T10:36:17.31004+0000"
 {
+	if (is_null($gmt_offset) === true)
+	{
+		$gmt_offset = libcore__get_gmt_offset();
+	}
+
 	settype($unixmicrotime, "string");
 	settype($gmt_offset, "integer");
 
