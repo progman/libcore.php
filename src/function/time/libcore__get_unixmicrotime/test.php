@@ -50,3 +50,21 @@
 	echo $__FUNCTION__."(): ".($stop - $start)."\n"; flush();
 })();
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/*
+	require_once("../submodule/libcore.php/libcore.php");
+
+
+	$unixmicrotime = libcore__get_unixmicrotime(true);
+	$iso8601 = libcore__unixmicrotime_to_iso8601($unixmicrotime, 0);
+	echo $iso8601."\n"; // 2020-05-22 16:05:43.941446+0000
+
+
+	$unixmicrotime = libcore__get_unixmicrotime();
+	$iso8601 = libcore__unixmicrotime_to_iso8601($unixmicrotime);
+	echo $iso8601."\n"; // 2020-05-22 19:05:43.941630+0300
+
+
+	$unixmicrotime = libcore__get_unixmicrotime();
+	$iso8601 = libcore__unixmicrotime_to_iso8601($unixmicrotime, null, false);
+	echo $iso8601."\n"; // 2020-05-22 19:05:43.944010
+*/
