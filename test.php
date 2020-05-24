@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.0.8
+// 1.0.9
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -762,58 +762,69 @@ require_once("libcore.php");
 		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
-
-	if (libcore__is_flag_set(0) !== false)
+	if (libcore__is_flag_set(true) === false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 
-	if (libcore__is_flag_set("false") !== false)
+
+	if (libcore__is_flag_set(0) !== false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step003\n";
 		exit(1);
 	}
-
-	if (libcore__is_flag_set("off") !== false)
+	if (libcore__is_flag_set(100) === false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step004\n";
 		exit(1);
 	}
 
-	if (libcore__is_flag_set("0") !== false)
+
+	if (libcore__is_flag_set("false") !== false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step005\n";
 		exit(1);
 	}
-
-	if (libcore__is_flag_set(true) === false)
+	if (libcore__is_flag_set("true") === false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step006\n";
 		exit(1);
 	}
 
-	if (libcore__is_flag_set(100) === false)
+
+	if (libcore__is_flag_set("no") !== false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step007\n";
 		exit(1);
 	}
-
-	if (libcore__is_flag_set("true") === false)
+	if (libcore__is_flag_set("yes") === false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step008\n";
 		exit(1);
 	}
 
-	if (libcore__is_flag_set("on") === false)
+
+	if (libcore__is_flag_set("off") !== false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step009\n";
 		exit(1);
 	}
-
-	if (libcore__is_flag_set("1") === false)
+	if (libcore__is_flag_set("on") === false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step010\n";
+		exit(1);
+	}
+
+
+	if (libcore__is_flag_set("0") !== false)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step011\n";
+		exit(1);
+	}
+	if (libcore__is_flag_set("1") === false)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step012\n";
 		exit(1);
 	}
 
@@ -882,58 +893,69 @@ require_once("libcore.php");
 		echo "ERROR[".$__FUNCTION__."()]: step001\n";
 		exit(1);
 	}
-
-	if (libcore__is_flag_unset(0) === false)
+	if (libcore__is_flag_unset(true) !== false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 
-	if (libcore__is_flag_unset("false") === false)
+
+	if (libcore__is_flag_unset(0) === false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step003\n";
 		exit(1);
 	}
-
-	if (libcore__is_flag_unset("off") === false)
+	if (libcore__is_flag_unset(100) !== false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step004\n";
 		exit(1);
 	}
 
-	if (libcore__is_flag_unset("0") === false)
+
+	if (libcore__is_flag_unset("false") === false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step005\n";
 		exit(1);
 	}
-
-	if (libcore__is_flag_unset(true) !== false)
+	if (libcore__is_flag_unset("true") !== false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step006\n";
 		exit(1);
 	}
 
-	if (libcore__is_flag_unset(100) !== false)
+
+	if (libcore__is_flag_unset("no") === false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step007\n";
 		exit(1);
 	}
-
-	if (libcore__is_flag_unset("true") !== false)
+	if (libcore__is_flag_unset("yes") !== false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step008\n";
 		exit(1);
 	}
 
-	if (libcore__is_flag_unset("on") !== false)
+
+	if (libcore__is_flag_unset("off") === false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step009\n";
 		exit(1);
 	}
-
-	if (libcore__is_flag_unset("1") !== false)
+	if (libcore__is_flag_unset("on") !== false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step010\n";
+		exit(1);
+	}
+
+
+	if (libcore__is_flag_unset("0") === false)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step011\n";
+		exit(1);
+	}
+	if (libcore__is_flag_unset("1") !== false)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step012\n";
 		exit(1);
 	}
 

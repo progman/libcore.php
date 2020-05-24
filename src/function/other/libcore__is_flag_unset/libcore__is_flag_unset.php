@@ -24,6 +24,7 @@ function libcore__is_flag_unset($val)
 		if
 		(
 			(strcmp($val_low, "false") === 0) ||
+			(strcmp($val_low, "no")    === 0) ||
 			(strcmp($val_low, "off")   === 0) ||
 			(strcmp($val_low, "0")     === 0)
 		)
