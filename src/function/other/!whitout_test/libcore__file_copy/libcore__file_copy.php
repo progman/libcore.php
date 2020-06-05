@@ -8,6 +8,7 @@
  */
 function libcore__file_copy($source, $target, $flag_overwrite = false)
 {
+/*
 	$rc = @stat($source);
 	if ($rc === false) return false;
 	$source_stat = $rc;
@@ -40,30 +41,17 @@ function libcore__file_copy($source, $target, $flag_overwrite = false)
 
 
 	$chunk_size = 4096;
-	for (;;)
-	{
-		if ($size < $chunk_size) $chunk_size = $size;
-
-
-		$rc = libcore__blk_read($source_handle, $chunk_size);
-		if ($rc === false) return false;
-		$chunk = $rc;
-
-
-		$rc = libcore__blk_write($target_handle, $chunk);
-		if ($rc === false) return false;
-
-		$size -= $chunk_size;
-
-		if ($size === 0) break;
-	}
+	$rc = libcore__blk_copy($source_handle, $target_handle, $size, $chunk_size);
+	if ($rc === false) return false;
 
 
 	$rc = @fflush($target_handle);
 	if ($rc === false) return false;
 
+
 	$rc = @fclose($target_handle);
 	if ($rc === false) return false;
+
 
 	$rc = @fclose($source_handle);
 	if ($rc === false) return false;
@@ -72,6 +60,28 @@ function libcore__file_copy($source, $target, $flag_overwrite = false)
 	$rc = @rename($target.".tmp", $target);
 	if ($rc === false) return false;
 
+
+	return true;
+*/
+
+
+	$mode = 1;
+	if ($flag_overwrite === false)
+	{
+		$mode = 0;
+	}
+
+/**
+ * copy file to file
+ * \param[in] source name of source file
+ * \param[in] offset offset copy block from source file
+ * \param[in] limit  limit  copy block from source file. if limit is -1 then limit = size of file - offset
+ * \param[in] target name of target file
+ * \param[in] mode mode of copy: 0 - file make only, 1 - file make or owerwrite, 2 - file append only, 3 - file make or append
+ * \return status
+ */
+	$rc = libcore__file_copy2($source, 0, -1, $target, $mode);
+	if ($rc->is_ok() === false) return false;
 
 	return true;
 }

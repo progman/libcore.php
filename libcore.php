@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.1.0
+// 1.1.1
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -1560,6 +1560,98 @@ function libcore__xml_to_object($xml)
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 /**
+ * read block from source file and write block to target file
+ * \param[in] source_handle handle of source file
+ * \param[in] target_handle handle of target file
+ * \param[in] size size of block
+ * \param[in] chunk_size size of chunk
+ * \return copy status
+ */
+function libcore__blk_copy($source_handle, $target_handle, $size, $chunk_size = 4096)
+{
+	for (;;)
+	{
+		if ($size < $chunk_size)
+		{
+			$chunk_size = $size;
+		}
+
+
+		$rc = libcore__blk_read($source_handle, $chunk_size);
+		if ($rc === false) return false;
+		$chunk = $rc;
+
+
+		$rc = libcore__blk_write($target_handle, $chunk);
+		if ($rc === false) return false;
+
+
+		$size -= $chunk_size;
+		if ($size === 0) break;
+	}
+
+
+	return true;
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
+ * read block from file
+ * \param[in] handle handle of file
+ * \param[in] size size of block
+ * \param[in] algo algo of hash
+ * \param[in] chunk_size size of chunk
+ * \return hash of block or error
+ */
+function libcore__blk_hash($handle, $size, $algo = "sha3-256", $chunk_size = 4096)
+{
+	$algos = hash_algos();
+	$algos_size = count($algos);
+
+	$flag_found = false;
+	for ($i=0; $i < $algos_size; $i++)
+	{
+		if (strcmp($algos[$i], $algo) === 0)
+		{
+			$flag_found = true;
+			break;
+		}
+	}
+	if ($flag_found === false)
+	{
+		return false;
+	}
+
+
+	$ctx = hash_init($algo);
+
+
+	for (;;)
+	{
+		if ($size < $chunk_size)
+		{
+			$chunk_size = $size;
+		}
+
+
+		$rc = libcore__blk_read($handle, $chunk_size);
+		if ($rc === false) return false;
+		$chunk = $rc;
+
+
+		hash_update($ctx, $chunk);
+
+
+		$size -= $chunk_size;
+		if ($size === 0) break;
+	}
+
+
+	return hash_final($ctx);
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
  * read block from file
  * \param[in] handle handle of file
  * \param[in] size size of block
@@ -1896,12 +1988,122 @@ function libcore__file_add($filename, $str, $flag_overwrite = true)
 /**
  * copy file to file
  * \param[in] source name of source file
+ * \param[in] offset offset copy block from source file
+ * \param[in] limit  limit  copy block from source file. if limit is -1 then limit = size of file - offset
+ * \param[in] target name of target file
+ * \param[in] mode mode of copy: 0 - file make only, 1 - file make or owerwrite, 2 - file append only, 3 - file make or append
+ * \return status
+ */
+function libcore__file_copy2($source, $offset, $limit, $target, $mode = 1)
+{
+	$result = new result_t(__FUNCTION__, __FILE__);
+
+
+	if ($limit === -1)
+	{
+		$rc = @stat($source);
+		if ($rc === false) return false;
+		$source_stat = $rc;
+		$limit = $source_stat['size'] - $offset;
+	}
+
+
+	if
+	(
+		($mode !== 0) &&
+		($mode !== 1) &&
+		($mode !== 2) &&
+		($mode !== 3)
+	)
+	{
+		$result->set_err(1, "invalid mode");
+		return $result;
+	}
+
+
+	$rc = @file_exists($target);
+	if ($mode === 0)
+	{
+		if ($rc !== false)
+		{
+			$result->set_err(1, "file already exist but mode is 'make only'");
+			return $result;
+		}
+	}
+	if ($mode === 2)
+	{
+		if ($rc === false)
+		{
+			$result->set_err(1, "file is not exist but mode is 'append only'");
+			return $result;
+		}
+	}
+
+
+	$rc = @fopen($source, 'rb');
+	if ($rc === false) return false;
+	$source_handle = $rc;
+
+
+	$rc = libcore__make_dir($target);
+	if ($rc->is_ok() === false) return false;
+
+
+	$target_handle = null;
+	if (($mode === 0) || ($mode === 1))
+	{
+		$rc = @fopen($target.".tmp", 'wb'); // Open for writing only; place the file pointer at the beginning of the file and truncate the file to zero length. If the file does not exist, attempt to create it.
+		if ($rc === false) return false;
+		$target_handle = $rc;
+	}
+	if (($mode === 2) || ($mode === 3))
+	{
+		$rc = @fopen($target.".tmp", 'ab'); // Open for writing only; place the file pointer at the end of the file. If the file does not exist, attempt to create it. In this mode, fseek() has no effect, writes are always appended.
+		if ($rc === false) return false;
+		$target_handle = $rc;
+	}
+
+
+	$rc = @file_exists($target.".tmp");
+	if ($rc === false) return false;
+
+
+	$chunk_size = 4096;
+	$rc = libcore__blk_copy($source_handle, $target_handle, $limit, $chunk_size);
+	if ($rc === false) return false;
+
+
+	$rc = @fflush($target_handle);
+	if ($rc === false) return false;
+
+
+	$rc = @fclose($target_handle);
+	if ($rc === false) return false;
+
+
+	$rc = @fclose($source_handle);
+	if ($rc === false) return false;
+
+
+	$rc = @rename($target.".tmp", $target);
+	if ($rc === false) return false;
+
+
+	$result->set_ok();
+	return $result;
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
+ * copy file to file
+ * \param[in] source name of source file
  * \param[in] target name of target file
  * \param[in] flag_overwrite flag of overwriting target file
  * \return status
  */
 function libcore__file_copy($source, $target, $flag_overwrite = false)
 {
+/*
 	$rc = @stat($source);
 	if ($rc === false) return false;
 	$source_stat = $rc;
@@ -1934,30 +2136,17 @@ function libcore__file_copy($source, $target, $flag_overwrite = false)
 
 
 	$chunk_size = 4096;
-	for (;;)
-	{
-		if ($size < $chunk_size) $chunk_size = $size;
-
-
-		$rc = libcore__blk_read($source_handle, $chunk_size);
-		if ($rc === false) return false;
-		$chunk = $rc;
-
-
-		$rc = libcore__blk_write($target_handle, $chunk);
-		if ($rc === false) return false;
-
-		$size -= $chunk_size;
-
-		if ($size === 0) break;
-	}
+	$rc = libcore__blk_copy($source_handle, $target_handle, $size, $chunk_size);
+	if ($rc === false) return false;
 
 
 	$rc = @fflush($target_handle);
 	if ($rc === false) return false;
 
+
 	$rc = @fclose($target_handle);
 	if ($rc === false) return false;
+
 
 	$rc = @fclose($source_handle);
 	if ($rc === false) return false;
@@ -1966,6 +2155,28 @@ function libcore__file_copy($source, $target, $flag_overwrite = false)
 	$rc = @rename($target.".tmp", $target);
 	if ($rc === false) return false;
 
+
+	return true;
+*/
+
+
+	$mode = 1;
+	if ($flag_overwrite === false)
+	{
+		$mode = 0;
+	}
+
+/**
+ * copy file to file
+ * \param[in] source name of source file
+ * \param[in] offset offset copy block from source file
+ * \param[in] limit  limit  copy block from source file. if limit is -1 then limit = size of file - offset
+ * \param[in] target name of target file
+ * \param[in] mode mode of copy: 0 - file make only, 1 - file make or owerwrite, 2 - file append only, 3 - file make or append
+ * \return status
+ */
+	$rc = libcore__file_copy2($source, 0, -1, $target, $mode);
+	if ($rc->is_ok() === false) return false;
 
 	return true;
 }
@@ -1999,6 +2210,38 @@ function libcore__file_get($filename)
 
 
 	return $str;
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
+ * hash file body
+ * \param[in] filename name of file
+ * \param[in] algo algo of hash
+ * \return file hash
+ */
+function libcore__file_hash($filename, $algo = "sha3-256")
+{
+	$rc = @fopen($filename, 'rb');
+	if ($rc === false) return false;
+	$handle = $rc;
+
+
+	$rc = @stat($filename);
+	if ($rc === false) return false;
+	$stat = $rc;
+	$size = $stat['size'];
+
+
+	$rc = libcore__blk_read($handle, $size, $algo);
+	if ($rc === false) return false;
+	$hash = $rc;
+
+
+	$rc = @fclose($handle);
+	if ($rc === false) return false;
+
+
+	return $hash;
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

@@ -1,5 +1,32 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.1.1
-// Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
+/**
+ * hash file body
+ * \param[in] filename name of file
+ * \param[in] algo algo of hash
+ * \return file hash
+ */
+function libcore__file_hash($filename, $algo = "sha3-256")
+{
+	$rc = @fopen($filename, 'rb');
+	if ($rc === false) return false;
+	$handle = $rc;
+
+
+	$rc = @stat($filename);
+	if ($rc === false) return false;
+	$stat = $rc;
+	$size = $stat['size'];
+
+
+	$rc = libcore__blk_read($handle, $size, $algo);
+	if ($rc === false) return false;
+	$hash = $rc;
+
+
+	$rc = @fclose($handle);
+	if ($rc === false) return false;
+
+
+	return $hash;
+}
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
