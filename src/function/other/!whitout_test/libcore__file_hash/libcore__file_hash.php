@@ -18,7 +18,7 @@ function libcore__file_hash($filename, $algo = "sha3-256")
 	$size = $stat['size'];
 
 
-	$rc = libcore__blk_read($handle, $size, $algo);
+	$rc = libcore__blk_hash($handle, $size, $algo);
 	if ($rc === false) return false;
 	$hash = $rc;
 
