@@ -1,5 +1,35 @@
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.1.3
-// Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
+/**
+ * hash buffer
+ * \param[in] buf buffer
+ * \param[in] algo algo of hash
+ * \return buffer hash
+ */
+function libcore__buf_hash($buffer, $algo = "sha3-256")
+{
+	$algos = hash_algos();
+	$algos_size = count($algos);
+
+	$flag_found = false;
+	for ($i=0; $i < $algos_size; $i++)
+	{
+		if (strcmp($algos[$i], $algo) === 0)
+		{
+			$flag_found = true;
+			break;
+		}
+	}
+	if ($flag_found === false)
+	{
+		return false;
+	}
+
+/*
+	$ctx = hash_init($algo);
+	hash_update($ctx, $buffer);
+	return hash_final($ctx);
+*/
+
+	return hash($algo, $buffer);
+}
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
