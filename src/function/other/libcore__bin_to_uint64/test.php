@@ -12,9 +12,14 @@
 
 
 	$rc = libcore__bin_to_uint64($bin);
-	if ($rc !== 72623859790382856)
+	if ($rc->is_ok() === false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step001\n";
+		exit(1);
+	}
+	if ($rc->get_value() !== 72623859790382856)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		exit(1);
 	}
 

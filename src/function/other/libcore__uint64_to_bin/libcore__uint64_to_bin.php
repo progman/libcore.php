@@ -6,6 +6,30 @@
  */
 function libcore__uint64_to_bin($val)
 {
+	$result = new result_t(__FUNCTION__, __FILE__);
+
+
+	if
+	(
+		(is_int($val) === false) &&
+		(is_string($val) === false)
+	)
+	{
+		$result->set_err(1, 'invalid argument type');
+		return $result;
+	}
+
+
+	if (is_string($val) === true)
+	{
+		if (libcore__is_uint($val) === false)
+		{
+			$result->set_err(1, 'invalid argument value');
+			return $result;
+		}
+	}
+
+
 	$hex = gmp_strval($val, 16);
 	if (strlen($hex) === 15)
 	{
@@ -26,6 +50,8 @@ function libcore__uint64_to_bin($val)
 	$bin = chr($b1).chr($b2).chr($b3).chr($b4).chr($b5).chr($b6).chr($b7).chr($b8);
 
 
-	return $bin;
+	$result->set_ok();
+	$result->set_value($bin);
+	return $result;
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
