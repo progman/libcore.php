@@ -36,15 +36,26 @@ function libcore__uint64_to_bin($val)
 		$hex = "0".$hex;
 	}
 
+	if (strlen($hex) !== 16)
+	{
+		$result->set_err(1, 'problem with gmp');
+		return $result;
+	}
 
-	$b1 = substr($hex, 14, 2);
-	$b2 = substr($hex, 12, 2);
-	$b3 = substr($hex, 10, 2);
-	$b4 = substr($hex,  8, 2);
-	$b5 = substr($hex,  6, 2);
-	$b6 = substr($hex,  4, 2);
-	$b7 = substr($hex,  2, 2);
-	$b8 = substr($hex,  0, 2);
+	if (libcore__is_hex($hex, true) === false)
+	{
+		$result->set_err(1, 'problem with gmp');
+		return $result;
+	}
+
+	$b1 = hexdec(substr($hex, 14, 2));
+	$b2 = hexdec(substr($hex, 12, 2));
+	$b3 = hexdec(substr($hex, 10, 2));
+	$b4 = hexdec(substr($hex,  8, 2));
+	$b5 = hexdec(substr($hex,  6, 2));
+	$b6 = hexdec(substr($hex,  4, 2));
+	$b7 = hexdec(substr($hex,  2, 2));
+	$b8 = hexdec(substr($hex,  0, 2));
 
 
 	$bin = chr($b1).chr($b2).chr($b3).chr($b4).chr($b5).chr($b6).chr($b7).chr($b8);
