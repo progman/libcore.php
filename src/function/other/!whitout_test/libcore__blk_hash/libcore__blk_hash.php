@@ -32,6 +32,9 @@ function libcore__blk_hash($handle, $size, $algo = "sha3-256", $chunk_size = 409
 
 	for (;;)
 	{
+		if ($size === 0) break;
+
+
 		if ($size < $chunk_size)
 		{
 			$chunk_size = $size;
@@ -47,7 +50,6 @@ function libcore__blk_hash($handle, $size, $algo = "sha3-256", $chunk_size = 409
 
 
 		$size -= $chunk_size;
-		if ($size === 0) break;
 	}
 
 

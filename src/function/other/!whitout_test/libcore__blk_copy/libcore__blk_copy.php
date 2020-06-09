@@ -11,6 +11,9 @@ function libcore__blk_copy($source_handle, $target_handle, $size, $chunk_size = 
 {
 	for (;;)
 	{
+		if ($size === 0) break;
+
+
 		if ($size < $chunk_size)
 		{
 			$chunk_size = $size;
@@ -27,7 +30,6 @@ function libcore__blk_copy($source_handle, $target_handle, $size, $chunk_size = 
 
 
 		$size -= $chunk_size;
-		if ($size === 0) break;
 	}
 
 

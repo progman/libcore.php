@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.1.7
+// 1.1.8
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -1699,6 +1699,9 @@ function libcore__blk_copy($source_handle, $target_handle, $size, $chunk_size = 
 {
 	for (;;)
 	{
+		if ($size === 0) break;
+
+
 		if ($size < $chunk_size)
 		{
 			$chunk_size = $size;
@@ -1715,7 +1718,6 @@ function libcore__blk_copy($source_handle, $target_handle, $size, $chunk_size = 
 
 
 		$size -= $chunk_size;
-		if ($size === 0) break;
 	}
 
 
@@ -1756,6 +1758,9 @@ function libcore__blk_hash($handle, $size, $algo = "sha3-256", $chunk_size = 409
 
 	for (;;)
 	{
+		if ($size === 0) break;
+
+
 		if ($size < $chunk_size)
 		{
 			$chunk_size = $size;
@@ -1771,7 +1776,6 @@ function libcore__blk_hash($handle, $size, $algo = "sha3-256", $chunk_size = 409
 
 
 		$size -= $chunk_size;
-		if ($size === 0) break;
 	}
 
 
