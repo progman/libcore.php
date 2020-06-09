@@ -31,8 +31,13 @@ function libcore__uint64_to_bin($val)
 
 
 	$hex = gmp_strval($val, 16);
-	if (strlen($hex) === 15)
+
+	for (;;)
 	{
+		if (strlen($hex) >= 16)
+		{
+			break;
+		}
 		$hex = "0".$hex;
 	}
 

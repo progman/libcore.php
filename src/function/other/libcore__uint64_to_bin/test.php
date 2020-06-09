@@ -17,13 +17,29 @@
 	}
 	$bin = $rc->get_value();
 
-
 	$hex = bin2hex($bin);
-
 
 	if (strcmp($hex, "0807060504030201") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step002\n";
+		exit(1);
+	}
+
+
+	$val = 30;
+	$rc = libcore__uint64_to_bin($val);
+	if ($rc->is_ok() === false)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step003\n";
+		exit(1);
+	}
+	$bin = $rc->get_value();
+
+	$hex = bin2hex($bin);
+
+	if (strcmp($hex, "1e00000000000000") !== 0)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step004\n";
 		exit(1);
 	}
 
