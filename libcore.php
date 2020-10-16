@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.2.0
+// 1.2.1
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -3857,15 +3857,28 @@ function libcore__http_request($arg)
 	}
 	$output_body = $rc;
 
+
+//	$info = curl_getinfo($ch);
+//	print_r($info);
+
+
+	$rc = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+	if ($rc === false)
+	{
+		$result->set_err(1, curl_error($ch));
+		curl_close($ch);
+		return $result;
+	}
+	$code = $rc;
+
+
 	curl_close($ch);
-
-
-//	print_r($output_header_list);
 
 
 	$answer = new stdClass();
 	$answer->body = $output_body;
 	$answer->head = $output_header_list;
+	$answer->code = $code;
 
 
 	$result->set_ok();
