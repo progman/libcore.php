@@ -85,7 +85,7 @@ function libcore__make_form_data($item_list)
 	$data .= "--" . $delimiter . "--".$eol;
 
 
-	$form_header_list = [ "Content-Type: multipart/form-data; boundary=".$delimiter, "Content-Length: ".strlen($data) ];
+	$extra_header_list = [ "Content-Type: multipart/form-data; boundary=".$delimiter, "Content-Length: ".strlen($data) ];
 
 
 	$value = new stdClass();
