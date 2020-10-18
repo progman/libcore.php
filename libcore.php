@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.2.4
+// 1.2.5
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -4173,7 +4173,7 @@ function libcore__make_dir($path)
  * \param[in] item_list list with items
  * \return form_data
  */
-function libcore__make_form_data($item_list)
+function libcore__make_form_data($item_list, $content_type = "multipart/form-data")
 {
 	$result = new result_t(__FUNCTION__, __FILE__);
 
@@ -4223,7 +4223,7 @@ function libcore__make_form_data($item_list)
 	$form_data .= "--" . $delimiter . "--".$eol;
 
 
-	$form_header_list = [ "Content-Type: multipart/form-data; boundary=".$delimiter, "Content-Length: ".strlen($form_data) ];
+	$form_header_list = [ "Content-Type: ".$content_type."; boundary=".$delimiter, "Content-Length: ".strlen($form_data) ];
 
 
 	$value = new stdClass();
