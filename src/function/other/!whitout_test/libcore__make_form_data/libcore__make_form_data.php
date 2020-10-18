@@ -36,6 +36,9 @@
  */
 function libcore__make_form_data($item_list)
 {
+	$result = new result_t(__FUNCTION__, __FILE__);
+
+
 	$boundary = uniqid();
 	$delimiter = '-------------' . $boundary;
 
@@ -84,11 +87,13 @@ function libcore__make_form_data($item_list)
 	$form_header_list = [ "Content-Type: multipart/form-data; boundary=".$delimiter, "Content-Length: ".strlen($form_data) ];
 
 
-	$result = new stdClass();
-	$result->form_header_list = $form_header_list;
-	$result->form_data        = $form_data;
+	$value = new stdClass();
+	$value->form_header_list = $form_header_list;
+	$value->form_data        = $form_data;
 
 
+	$result->set_ok();
+	$result->set_value($value);
 	return $result;
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
