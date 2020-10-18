@@ -60,7 +60,7 @@ function libcore__make_form_urlencoded($item_list)
 		{
 			$ch = $item_list[$i]->value[$j];
 
-			$hex = bin2hex(ord($ch));
+			$hex = bin2hex($ch);
 			settype($hex, "string");
 
 			if (strlen($hex) == 1)
