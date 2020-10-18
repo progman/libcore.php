@@ -35,7 +35,7 @@
  * \param[in] item_list list with items
  * \return form-data
  */
-function libcore__make_form-data($item_list)
+function libcore__make_form_data($item_list)
 {
 	$result = new result_t(__FUNCTION__, __FILE__);
 
