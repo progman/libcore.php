@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.2.5
+// 1.2.6
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -4164,16 +4164,17 @@ function libcore__make_dir($path)
 	$item_list[] = $item;
 
 	$rc = make_form_data($item_list);
-	$form_data         = $rc->form_data;
-	$form_header_list  = $rc->form_header_list;
+	if ($rc->is_ok() === false) return $rc;
+	$data              = $rc->get_value()->data;
+	$extra_header_list = $rc->get_value()->extra_header_list;
 */
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 /**
- * make form data
+ * make form-data
  * \param[in] item_list list with items
- * \return form_data
+ * \return form-data
  */
-function libcore__make_form_data($item_list, $content_type = "multipart/form-data")
+function libcore__make_form-data($item_list)
 {
 	$result = new result_t(__FUNCTION__, __FILE__);
 
@@ -4182,7 +4183,7 @@ function libcore__make_form_data($item_list, $content_type = "multipart/form-dat
 	$delimiter = '-------------' . $boundary;
 
 
-	$form_data = '';
+	$data = '';
 	$eol = "\r\n";
 
 
@@ -4192,43 +4193,43 @@ function libcore__make_form_data($item_list, $content_type = "multipart/form-dat
 		if (property_exists($item_list[$i], 'filename') === false)
 		{
 
-			$form_data .= "--".$delimiter.$eol;
-			$form_data .= 'Content-Disposition: form-data; name="'.$item_list[$i]->name.'"'.$eol;
+			$data .= "--".$delimiter.$eol;
+			$data .= 'Content-Disposition: form-data; name="'.$item_list[$i]->name.'"'.$eol;
 
 			if (property_exists($item_list[$i], 'type') === true)
 			{
-				$form_data .= 'Content-Type: '.$item_list[$i]->type.$eol;
+				$data .= 'Content-Type: '.$item_list[$i]->type.$eol;
 			}
 
-			$form_data .= $eol;
-			$form_data .= $item_list[$i]->value.$eol;
+			$data .= $eol;
+			$data .= $item_list[$i]->value.$eol;
 		}
 		else
 		{
-			$form_data .= "--".$delimiter.$eol;
-			$form_data .= 'Content-Disposition: form-data; name="'.$item_list[$i]->name.'"; filename="'.$item_list[$i]->filename.'"'.$eol;
+			$data .= "--".$delimiter.$eol;
+			$data .= 'Content-Disposition: form-data; name="'.$item_list[$i]->name.'"; filename="'.$item_list[$i]->filename.'"'.$eol;
 
 			if (property_exists($item_list[$i], 'type') === true)
 			{
-				$form_data .= 'Content-Type: '.$item_list[$i]->type.$eol;
+				$data .= 'Content-Type: '.$item_list[$i]->type.$eol;
 			}
 
-			$form_data .= 'Content-Transfer-Encoding: binary'.$eol;
-			$form_data .= $eol;
-			$form_data .= $item_list[$i]->value.$eol;
+			$data .= 'Content-Transfer-Encoding: binary'.$eol;
+			$data .= $eol;
+			$data .= $item_list[$i]->value.$eol;
 		}
 	}
 
 
-	$form_data .= "--" . $delimiter . "--".$eol;
+	$data .= "--" . $delimiter . "--".$eol;
 
 
-	$form_header_list = [ "Content-Type: ".$content_type."; boundary=".$delimiter, "Content-Length: ".strlen($form_data) ];
+	$form_header_list = [ "Content-Type: multipart/form-data; boundary=".$delimiter, "Content-Length: ".strlen($data) ];
 
 
 	$value = new stdClass();
-	$value->form_header_list = $form_header_list;
-	$value->form_data        = $form_data;
+	$value->extra_header_list = $extra_header_list;
+	$value->data              = $data;
 
 
 	$result->set_ok();
