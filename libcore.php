@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.3.2
+// 1.3.3
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -1523,6 +1523,351 @@ function libcore__rnd($min, $max)
 	$rnd = floor(($rnd/($rnd_max)) * ($max - $min + 1)) + $min;
 
 	return ($rnd > $max) ? $max : $rnd;
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
+ * parse and validate route path
+ * \param[in] route_template_data result of function libcore__route_template_validate()
+ * \param[in] route_path string, example: '/api/v1/companies/0a/users/0b?nextKey=0&limit=123&userId=123&a=&b'
+ * \return fact of validation and array with params
+ */
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__route_path_validate($route_template_data, $route_path)
+{
+	$result = new result_t(__FUNCTION__, __FILE__);
+
+
+// separate path and params
+	$param_list = [];
+	$index = strpos($route_path, "?");
+	if ($index !== false)
+	{
+		$paramStr = substr($route_path, $index + 1);
+		$param_listInner = explode("&", $paramStr);
+
+		foreach ($param_listInner as $param)
+		{
+			$pair = explode("=", $param);
+
+			for (;;)
+			{
+				if (count($pair) === 2)
+				{
+					$key = $pair[0];
+					$val = $pair[1];
+
+					if (strlen($val) === 0)
+					{
+						$val = true;
+					}
+
+					$param_list[$key] = $val;
+					break;
+				}
+				if (count($pair) === 1)
+				{
+					$key = $pair[0];
+					$val = true;
+					$param_list[$key] = $val;
+					break;
+				}
+				break;
+			}
+		}
+
+
+		$route_path = substr($route_path, 0, $index);
+	}
+	$route_path = libcore__remove_from_tail($route_path, '/');
+
+
+// validate path by template data
+	$key_list = [];
+	$route_template_data_size = count($route_template_data);
+	for ($i=0; $i < $route_template_data_size; $i++)
+	{
+		if ($route_template_data[$i]->flagKey === false)
+		{
+			$val_size = strlen($route_template_data[$i]->val);
+			if (strlen($route_path) < $val_size)
+			{
+				$result->set_err(1, "route_template is not fit, stage1");
+				return $result;
+			}
+			$rc = strpos($route_path, $route_template_data[$i]->val);
+			if ($rc !== 0)
+			{
+				$result->set_err(1, "route_template is not fit, stage2");
+				return $result;
+			}
+			$route_path = substr($route_path, $val_size);
+		}
+		else
+		{
+			if (($i + 1) === $route_template_data_size) // last item
+			{
+				$key = $route_path;
+				$key_list[$route_template_data[$i]->val] = $key;
+				$route_path = "";
+			}
+			else
+			{
+				$nextPart = $route_template_data[$i + 1]->val;
+				$rc = strpos($route_path, $nextPart);
+				if ($rc === false)
+				{
+					$result->set_err(1, "route_template is not fit, stage3");
+					return $result;
+				}
+				$key = substr($route_path, 0, $rc);
+				$key_list[$route_template_data[$i]->val] = $key;
+				$route_path = substr($route_path, $rc);
+			}
+		}
+	}
+	if (strlen($route_path) !== 0)
+	{
+		$result->set_err(1, "route_template is not fit, stage4");
+		return $result;
+	}
+
+
+// mix keys with params
+	foreach ($param_list as $key => $value)
+	{
+		$key_list[$key] = $value;
+	}
+
+
+	$result->set_ok();
+	$result->set_value($key_list);
+	return $result;
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
+ * route method and path to callback by template
+ * \param[in] arg object with params, example: empty object
+ * \param[in] method request method, example: $_SERVER['REQUEST_METHOD']
+ * \param[in] path request path, example: $_SERVER['REQUEST_URI']
+ * \param[in] route_list, exmaple: [ [ 'POST', '/v1/auth/login', handler_login ], [ 'GET', '/v1/users', handler_get_users ] ]
+ * \return fact of route and arg object with mixed params and special property route_callback
+ */
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__route(&$arg, $method, $path, $route_list)
+{
+	$result = new result_t(__FUNCTION__, __FILE__);
+
+
+// check arguments
+	if (is_object($arg) == false)
+	{
+		$result->set_err(1, "arg is not object");
+		return $result;
+	}
+
+	if (is_string($method) == false)
+	{
+		$result->set_err(1, "method is not string");
+		return $result;
+	}
+
+	if (libcore__filter_enum($method, [ 'POST', 'GET', 'PUT', 'DELETE' ], null) === null)
+	{
+		$result->set_err(1, "method is not correct");
+		return $result;
+	}
+
+	if (is_string($path) == false)
+	{
+		$result->set_err(1, "path is not string");
+		return $result;
+	}
+
+	if (is_array($route_list) == false)
+	{
+		$result->set_err(1, "route_list is not array");
+		return $result;
+	}
+
+
+// ckeck templates
+	foreach ($route_list as $item)
+	{
+		if (is_array($item) == false)
+		{
+			$result->set_err(1, "item of route_list is not array");
+			return $result;
+		}
+		if (count($item) !== 3)
+		{
+			$result->set_err(1, "count of item of route_list is not equal 3");
+			return $result;
+		}
+
+
+		$route_method   = $item[0];
+		$route_template = $item[1];
+		$route_callback = $item[2];
+
+
+// validate method
+		if (strcmp(strtoupper($method), strtoupper($route_method)) !== 0)
+		{
+			continue;
+		}
+
+
+// validate route template
+		$rc = libcore__route_template_validate($route_template);
+		if ($rc->is_ok() === false)
+		{
+			continue;
+		}
+		$route_template_data = $rc->get_value();
+
+
+// validate route path
+		$rc = libcore__route_path_validate($route_template_data, $path);
+		if ($rc->is_ok() === false)
+		{
+			continue;
+		}
+		$route_path_data = $rc->get_value();
+
+
+// mix params in arg
+		foreach ($route_template_data as $key => $value)
+		{
+			$arg->{$key} = $value;
+		}
+
+
+// set route_callback
+		$arg->{'route_callback'} = $route_callback;
+
+
+		$result->set_ok();
+		$result->set_value($arg);
+		return $result;
+	}
+
+
+	$result->set_err(1, "path not found");
+	return $result;
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+/**
+ * parse and validate route template
+ * \param[in] route_template string, example: '/api/v1/companies/{id}/users/{userId}'
+ * \return array with parts of route_template
+ */
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+function libcore__route_template_validate($route_template)
+{
+	$result = new result_t(__FUNCTION__, __FILE__);
+
+
+	$data = [];
+	$route_template = libcore__remove_from_tail($route_template, '/');
+	if (strlen($route_template) === 0)
+	{
+		$result->set_err(1, "route_template is empty");
+		return $result;
+	}
+
+
+// init parity trigger
+	$flagKey = true;
+	if ($route_template[0] === '{')
+	{
+		$flagKey = false;
+	}
+
+
+// main cycle
+	for (;;)
+	{
+		$route_template_size = strlen($route_template);
+		if ($route_template_size === 0) break;
+
+		if ($route_template[0] === '{')
+		{
+			if ($flagKey === true)
+			{
+				$result->set_err(1, "route_template has key after key");
+				return $result;
+			}
+
+
+			$val = '';
+			$flag_key_open = true;
+			for ($i=1; $i < $route_template_size; $i++)
+			{
+				if ($route_template[$i] === '}')
+				{
+					$i++;
+					$flag_key_open = false;
+					break;
+				}
+				$val .= $route_template[$i];
+			}
+			if ($flag_key_open === true)
+			{
+				$result->set_err(1, "route_template has broken key (it is not closed)");
+				return $result;
+			}
+			$route_template = substr($route_template, $i, $route_template_size - $i);
+
+			$tmp = (object)[];
+			$tmp->flagKey  = true;
+			$tmp->val      = $val;
+			$tmp->route_template = $route_template;
+
+			$flagKey = true;
+			$data[] = $tmp;
+		}
+		else
+		{
+			if ($flagKey === false)
+			{
+				$result->set_err(1, "route_template has key after key");
+				return $result;
+			}
+
+
+			$val = '';
+			for ($i=0; $i < $route_template_size; $i++)
+			{
+				if ($route_template[$i] === '{')
+				{
+					break;
+				}
+				$val .= $route_template[$i];
+			}
+			$route_template = substr($route_template, $i, $route_template_size - $i);
+
+			$tmp = (object)[];
+			$tmp->flagKey  = false;
+			$tmp->val      = $val;
+			$tmp->route_template = $route_template;
+
+			$flagKey = false;
+			$data[] = $tmp;
+		}
+	}
+	if (count($data) === 0)
+	{
+		$result->set_err(1, "route_template_data is empty");
+		return $result;
+	}
+
+
+	$result->set_ok();
+	$result->set_value($data);
+	return $result;
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
