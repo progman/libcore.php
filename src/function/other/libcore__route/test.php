@@ -494,6 +494,43 @@
 	$handler = function (&$arg)
 	{
 //		echo "---=== libcore__route_handler() ===---\n";
+
+		if (strcmp($arg->{'id'}, '0a') !== 0)
+		{
+			echo "WARNING: id is alien\n";
+			return;
+		}
+
+		if (strcmp($arg->{'userId'}, '0b') !== 0)
+		{
+			echo "WARNING: userId is alien\n";
+			return;
+		}
+
+		if (strcmp($arg->{'nextKey'}, '0') !== 0)
+		{
+			echo "WARNING: nextKey is alien\n";
+			return;
+		}
+
+		if (strcmp($arg->{'limit'}, '123') !== 0)
+		{
+			echo "WARNING: limit is alien\n";
+			return;
+		}
+
+		if (strcmp($arg->{'a'}, '1') !== 0)
+		{
+			echo "WARNING: a is alien\n";
+			return;
+		}
+
+		if (strcmp($arg->{'b'}, '1') !== 0)
+		{
+			echo "WARNING: b is alien\n";
+			return;
+		}
+
 		$arg->{'value'} = 7;
 	};
 

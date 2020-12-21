@@ -91,7 +91,7 @@ function libcore__route(&$arg, $method, $path, $route_list)
 
 
 // mix params in arg
-		foreach ($route_template_data as $key => $value)
+		foreach ($route_path_data as $key => $value)
 		{
 			$arg->{$key} = $value;
 		}
