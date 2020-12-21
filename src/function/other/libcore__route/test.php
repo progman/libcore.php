@@ -83,12 +83,12 @@
 		echo "ERROR[".$__FUNCTION__."()]: step012\n";
 		exit(1);
 	}
-	if (strcmp($route_path_data['a'], '1') !== 0)
+	if (strcmp($route_path_data['a'], '') !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step013\n";
 		exit(1);
 	}
-	if (strcmp($route_path_data['b'], '1') !== 0)
+	if (strcmp($route_path_data['b'], '') !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step014\n";
 		exit(1);
@@ -175,12 +175,12 @@
 		echo "ERROR[".$__FUNCTION__."()]: step027\n";
 		exit(1);
 	}
-	if (strcmp($route_path_data['a'], '1') !== 0)
+	if (strcmp($route_path_data['a'], '') !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step028\n";
 		exit(1);
 	}
-	if (strcmp($route_path_data['b'], '1') !== 0)
+	if (strcmp($route_path_data['b'], '') !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step029\n";
 		exit(1);
@@ -267,12 +267,12 @@
 		echo "ERROR[".$__FUNCTION__."()]: step042\n";
 		exit(1);
 	}
-	if (strcmp($route_path_data['a'], '1') !== 0)
+	if (strcmp($route_path_data['a'], '') !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step043\n";
 		exit(1);
 	}
-	if (strcmp($route_path_data['b'], '1') !== 0)
+	if (strcmp($route_path_data['b'], '') !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step044\n";
 		exit(1);
@@ -354,12 +354,12 @@
 		echo "ERROR[".$__FUNCTION__."()]: step056\n";
 		exit(1);
 	}
-	if (strcmp($route_path_data['a'], '1') !== 0)
+	if (strcmp($route_path_data['a'], '') !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step057\n";
 		exit(1);
 	}
-	if (strcmp($route_path_data['b'], '1') !== 0)
+	if (strcmp($route_path_data['b'], '') !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step058\n";
 		exit(1);
@@ -519,13 +519,13 @@
 			return;
 		}
 
-		if (strcmp($arg->{'a'}, '1') !== 0)
+		if (strcmp($arg->{'a'}, '') !== 0)
 		{
 			echo "WARNING: a is alien\n";
 			return;
 		}
 
-		if (strcmp($arg->{'b'}, '1') !== 0)
+		if (strcmp($arg->{'b'}, '') !== 0)
 		{
 			echo "WARNING: b is alien\n";
 			return;

@@ -32,7 +32,7 @@ function libcore__route_path_validate($route_template_data, $route_path)
 
 					if (strlen($val) === 0)
 					{
-						$val = true;
+						$val = "";
 					}
 
 					$param_list[$key] = $val;
@@ -41,7 +41,7 @@ function libcore__route_path_validate($route_template_data, $route_path)
 				if (count($pair) === 1)
 				{
 					$key = $pair[0];
-					$val = true;
+					$val = "";
 					$param_list[$key] = $val;
 					break;
 				}
