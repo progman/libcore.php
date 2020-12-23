@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.3.5
+// 1.3.6
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -4939,28 +4939,23 @@ function libcore__get_var_hex($key_name, $value_default = null)
  */
 function libcore__get_var_json($key_name = null, $value_default = null)
 {
+	$value = null;
+
+
 	if ($key_name !== null)
 	{
-		$var = libcore__get_var($key_name, $value_default);
+		$var        = libcore__get_var($key_name, $value_default);
 		$value_json = $var->value;
-		$value = json_decode($value_json);
-		if (json_last_error() !== JSON_ERROR_NONE)
-		{
-			$value = null;
-		}
+		$value      = json_decode($value_json);
 	}
 	else
 	{
 		$value_json = file_get_contents("php://input");
-		$value = json_decode($value_json);
-		if (json_last_error() !== JSON_ERROR_NONE)
-		{
-			$value = null;
-		}
+		$value      = json_decode($value_json);
 	}
 
 
-	if ($value === null)
+	if (json_last_error() !== JSON_ERROR_NONE)
 	{
 		return $value_default;
 	}
