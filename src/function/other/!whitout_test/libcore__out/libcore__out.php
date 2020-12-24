@@ -3,30 +3,45 @@
  * make output json
  * \param[in] list output object list
  * \param[in] callback JSONP callback
+ * \param[in] flag_silent on/or off echo result
  * \return output json
  */
-function libcore__out($list = array(), $callback = '')
+function libcore__out($list = array(), $callback = '', $flag_silent = false)
 {
+	$out = '';
+
+
 	if ($callback != '')
 	{
 		if ($callback != '?')
 		{
-			echo $callback."(\n";
+			out .= $callback."(\n";
 		}
 	}
+
 
 	$obj = (object)$list;
+	out .= json_encode($obj, JSON_PRETTY_PRINT);
 
-	echo json_encode($obj, JSON_PRETTY_PRINT);
 
 	if ($callback != '')
 	{
 		if ($callback != '?')
 		{
-			echo ");";
+			out .= ");";
 		}
 	}
 
-	echo "\n";
+
+	out .= "\n";
+
+
+	if ($flag_silent === false)
+	{
+		echo $out;
+	}
+
+
+	return $out;
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
