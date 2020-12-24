@@ -4744,25 +4744,25 @@ function libcore__out($list = array(), $callback = '', $flag_silent = false)
 	{
 		if ($callback != '?')
 		{
-			out .= $callback."(\n";
+			$out .= $callback."(\n";
 		}
 	}
 
 
 	$obj = (object)$list;
-	out .= json_encode($obj, JSON_PRETTY_PRINT);
+	$out .= json_encode($obj, JSON_PRETTY_PRINT);
 
 
 	if ($callback != '')
 	{
 		if ($callback != '?')
 		{
-			out .= ");";
+			$out .= ");";
 		}
 	}
 
 
-	out .= "\n";
+	$out .= "\n";
 
 
 	if ($flag_silent === false)
