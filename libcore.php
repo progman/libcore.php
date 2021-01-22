@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.3.9
+// 1.4.0
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -518,9 +518,10 @@ function libcore__array_uniq($arr)
 /**
  * Base 64 Decoding with URL (https://tools.ietf.org/html/rfc4648#section-5)
  * \param[in] data source value
+ * \param[in] strict use only base64 alphabet
  * \return decoded data
  */
-function libcore__base64url_decode($data)
+function libcore__base64url_decode(string $data, bool $strict = false)
 {
 	$tmp = str_replace(['-', '_'], ['+', '/'], $data);
 
@@ -553,7 +554,7 @@ function libcore__base64url_decode($data)
  * \param[in] data source value
  * \return encoded data
  */
-function libcore__base64url_encode($data)
+function libcore__base64url_encode(string $data)
 {
 	$tmp = base64_encode($data);
 

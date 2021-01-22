@@ -2,9 +2,10 @@
 /**
  * Base 64 Decoding with URL (https://tools.ietf.org/html/rfc4648#section-5)
  * \param[in] data source value
+ * \param[in] strict use only base64 alphabet
  * \return decoded data
  */
-function libcore__base64url_decode($data)
+function libcore__base64url_decode(string $data, bool $strict = false)
 {
 	$tmp = str_replace(['-', '_'], ['+', '/'], $data);
 

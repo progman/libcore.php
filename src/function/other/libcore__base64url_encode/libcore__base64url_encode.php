@@ -4,7 +4,7 @@
  * \param[in] data source value
  * \return encoded data
  */
-function libcore__base64url_encode($data)
+function libcore__base64url_encode(string $data)
 {
 	$tmp = base64_encode($data);
 
