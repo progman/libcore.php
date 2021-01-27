@@ -9,7 +9,11 @@ function libcore__base64url_encode(string $data)
 	$tmp = base64_encode($data);
 
 
-	$tmp = str_replace(['+', '/', '='], ['-', '_', ''], $tmp);
+//	$tmp = str_replace(['+', '/', '='], ['-', '_', ''], $tmp);
+
+
+	$tmp = strtr($tmp, '+/', '-_');
+	$tmp = rtrim($tmp, '=');
 
 
 	return $tmp;

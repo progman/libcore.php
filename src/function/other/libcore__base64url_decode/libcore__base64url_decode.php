@@ -5,9 +5,10 @@
  * \param[in] strict use only base64 alphabet
  * \return decoded data
  */
-function libcore__base64url_decode(string $data, bool $strict = false)
+function libcore__base64url_decode(string $data, bool $strict = true)
 {
-	$tmp = str_replace(['-', '_'], ['+', '/'], $data);
+//	$tmp = str_replace(['-', '_'], ['+', '/'], $data);
+	$tmp = strtr($data, '-_', '+/');
 
 
 	switch (strlen($tmp))
@@ -29,6 +30,6 @@ function libcore__base64url_decode(string $data, bool $strict = false)
 	}
 
 
-	return base64_decode($tmp);
+	return base64_decode($tmp, $strict);
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
