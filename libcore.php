@@ -1,6 +1,6 @@
 <?php
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-// 1.4.1
+// 1.4.2
 // Alexey Potehin <gnuplanet@gmail.com>, http://www.gnuplanet.ru/doc/cv
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 // PLEASE DO NOT EDIT !!! THIS FILE IS GENERATED FROM FILES FROM DIR src BY make.sh
@@ -4097,6 +4097,15 @@ function libcore__http_request($arg)
 			break;
 		}
 
+/*
+TODO:
+HEAD - The HEAD method asks for a response identical to that of a GET request, but without the response body.
+CONNECT - The CONNECT method establishes a tunnel to the server identified by the target resource.
+OPTIONS - The OPTIONS method is used to describe the communication options for the target resource.
+TRACE - The TRACE method performs a message loop-back test along the path to the target resource.
+PATCH - The PATCH method is used to apply partial modifications to a resource.
+*/
+
 		$result->set_err(1, 'method is invalid');
 		return $result;
 	}
@@ -4279,6 +4288,7 @@ function libcore__http_request($arg)
 		return $result;
 	}
 	$code = $rc;
+	settype($code, "integer");
 
 
 	curl_close($ch);
