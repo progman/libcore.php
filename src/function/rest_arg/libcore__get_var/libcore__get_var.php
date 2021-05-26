@@ -17,6 +17,13 @@ function libcore__get_var($key_name, $value_default = null)
 
 	$item = new stdClass();
 
+	if (getenv($key_name) !== false)
+	{
+		$item->flag_set       = true;
+		$item->value          = getenv($key_name);
+		$item->value_original = $item->value;
+		return $item;
+	}
 
 	if (isset($_ENV[$key_name]) === true)
 	{
