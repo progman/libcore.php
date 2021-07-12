@@ -17,7 +17,7 @@
 	}
 
 	$unixmicrotime = libcore__unixtime_to_unixmicrotime('1528799349000000');
-	if ($unixmicrotime !== false)
+	if ($unixmicrotime === false)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step002\n";
 		echo "unixmicrotime:".$unixmicrotime."\n";

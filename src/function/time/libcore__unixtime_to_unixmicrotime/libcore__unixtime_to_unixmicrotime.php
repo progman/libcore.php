@@ -9,15 +9,23 @@ function libcore__unixtime_to_unixmicrotime($unixtime)
 	settype($unixtime, "string");
 
 
-	if (strlen($unixtime) !== 10)
+	$rc = libcore__is_unixtime($unixtime);
+	if ($rc === false)
 	{
 		return false;
 	}
 
-	if (libcore__is_uint($unixtime) === false)
-	{
-		return false;
-	}
+
+//	if (strlen($unixtime) !== 10)
+//	{
+//		return false;
+//	}
+
+
+//	if (libcore__is_uint($unixtime) === false)
+//	{
+//		return false;
+//	}
 
 
 	return $unixtime."000000";

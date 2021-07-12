@@ -9,17 +9,25 @@ function libcore__unixmicrotime_to_unixtime($unixmicrotime)
 	settype($unixmicrotime, "string");
 
 
-	if (strlen($unixmicrotime) !== 16)
+	$rc = libcore__is_unixmicrotime($unixmicrotime);
+	if ($rc === false)
 	{
 		return false;
 	}
 
-	if (libcore__is_uint($unixmicrotime) === false)
-	{
-		return false;
-	}
+
+//	if (strlen($unixmicrotime) !== 16)
+//	{
+//		return false;
+//	}
 
 
-	return substr($unixmicrotime, 0, 10);
+//	if (libcore__is_uint($unixmicrotime) === false)
+//	{
+//		return false;
+//	}
+
+
+	return substr($unixmicrotime, 0, strlen($unixmicrotime) - 6);
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

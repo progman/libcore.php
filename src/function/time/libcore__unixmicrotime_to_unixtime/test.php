@@ -16,10 +16,26 @@
 		exit(1);
 	}
 
-	$unixtime = libcore__unixmicrotime_to_unixtime('1528799349');
-	if ($unixtime !== false)
+	$unixtime = libcore__unixmicrotime_to_unixtime('0000000');
+	if (strcmp($unixtime, "0") !== 0)
 	{
 		echo "ERROR[".$__FUNCTION__."()]: step002\n";
+		echo "unixtime:".$unixtime."\n";
+		exit(1);
+	}
+
+	$unixtime = libcore__unixmicrotime_to_unixtime('1000000');
+	if (strcmp($unixtime, "1") !== 0)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step003\n";
+		echo "unixtime:".$unixtime."\n";
+		exit(1);
+	}
+
+	$unixtime = libcore__unixmicrotime_to_unixtime('1528799349');
+	if ($unixtime === false)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step004\n";
 		echo "unixtime:".$unixtime."\n";
 		exit(1);
 	}
@@ -27,7 +43,7 @@
 	$unixtime = libcore__unixtime_to_unixmicrotime('');
 	if ($unixtime !== false)
 	{
-		echo "ERROR[".$__FUNCTION__."()]: step003\n";
+		echo "ERROR[".$__FUNCTION__."()]: step005\n";
 		echo "unixtime:".$unixtime."\n";
 		exit(1);
 	}
