@@ -46,6 +46,15 @@
 		exit(1);
 	}
 
+	$x = "d5104dc76695721d";
+	$y = "b80704bb7b4d7c03";
+	$z = libcore__hex_string_add($x, $y);
+	if (strcmp($z, "018d175282e1e2ee20") != 0)
+	{
+		echo "ERROR[".$__FUNCTION__."()]: step005\n";
+		exit(1);
+	}
+
 
 	for ($i=0; $i < 1000; $i++)
 	{
@@ -63,7 +72,7 @@
 
 		if (strcmp($c1, $c2) != 0)
 		{
-			echo "ERROR[".$__FUNCTION__."()]: step005\n";
+			echo "ERROR[".$__FUNCTION__."()]: step006\n";
 			echo "a      : ".$a."\n";
 			echo "b      : ".$b."\n";
 			echo "c1     : ".$c1."\n";
