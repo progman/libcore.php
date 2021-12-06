@@ -697,7 +697,7 @@ require_once("libcore.php");
 		exit(1);
 	}
 
-
+/*
 	for ($i=0; $i < 1000; $i++)
 	{
 		$a = libcore__hex_string_expand(dechex(rand(0, 9223372036854775807)), 32);
@@ -722,7 +722,7 @@ require_once("libcore.php");
 			exit(1);
 		}
 	}
-
+*/
 
 	$stop = libcore__get_unixmicrotime();
 	echo $__FUNCTION__."(): ".($stop - $start)."\n"; flush();
