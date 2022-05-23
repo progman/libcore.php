@@ -4,6 +4,7 @@
  * \param[in] arg arguments for query
  * \return result
  */
+/*
 function libcore__http_post($arg)
 {
 	$result = new result_t(__FUNCTION__, __FILE__);
@@ -270,6 +271,29 @@ function libcore__http_post($arg)
 	$answer = new stdClass();
 	$answer->body = $output_body;
 	$answer->head = $output_header_list;
+
+
+	$result->set_ok();
+	$result->set_value($answer);
+	return $result;
+}
+*/
+function libcore__http_post($arg)
+{
+	$result = new result_t(__FUNCTION__, __FILE__);
+
+
+	$http_request_arg = new stdClass();
+	$http_request_arg->url           = $arg->url;
+	$http_request_arg->method        = "POST";
+	$http_request_arg->flag_security = $arg->flag_security;
+	$http_request_arg->timeout       = $arg->timeout;
+	$http_request_arg->header_list   = $arg->header_list;
+	$http_request_arg->data          = $arg->data;
+
+	$rc = libcore__http_request($http_request_arg);
+	if ($rc->is_ok() === false) return $rc;
+	$answer = $rc->get_value();
 
 
 	$result->set_ok();
