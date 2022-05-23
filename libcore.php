@@ -4514,7 +4514,7 @@ PATCH - The PATCH method is used to apply partial modifications to a resource.
 //	print_r($info);
 
 
-	$rc = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+	$rc = curl_getinfo($ch, CURLINFO_RESPONSE_CODE); // $result['http_code'] = curl_getinfo($this -> ch,CURLINFO_HTTP_CODE);
 	if ($rc === false)
 	{
 		$result->set_err(1, curl_error($ch));
